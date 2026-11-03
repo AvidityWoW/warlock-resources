@@ -23,5 +23,5 @@ const text = [w.name, w.school, s?.text, s?.link?.name, s?.where].filter(Boolean
     ? <Fragment>{s.text}: <a href={wowhead(s.link.type, s.link.id)}>{s.link.name}</a>{s.where && ` · ${s.where}`}</Fragment>
     : s.text) : 'No known source'}</div>
   <span class="dps"><b>{w.dps.toFixed(1)}</b> DPS<span class="gain">{first != null ? `+${first.toFixed(1)}` : ''}</span></span>
-  <span class="meta muted">{w.school} · {w.damage ? `${w.damage[0]}–${w.damage[1]}` : '—'} · {w.speed.toFixed(2)}s</span>
+  <span class="meta muted"><span class="sch">{w.school}</span> · {w.damage ? `${w.damage[0]}–${w.damage[1]}` : '—'} · {w.speed.toFixed(2)}s</span>
 </li>

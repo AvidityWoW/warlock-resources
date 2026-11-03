@@ -4,6 +4,7 @@
   --bg:#1e1729;
   --surface:#261d33;
   --raised:#2f2540;
+  --row-odd:#2a2038;--row-even:#231a2f;   /* two-tone list rows, either side of --surface */
   --line:#3a2e4d;
   --text:#f8f8f2;
   --muted:#a99fc2;
@@ -26,8 +27,9 @@
 :root[data-theme="light"]{
   color-scheme:light;
   --bg:#faf8fc;
-  --surface:#ffffff;
-  --raised:#f3eff8;
+  --surface:#ece8f2;   /* greyish, so cards and lists stand out from the page */
+  --raised:#ded7e8;
+  --row-odd:#f1edf6;--row-even:#e6e0ee;
   --line:#e4dced;
   --text:#1f1a2b;
   --muted:#625a77;

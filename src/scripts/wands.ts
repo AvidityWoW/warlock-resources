@@ -1,4 +1,4 @@
-// Wand page: faction, source types, search, "path only", ticking wands on / off your upgrade path, reset,
+// Wand page: faction, sources, search, "show selected", ticking wands on / off your upgrade path, the reset button,
 // and the sticky toolbar's level label. Rows carry what's needed in data-* attributes; everything here runs in the browser.
 type Fac = 'b' | 'a' | 'h';
 const SIDE: Record<Fac, string> = { b: '', a: 'Alliance', h: 'Horde' };
@@ -17,6 +17,7 @@ document.addEventListener('astro:page-load', () => {
   const rows = [...document.querySelectorAll<HTMLElement>('.wand')];
   const listed = rows.filter((r) => r.closest('.band'));   // the no-source wands stay out of counts and the path
   const bands = [...document.querySelectorAll<HTMLElement>('.band')];
+  const lists = [...document.querySelectorAll<HTMLElement>('.wands')];
   const toolbar = document.querySelector<HTMLElement>('.toolbar')!;
   const types = $('types') as HTMLDetailsElement;
 
@@ -45,6 +46,9 @@ document.addEventListener('astro:page-load', () => {
     const bar = toolbar.getBoundingClientRect();
     toolbar.classList.toggle('stuck', window.scrollY > 0 && bar.top <= parseFloat(getComputedStyle(toolbar).top) + 0.5);
     const visible = bands.filter((b) => !b.hidden);
+    // the label only appears once the first level heading has scrolled up under the toolbar
+    const firstHead = visible[0]?.querySelector('h2');
+    toolbar.classList.toggle('show-now', !!firstHead && firstHead.getBoundingClientRect().bottom <= bar.bottom);
     let cur = visible[0];
     for (const b of visible) if (b.getBoundingClientRect().top <= bar.bottom + 8) cur = b;
     $('now').textContent = cur ? cur.dataset.label! : 'No wands';
@@ -97,6 +101,12 @@ document.addEventListener('astro:page-load', () => {
       r.hidden = !show;
       if (show && isListed) shown++;
     }
+    // two-tone rows: alternate over the rows actually showing in each list
+    for (const list of lists) {
+      list.classList.add('js');
+      let i = 0;
+      for (const r of list.children as HTMLCollectionOf<HTMLElement>) if (!r.hidden) r.classList.toggle('alt', i++ % 2 === 1);
+    }
     for (const b of bands) {
       const n = b.querySelectorAll('.wand:not([hidden])').length;
       b.hidden = n === 0;
@@ -106,13 +116,18 @@ document.addEventListener('astro:page-load', () => {
     for (const s of segs) s.setAttribute('aria-pressed', String(s.dataset.fac === fac));
     for (const t of typeItems) t.setAttribute('aria-checked', String(!off.has(t.dataset.kind!)));
     const onTypes = typeItems.filter((t) => !off.has(t.dataset.kind!));
-    $('typesum').textContent = onTypes.length === typeItems.length ? 'All' : onTypes.length === 1 ? onTypes[0].dataset.kind! : onTypes.length ? `${onTypes.length} types` : 'None';
+    $('typesum').textContent = onTypes.length === typeItems.length ? 'All' : onTypes.length === 1 ? onTypes[0].dataset.kind! : onTypes.length ? `${onTypes.length} of ${typeItems.length}` : 'None';
     $('count').textContent = `${shown} ${shown === 1 ? 'wand' : 'wands'}`;
     $('empty').hidden = shown > 0;
-    $('defaults').hidden = fac === 'b' && !only.checked && !off.size && !q!.value;
-    const added = [...picks].length, dropped = [...removed].length;
-    $('edits').hidden = !added && !dropped;
-    $('edits').querySelector('.what')!.textContent = [added && `${added} added`, dropped && `${dropped} dropped`].filter(Boolean).join(', ');
+    // One Reset button, always there: greyed out when there's nothing to reset; its tooltip says what it will reset.
+    const filters = [fac !== 'b' && 'faction', off.size && 'source', only.checked && 'show selected', q!.value && 'search'].filter(Boolean) as string[];
+    const added = picks.size, dropped = removed.size;
+    const edits = [added && `${added} added`, dropped && `${dropped} dropped`].filter(Boolean).join(', ');
+    const rb = $('reset-all') as HTMLButtonElement, what = [...filters, edits && `your path (${edits})`].filter(Boolean);
+    rb.disabled = !what.length;
+    rb.title = what.length ? `Reset ${what.join(', ')}` : 'Nothing to reset';
+    $('edits').hidden = !edits;
+    $('edits').querySelector('.what')!.textContent = edits;
     track();
   }
 
@@ -126,7 +141,7 @@ document.addEventListener('astro:page-load', () => {
     }
     save(); apply();
   };
-  // Quick repeated clicks in one spot (e.g. unticking several wands in a row with "Path only" on) must each count,
+  // Quick repeated clicks in one spot (e.g. unticking several wands in a row with "Show selected" on) must each count,
   // so: no double-click word selection on rows, and a click is only ignored if the mouse moved while held (a text drag).
   let downX = 0, downY = 0;
   for (const r of listed) {
@@ -142,24 +157,26 @@ document.addEventListener('astro:page-load', () => {
       toggle(r.dataset.id!);
     });
   }
-  $('reset-path').addEventListener('click', () => { picks.clear(); removed.clear(); save(); apply(); });
 
   // ---- controls
   segs.forEach((s) => s.addEventListener('click', () => { fac = s.dataset.fac as Fac; save(); apply(); }));
   for (const t of typeItems) t.addEventListener('click', () => { const k = t.dataset.kind!; off.has(k) ? off.delete(k) : off.add(k); save(); apply(); });
   only.addEventListener('change', () => { save(); apply(); });
   q.addEventListener('input', apply);
-  // the Type menu closes on a click outside it or Escape
+  // the Source menu opens under its button; if that would run off the right edge, it lines up with the button's right edge
+  types.addEventListener('toggle', () => {
+    const menu = types.querySelector<HTMLElement>('.menu')!;
+    menu.classList.remove('flip');
+    if (types.open && menu.getBoundingClientRect().right > document.documentElement.clientWidth - 8) menu.classList.add('flip');
+  });
+  // the Source menu closes on a click outside it or Escape
   document.addEventListener('click', (e) => { if (types.open && !types.contains(e.target as Node)) types.open = false; }, { signal });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && types.open) { types.open = false; types.querySelector('summary')!.focus(); } }, { signal });
 
-  // Reset: faction, types, path only and search back to how the page started. Your path ticks stay ("reset path" clears those).
-  const reset = () => {
-    fac = 'b'; only.checked = false; q.value = ''; off.clear();
-    save(); apply();
-  };
-  $('defaults').addEventListener('click', reset);
-  $('reset').addEventListener('click', reset);
+  // Reset: faction, sources, show selected, search and your ticks, all back to how the page started.
+  $('reset-all').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); picks.clear(); removed.clear(); save(); apply(); });
+  // "Nothing here" only needs the filters cleared; your ticks stay.
+  $('reset').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); save(); apply(); });
 
   apply();
 });

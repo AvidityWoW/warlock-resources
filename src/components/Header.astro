@@ -48,6 +48,16 @@ const links = nav.flatMap((g) => g.pages).map((l) => ({ ...l, href: url(l.href) 
   const rank = (u: URL) => order.findIndex((p) => norm(p) === norm(u.pathname));
   document.addEventListener('astro:before-preparation', (e) => {
     if ((e as Event & { navigationType: string }).navigationType === 'traverse') return;
+    // The new page starts at the top. Jump there now, before the old page is captured for the slide;
+    // otherwise the slide also travels up the page and looks diagonal.
+    if (window.scrollY === 0) return;
+    // Astro has just recorded where you were, for the Back button. The jump makes it record 0 instead, so put the
+    // real position back right before the new page goes in (while this page's history entry is still the current one).
+    const saved = history.state;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.addEventListener('astro:before-swap', () => {
+      if (saved && history.state?.index === saved.index) history.replaceState(saved, '');
+    }, { once: true });
     const ev = e as Event & { from: URL; to: URL; direction: string };
     const a = rank(ev.from), b = rank(ev.to);
     if (a >= 0 && b >= 0 && a !== b) ev.direction = b > a ? 'forward' : 'back';

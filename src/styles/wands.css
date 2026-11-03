@@ -7,7 +7,10 @@
 .wands{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;container-type:inline-size}
 .wand{display:grid;grid-template-columns:1.25rem 2.25rem minmax(0,1fr) auto;grid-template-areas:"tog lvl name dps" "tog lvl src src" "tog lvl meta meta";gap:2px 14px;align-items:center;padding:10px 14px}
 .wand+.wand{border-top:1px solid var(--line)}
-.wand:hover{background:var(--raised)}
+.wand{background-color:var(--row-odd)}
+.wand.alt{background-color:var(--row-even)}   /* every other visible row, set by scripts/wands.ts */
+.wands:not(.js)>.wand:nth-child(even){background-color:var(--row-even)}   /* before the script runs */
+.wand:hover{background-color:var(--raised)}
 
 .wand{cursor:pointer}
 .lvl{grid-area:lvl;align-self:start;display:grid;place-items:center;height:2.25rem;border-radius:8px;background:var(--raised);font-weight:650;font-variant-numeric:tabular-nums}
@@ -22,26 +25,26 @@
 .src a{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
 .src a:hover{color:var(--text);text-decoration-color:currentColor}
 .dps{grid-area:dps;justify-self:end;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:.85em;color:var(--muted)}
-.dps b{font-size:1.2rem;font-weight:650;margin-right:2px}
+.dps b{font-size:1.2rem;font-weight:650;margin-right:2px;color:var(--text)}
 .meta{grid-area:meta;font-size:.8em;font-variant-numeric:tabular-nums}
 .badge{flex:none;padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.72em;font-weight:600;letter-spacing:.02em;white-space:nowrap}
 
 /* picked (gold) — drawn over the upgrade-path green */
-.wand.pick,.extra .wand.pick{box-shadow:inset 3px 0 0 var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent)}
-.wand.pick:hover{background:color-mix(in srgb,var(--gold) 15%,var(--raised))}
+.wand.pick,.extra .wand.pick{box-shadow:inset 3px 0 0 var(--gold);background-image:linear-gradient(var(--pick-tint),var(--pick-tint))}
+.wand{--pick-tint:color-mix(in srgb,var(--gold) 11%,transparent);--up-tint:color-mix(in srgb,var(--good) 7%,transparent)}   /* tints sit on top of the row stripe */
 .wand.pick .lvl{background:var(--gold);color:var(--on-gold)}
 
 /* upgrade path */
-.wand.up:not(.pick){box-shadow:inset 3px 0 0 var(--good);background:color-mix(in srgb,var(--good) 6%,transparent)}
-.wand.up:not(.pick):hover{background:color-mix(in srgb,var(--good) 10%,var(--raised))}
+.wand.up:not(.pick){box-shadow:inset 3px 0 0 var(--good);background-image:linear-gradient(var(--up-tint),var(--up-tint))}
 .gain{display:inline-block;min-width:3.2em;margin-left:8px;color:var(--good);font-weight:600;text-align:left}
 .gain:empty{min-width:0;margin:0}
 .gain.down{color:var(--muted);font-weight:500}
 
 /* item quality, damage school */
 .iq1{color:var(--q1)}.iq2{color:var(--q2)}.iq3{color:var(--q3)}.iq4{color:var(--q4)}
-[data-school="Fire"] .dps b{color:var(--fire)}[data-school="Shadow"] .dps b{color:var(--shadow)}[data-school="Arcane"] .dps b{color:var(--arcane)}
-[data-school="Frost"] .dps b{color:var(--frost)}[data-school="Nature"] .dps b{color:var(--nature)}[data-school="Physical"] .dps b{color:var(--physical)}
+[data-school="Fire"] .sch{color:var(--fire)}[data-school="Shadow"] .sch{color:var(--shadow)}[data-school="Arcane"] .sch{color:var(--arcane)}
+[data-school="Frost"] .sch{color:var(--frost)}[data-school="Nature"] .sch{color:var(--nature)}[data-school="Physical"] .sch{color:var(--physical)}
+.sch{font-weight:600}
 
 /* medium lists: name and DPS on top, source and details underneath */
 @container (min-width:560px){
@@ -60,54 +63,78 @@
 
 .extra{margin-top:28px}
 .extra[hidden]{display:none}
-.extra .wand.up:not(.pick){box-shadow:none;background:none}
+.extra .wand.up:not(.pick){box-shadow:none;background-image:none}
 
-/* sticky toolbar: current level band on the left, controls alongside */
-.toolbar{position:sticky;top:var(--header);z-index:5;display:flex;align-items:center;gap:10px 14px;margin:16px calc(-1 * var(--gap)) 0;padding:10px var(--gap);background:var(--bg);border-bottom:1px solid transparent;transition:border-color .15s}
+/* Sticky toolbar.
+   Wide screens, one line: [count / level label] [search] [faction] [source] [show selected] ............ [reset]
+   Narrower, two rows:    [count / level label] [search] ......................................... [reset]
+                          [faction] [source] [show selected]                                                   */
+.toolbar{position:sticky;top:var(--header);z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:16px calc(-1 * var(--gap)) 0;padding:10px var(--gap);background:var(--bg);border-bottom:1px solid transparent;transition:border-color .15s}
 .toolbar.stuck{border-bottom-color:var(--line)}
-.now{flex:none;min-width:7.5em;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
-#count{flex:none;order:9;margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
-.search{position:relative;flex:1 1 200px;max-width:380px}
+/* the count and the level label share one slot: the count at the top of the page, the label once you scroll past the first heading */
+#count{flex:none;order:0;min-width:7.5em;font-variant-numeric:tabular-nums;white-space:nowrap;transition:opacity .2s ease}
+.now{position:absolute;left:var(--gap);top:10px;height:38px;display:flex;align-items:center;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap;transition:opacity .2s ease,visibility .2s}
+.toolbar:not(.show-now) .now{opacity:0;visibility:hidden}
+.toolbar.show-now #count{opacity:0}
+@media (prefers-reduced-motion:reduce){.now,#count{transition:none}}
+.search{order:1;position:relative;flex:0 1 260px;min-width:120px}   /* compact: never stretches across the bar */
 .search svg{position:absolute;left:12px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--muted);pointer-events:none}
 .search input{width:100%;height:38px;padding:0 12px 0 38px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);font:inherit}
 .search input::placeholder{color:var(--muted)}
 .search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.seg{flex:none;display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+/* Reset: always there at the right end, greyed out when there's nothing to reset */
+.rbtn{order:9;margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:999px;background:var(--surface);color:var(--accent);font:inherit;font-weight:500;white-space:nowrap;cursor:pointer}
+.rbtn svg{width:16px;height:16px;flex:none}
+.rbtn:hover:not(:disabled){background:var(--accent-soft)}
+.rbtn:disabled{color:var(--muted);border-color:var(--line);opacity:.55;cursor:default}
+.brk{display:none;order:3;flex-basis:100%;height:0}   /* line break, only in the two-row layout */
+.seg{order:4;flex:none;display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
 .seg button{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border:0;border-radius:999px;background:none;color:var(--muted);font:inherit;font-weight:500;cursor:pointer}
 .seg button:hover{color:var(--text)}
 .seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
-
-.check{flex:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-weight:500;white-space:nowrap}
+.check{order:6;flex:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-weight:500;white-space:nowrap}
 .check input{width:18px;height:18px;margin:0;accent-color:var(--good);cursor:pointer}
+.check .short{display:none}
 .empty{margin:28px 0;padding:24px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
 .link{padding:0;border:0;background:none;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer}
-/* Type menu: a small dropdown of checkboxes */
-.types{position:relative;flex:none}
-.types summary{display:flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted);font-weight:500;cursor:pointer;list-style:none;white-space:nowrap;user-select:none}
-.types summary::-webkit-details-marker{display:none}
-.types summary::after{content:"";width:7px;height:7px;margin:-3px 0 0 4px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
-.types summary:hover,.types[open] summary{color:var(--text)}
-.types #typesum{color:var(--text)}
-.types .menu{position:absolute;top:calc(100% + 6px);left:0;z-index:6;min-width:200px;padding:6px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:0 8px 24px rgb(0 0 0 / .3)}
-.types [role=menuitemcheckbox]{display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px;border:0;border-radius:6px;background:none;color:var(--text);font:inherit;text-align:left;cursor:pointer}
-.types [role=menuitemcheckbox]:hover{background:var(--raised)}
-.types [role=menuitemcheckbox] .muted{margin-left:auto;font-variant-numeric:tabular-nums}
+
+/* Source: a dropdown that looks like a select box: label and value on the left, arrow at the right edge */
+.dd{position:relative;flex:none}
+.types{order:5}
+.dd summary{display:flex;align-items:center;gap:6px;height:38px;padding:0 12px 0 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted);font-weight:500;cursor:pointer;list-style:none;white-space:nowrap;user-select:none}
+.dd summary::-webkit-details-marker{display:none}
+.dd summary::after{content:"";flex:none;width:7px;height:7px;margin:-3px 2px 0 auto;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.dd summary:hover,.dd[open] summary{color:var(--text)}
+.types summary{width:11.5em}   /* fixed width: picking sources never resizes anything */
+.types summary svg{display:none;width:16px;height:16px;flex:none}
+#typesum{min-width:0;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.dd .menu{position:absolute;top:calc(100% + 6px);left:0;z-index:6;min-width:200px;padding:6px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:0 8px 24px rgb(0 0 0 / .3)}
+.dd .menu.flip{left:auto;right:0}   /* opens leftwards when there's no room on the right */
+.dd [role^=menuitem]{display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px;border:0;border-radius:6px;background:none;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.dd [role^=menuitem]:hover{background:var(--raised)}
+.dd [role^=menuitem] .muted{margin-left:auto;font-variant-numeric:tabular-nums}
 .tick{flex:none;display:grid;place-items:center;width:16px;height:16px;border:1.5px solid var(--muted);border-radius:4px}
 [aria-checked="true"] .tick{border-color:var(--accent);background:var(--accent)}
 [aria-checked="true"] .tick::after{content:"";width:8px;height:4px;margin-top:-2px;border:solid var(--bg);border-width:0 0 2px 2px;transform:rotate(-45deg)}
-.reset{flex:none;height:32px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--accent);font:inherit;font-weight:500;cursor:pointer;white-space:nowrap}
-.reset:hover{background:var(--accent-soft)}
-.reset[hidden]{display:none}
 
-/* narrow: level + count on top, controls in a row underneath, faction as crests only */
+/* below 1230px the one line doesn't fit: Reset moves up beside search and the rest go on a second row */
+@media (max-width:1229px){
+  .rbtn{order:2}
+  .brk{display:block}
+}
+/* phones: faction as crests, Source as a funnel + value, Reset as an icon, "Selected" for short */
 @media (max-width:760px){
-  .toolbar{flex-wrap:wrap}
-  .now{order:0}#count{order:1}
-  .search{order:2;flex:1 1 120px;max-width:none}
-  .seg{order:3}.types{order:4}.check{order:5}.reset{order:1}
-  .types summary{padding:0 12px}
-  .seg .t,.check .t{display:none}
-  .seg button{padding:0 10px}
+  .search{flex:1 1 100px;min-width:0;max-width:260px}   /* phones: search takes the room the top row has left, up to its usual size */
+  .types summary{width:6.5em;padding-left:12px}.types summary .t{display:none}.types summary svg{display:block}
+  .seg .t{display:none}.seg button{padding:0 10px}
+  .rbtn{width:38px;padding:0;justify-content:center}.rbtn .t{display:none}
+  .check .long{display:none}.check .short{display:inline}
+}
+@media (max-width:400px){
+  .toolbar{gap:10px 10px}
+  .seg button{padding:0 8px}
+  .types summary{width:5.75em;padding:0 10px}
+  .check{gap:6px}
 }
 .band:first-of-type{margin-top:8px}
 
