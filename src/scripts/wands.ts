@@ -2,6 +2,8 @@
 // and the sticky toolbar's level label. Rows carry what's needed in data-* attributes; everything here runs in the browser.
 type Fac = 'b' | 'a' | 'h';
 const SIDE: Record<Fac, string> = { b: '', a: 'Alliance', h: 'Horde' };
+// exact check: values come from links and storage, and `in` would also accept names like "toString"
+const isFac = (v: unknown): v is Fac => v === 'b' || v === 'a' || v === 'h';
 const VIEW = 'wands:view', PICKS = 'wands:picks', REMOVED = 'wands:removed', BLANK = 'wands:blank';
 
 const load = <T>(key: string, fallback: T): T => { try { return JSON.parse(localStorage.getItem(key) ?? 'null') ?? fallback; } catch { return fallback; } };
@@ -27,7 +29,7 @@ document.addEventListener('astro:page-load', () => {
 
   // ---- state, remembered in this browser
   const view = load<{ fac?: Fac; only?: boolean; off?: string[] }>(VIEW, {});
-  let fac: Fac = view.fac && view.fac in SIDE ? view.fac : 'b';
+  let fac: Fac = isFac(view.fac) ? view.fac : 'b';
   only.checked = !!view.only;
   const off = new Set<string>(view.off ?? []);            // source types switched off
   const picks = new Set<string>(load<string[]>(PICKS, []).map(String));
@@ -191,8 +193,8 @@ document.addEventListener('astro:page-load', () => {
     const known = new Set(listed.map((r) => r.dataset.id!));
     const want = new Set((params.get('path') ?? '').split('.').filter(Boolean).map((t) => String(parseInt(t, 36))).filter((id) => known.has(id)));
     const before = { fac, only: only.checked, off: [...off], picks: [...picks], removed: [...removed], blank };
-    const f = params.get('f') as Fac | null;
-    fac = f && f in SIDE ? f : 'b'; only.checked = false; off.clear();
+    const f = params.get('f');
+    fac = isFac(f) ? f : 'b'; only.checked = false; off.clear();
     picks.clear(); removed.clear(); blank = want.size === 0;
     if (!blank) {
       for (const id of want) picks.add(id);
