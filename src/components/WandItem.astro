@@ -1,0 +1,27 @@
+---
+// One wand as a list row. The cells are laid out by wands.css: one line on wide lists, stacked on narrow ones.
+// data-* attributes drive the controls in scripts/wands.ts; `path` only sets the first render (before the script runs).
+import FactionIcon from './FactionIcon.astro';
+import { wowhead, type Wand } from '../data/wands';
+import type { FactionKey } from '../lib/path';
+interface Props { w: Wand; path?: Partial<Record<FactionKey, number | null>>; pathable?: boolean }
+const { w, path = {}, pathable = true } = Astro.props;
+const s = w.source;
+const first = path.b;                               // gain on the default (both factions, no picks) path, for the first render
+const text = [w.name, w.school, s?.text, s?.link?.name, s?.where].filter(Boolean).join(' ').toLowerCase();
+---
+<li class:list={['wand', { up: 'b' in path }]} data-id={w.id} data-school={w.school} data-side={w.side ?? ''} data-text={text}
+  data-kind={s?.kind ?? ''} data-dps={w.dps}>
+  {pathable && <input class="tog" type="checkbox" checked={'b' in path} aria-label={`${w.name} on my upgrade path`} title="On my upgrade path">}
+  <span class="lvl" title="Required level">{w.req ?? '—'}</span>
+  <div class="name">
+    <a class={`iq${w.quality}`} href={wowhead('item', w.id)} aria-label={w.name}>{w.name}</a>
+    {w.side && <span class="side" title={`${w.side} only`}><FactionIcon side={w.side} /></span>}
+    {w.affixes && <span class="badge">Random enchant</span>}
+  </div>
+  <div class="src muted">{s ? (s.link
+    ? <Fragment>{s.text}: <a href={wowhead(s.link.type, s.link.id)}>{s.link.name}</a>{s.where && ` · ${s.where}`}</Fragment>
+    : s.text) : 'No known source'}</div>
+  <span class="dps"><b>{w.dps.toFixed(1)}</b> DPS<span class="gain">{first != null ? `+${first.toFixed(1)}` : ''}</span></span>
+  <span class="meta muted">{w.school} · {w.damage ? `${w.damage[0]}–${w.damage[1]}` : '—'} · {w.speed.toFixed(2)}s</span>
+</li>

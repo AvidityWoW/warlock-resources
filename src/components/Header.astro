@@ -1,0 +1,69 @@
+---
+// Sticky site header: brand (links home), a tab per page (from nav.ts), and the light / dark toggle.
+import { Image } from 'astro:assets';
+import { nav } from '../data/nav';
+import { SITE } from '../data/site';
+import { url } from '../lib/url';
+import logo from '../assets/brand/shadowbolt.jpg';
+
+// A link is current when it matches this page's path (trailing slash optional).
+const norm = (p: string) => p.replace(/index\.html$/, '').replace(/\/?$/, '/');
+const here = norm(Astro.url.pathname);
+// The logo and name link home, so the tabs are just the pages.
+const links = nav.flatMap((g) => g.pages).map((l) => ({ ...l, href: url(l.href) }));
+---
+<header class="site-header" transition:persist="site-header">
+  <div class="container">
+    <a class="brand" href={url()} aria-label={`${SITE}, home`} aria-current={norm(url()) === here ? 'page' : undefined}>
+      <Image class="logo" src={logo} alt="" width={30} height={30} densities={[1, 2]} loading="eager" />
+      <span>{SITE}</span>
+    </a>
+    <nav class="nav" aria-label="Pages">
+      {links.map((l) => <a href={l.href} aria-current={norm(l.href) === here ? 'page' : undefined}>{l.title}</a>)}
+    </nav>
+    <button class="icon-btn theme-toggle" type="button" aria-label="Switch to light theme">
+      <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<script>
+  // The header persists across in-site navigation, so this runs once.
+  const root = document.documentElement;
+  const btn = document.querySelector<HTMLButtonElement>('.theme-toggle')!;
+  const label = () => btn.setAttribute('aria-label', root.dataset.theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+  label();
+  btn.addEventListener('click', () => {
+    const light = root.dataset.theme !== 'light';
+    if (light) root.dataset.theme = 'light'; else delete root.dataset.theme;
+    try { light ? localStorage.setItem('theme', 'light') : localStorage.removeItem('theme'); } catch {}
+    label();
+  });
+  const norm = (p: string) => p.replace(/index\.html$/, '').replace(/\/?$/, '/');
+  // Slide direction follows page order (home, then the tabs left to right): going further along slides left,
+  // going back slides right. The Back / Forward buttons already set the direction themselves.
+  const order = [new URL(document.querySelector<HTMLAnchorElement>('.brand')!.href).pathname,
+    ...[...document.querySelectorAll<HTMLAnchorElement>('.nav a')].map((a) => new URL(a.href).pathname)];
+  const rank = (u: URL) => order.findIndex((p) => norm(p) === norm(u.pathname));
+  document.addEventListener('astro:before-preparation', (e) => {
+    if ((e as Event & { navigationType: string }).navigationType === 'traverse') return;
+    const ev = e as Event & { from: URL; to: URL; direction: string };
+    const a = rank(ev.from), b = rank(ev.to);
+    if (a >= 0 && b >= 0 && a !== b) ev.direction = b > a ? 'forward' : 'back';
+  });
+  // Clicking the page you're already on doesn't navigate (or slide); it just takes you back to the top.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.brand, .nav a')];
+  for (const a of links) a.addEventListener('click', (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;   // new tab etc. behave as normal
+    if (norm(new URL(a.href).pathname) !== norm(location.pathname)) return;
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
+  // keep the current-page marker in step with the page (the header itself isn't re-rendered)
+  document.addEventListener('astro:page-load', () => {
+    for (const a of links) {
+      if (norm(new URL(a.href).pathname) === norm(location.pathname)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    }
+  });
+</script>

@@ -1,0 +1,13 @@
+---
+// Alliance / Horde crest. A tiny icon, so it's drawn as a CSS background on a labelled element: Astro's image
+// pipeline still optimizes it (one 2× WebP per faction, cached), without per-<img> lazy/eager loading concerns.
+import { getImage } from 'astro:assets';
+import alliance from '../assets/factions/alliance.jpg';
+import horde from '../assets/factions/horde.jpg';
+import type { Side } from '../data/wands';
+
+interface Props { side: Side }
+const { side } = Astro.props;
+const img = await getImage({ src: side === 'Alliance' ? alliance : horde, width: 40, height: 40, format: 'webp' });
+---
+<span class="fi" role="img" aria-label={side} style={`background-image:url(${img.src})`}></span>

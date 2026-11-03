@@ -1,0 +1,124 @@
+/* Wand list. Rows reflow with the width of the list itself (container queries), so there is no separate phone layout. */
+.band{margin-top:28px}
+.band[hidden],.wand[hidden],.empty[hidden]{display:none}
+.band h2{padding:10px 0}
+.band h2 .muted{font-weight:400}
+
+.wands{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;container-type:inline-size}
+.wand{display:grid;grid-template-columns:1.25rem 2.25rem minmax(0,1fr) auto;grid-template-areas:"tog lvl name dps" "tog lvl src src" "tog lvl meta meta";gap:2px 14px;align-items:center;padding:10px 14px}
+.wand+.wand{border-top:1px solid var(--line)}
+.wand:hover{background:var(--raised)}
+
+.wand{cursor:pointer}
+.lvl{grid-area:lvl;align-self:start;display:grid;place-items:center;height:2.25rem;border-radius:8px;background:var(--raised);font-weight:650;font-variant-numeric:tabular-nums}
+.tog{grid-area:tog;align-self:start;width:18px;height:18px;margin:9px 0 0;accent-color:var(--good);cursor:pointer}
+.wand.pick .tog{accent-color:var(--gold)}
+.extra .wand{cursor:default}
+.name{grid-area:name;display:flex;align-items:center;gap:8px;min-width:0}
+.name a{font-weight:600;text-decoration:none}
+.name a:hover{text-decoration:underline}
+.side{flex:none;display:flex}
+.src{grid-area:src;font-size:.88em;min-width:0}
+.src a{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.src a:hover{color:var(--text);text-decoration-color:currentColor}
+.dps{grid-area:dps;justify-self:end;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:.85em;color:var(--muted)}
+.dps b{font-size:1.2rem;font-weight:650;margin-right:2px}
+.meta{grid-area:meta;font-size:.8em;font-variant-numeric:tabular-nums}
+.badge{flex:none;padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.72em;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+
+/* picked (gold) — drawn over the upgrade-path green */
+.wand.pick,.extra .wand.pick{box-shadow:inset 3px 0 0 var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent)}
+.wand.pick:hover{background:color-mix(in srgb,var(--gold) 15%,var(--raised))}
+.wand.pick .lvl{background:var(--gold);color:var(--on-gold)}
+
+/* upgrade path */
+.wand.up:not(.pick){box-shadow:inset 3px 0 0 var(--good);background:color-mix(in srgb,var(--good) 6%,transparent)}
+.wand.up:not(.pick):hover{background:color-mix(in srgb,var(--good) 10%,var(--raised))}
+.gain{display:inline-block;min-width:3.2em;margin-left:8px;color:var(--good);font-weight:600;text-align:left}
+.gain:empty{min-width:0;margin:0}
+.gain.down{color:var(--muted);font-weight:500}
+
+/* item quality, damage school */
+.iq1{color:var(--q1)}.iq2{color:var(--q2)}.iq3{color:var(--q3)}.iq4{color:var(--q4)}
+[data-school="Fire"] .dps b{color:var(--fire)}[data-school="Shadow"] .dps b{color:var(--shadow)}[data-school="Arcane"] .dps b{color:var(--arcane)}
+[data-school="Frost"] .dps b{color:var(--frost)}[data-school="Nature"] .dps b{color:var(--nature)}[data-school="Physical"] .dps b{color:var(--physical)}
+
+/* medium lists: name and DPS on top, source and details underneath */
+@container (min-width:560px){
+  .wand{grid-template-areas:"tog lvl name dps" "tog lvl src meta"}
+  .meta{justify-self:end;text-align:right;white-space:nowrap}
+}
+/* wide lists: every cell on one line, in columns that line up from row to row */
+@container (min-width:1000px){
+  .wand{grid-template-columns:1.25rem 2rem minmax(0,1fr) minmax(0,1.25fr) 10em 11.5em;grid-template-areas:"tog lvl name src dps meta";padding:8px 16px}
+  .lvl{align-self:center;height:2rem}
+  .tog{align-self:center;margin:0}
+  .name a{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dps{justify-self:start}
+  .gain:empty{display:inline-block;min-width:3.2em;margin-left:8px}
+}
+
+.extra{margin-top:28px}
+.extra[hidden]{display:none}
+.extra .wand.up:not(.pick){box-shadow:none;background:none}
+
+/* sticky toolbar: current level band on the left, controls alongside */
+.toolbar{position:sticky;top:var(--header);z-index:5;display:flex;align-items:center;gap:10px 14px;margin:16px calc(-1 * var(--gap)) 0;padding:10px var(--gap);background:var(--bg);border-bottom:1px solid transparent;transition:border-color .15s}
+.toolbar.stuck{border-bottom-color:var(--line)}
+.now{flex:none;min-width:7.5em;font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+#count{flex:none;order:9;margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.search{position:relative;flex:1 1 200px;max-width:380px}
+.search svg{position:absolute;left:12px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--muted);pointer-events:none}
+.search input{width:100%;height:38px;padding:0 12px 0 38px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);font:inherit}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.seg{flex:none;display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.seg button{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border:0;border-radius:999px;background:none;color:var(--muted);font:inherit;font-weight:500;cursor:pointer}
+.seg button:hover{color:var(--text)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+
+.check{flex:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-weight:500;white-space:nowrap}
+.check input{width:18px;height:18px;margin:0;accent-color:var(--good);cursor:pointer}
+.empty{margin:28px 0;padding:24px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
+.link{padding:0;border:0;background:none;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer}
+/* Type menu: a small dropdown of checkboxes */
+.types{position:relative;flex:none}
+.types summary{display:flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted);font-weight:500;cursor:pointer;list-style:none;white-space:nowrap;user-select:none}
+.types summary::-webkit-details-marker{display:none}
+.types summary::after{content:"";width:7px;height:7px;margin:-3px 0 0 4px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.types summary:hover,.types[open] summary{color:var(--text)}
+.types #typesum{color:var(--text)}
+.types .menu{position:absolute;top:calc(100% + 6px);left:0;z-index:6;min-width:200px;padding:6px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:0 8px 24px rgb(0 0 0 / .3)}
+.types [role=menuitemcheckbox]{display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px;border:0;border-radius:6px;background:none;color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.types [role=menuitemcheckbox]:hover{background:var(--raised)}
+.types [role=menuitemcheckbox] .muted{margin-left:auto;font-variant-numeric:tabular-nums}
+.tick{flex:none;display:grid;place-items:center;width:16px;height:16px;border:1.5px solid var(--muted);border-radius:4px}
+[aria-checked="true"] .tick{border-color:var(--accent);background:var(--accent)}
+[aria-checked="true"] .tick::after{content:"";width:8px;height:4px;margin-top:-2px;border:solid var(--bg);border-width:0 0 2px 2px;transform:rotate(-45deg)}
+.reset{flex:none;height:32px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--accent);font:inherit;font-weight:500;cursor:pointer;white-space:nowrap}
+.reset:hover{background:var(--accent-soft)}
+.reset[hidden]{display:none}
+
+/* narrow: level + count on top, controls in a row underneath, faction as crests only */
+@media (max-width:760px){
+  .toolbar{flex-wrap:wrap}
+  .now{order:0}#count{order:1}
+  .search{order:2;flex:1 1 120px;max-width:none}
+  .seg{order:3}.types{order:4}.check{order:5}.reset{order:1}
+  .types summary{padding:0 12px}
+  .seg .t,.check .t{display:none}
+  .seg button{padding:0 10px}
+}
+.band:first-of-type{margin-top:8px}
+
+.legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin:0;font-size:.85em}
+.legend>span{display:inline-flex;align-items:center;gap:8px}
+.legend .mark{flex:none;width:12px;height:12px;border-radius:3px}
+.legend .mark.up{background:var(--good)}.legend .mark.pick{background:var(--gold)}
+.legend>#edits{display:inline;gap:0}
+.legend>#edits[hidden]{display:none}
+.empty{margin:28px 0;padding:24px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
+.link{padding:0;border:0;background:none;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer}
+.extra summary{cursor:pointer;color:var(--muted);font-weight:500}
+.extra summary:hover{color:var(--text)}
+.extra p{margin:8px 0 12px}

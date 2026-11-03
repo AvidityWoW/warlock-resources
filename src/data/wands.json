@@ -1,0 +1,2885 @@
+{
+ "build": "1.60.1.70707",
+ "pulled": "2026-10-31",
+ "wands": [
+  {
+   "id": 247789,
+   "name": "Novice's Practice Wand",
+   "quality": 1,
+   "ilvl": 6,
+   "req": 1,
+   "side": null,
+   "school": "Arcane",
+   "dps": 4.0,
+   "damage": [
+    4,
+    8
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1245321,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 263428,
+   "name": "Dowsing Rod",
+   "quality": 1,
+   "ilvl": 6,
+   "req": 4,
+   "side": "Alliance",
+   "school": "Arcane",
+   "dps": 4.167,
+   "damage": [
+    3,
+    7
+   ],
+   "speed": 1.2,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 94413,
+     "name": "A Magical Affront"
+    },
+    "where": "Zephras Isle"
+   }
+  },
+  {
+   "id": 11287,
+   "name": "Lesser Magic Wand",
+   "quality": 2,
+   "ilvl": 15,
+   "req": 5,
+   "side": null,
+   "school": "Arcane",
+   "dps": 11.333,
+   "damage": [
+    12,
+    22
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 14293,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 286743,
+   "name": "Riptear's Spare Arm",
+   "quality": 2,
+   "ilvl": 13,
+   "req": 6,
+   "side": "Horde",
+   "school": "Shadow",
+   "dps": 9.412,
+   "damage": [
+    11,
+    21
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 99156,
+     "name": "Rear Guard Patrol"
+    },
+    "where": "Tirisfal Glades"
+   }
+  },
+  {
+   "id": 5069,
+   "name": "Fire Wand",
+   "quality": 2,
+   "ilvl": 12,
+   "req": 7,
+   "side": null,
+   "school": "Fire",
+   "dps": 8.667,
+   "damage": [
+    9,
+    17
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 286750,
+   "name": "Wisesight Wand",
+   "quality": 2,
+   "ilvl": 12,
+   "req": 7,
+   "side": null,
+   "school": "Arcane",
+   "dps": 8.824,
+   "damage": [
+    10,
+    20
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 276101,
+     "name": "Nightscreech"
+    },
+    "where": "Teldrassil"
+   }
+  },
+  {
+   "id": 5604,
+   "name": "Elven Wand",
+   "quality": 2,
+   "ilvl": 13,
+   "req": 7,
+   "side": "Alliance",
+   "school": "Arcane",
+   "dps": 9.375,
+   "damage": [
+    10,
+    20
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 957,
+     "name": "Bashal'Aran"
+    },
+    "where": "Darkshore"
+   }
+  },
+  {
+   "id": 5071,
+   "name": "Shadow Wand",
+   "quality": 2,
+   "ilvl": 14,
+   "req": 9,
+   "side": null,
+   "school": "Shadow",
+   "dps": 10.357,
+   "damage": [
+    10,
+    19
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5242,
+   "name": "Cinder Wand",
+   "quality": 2,
+   "ilvl": 16,
+   "req": 9,
+   "side": "Horde",
+   "school": "Fire",
+   "dps": 11.786,
+   "damage": [
+    11,
+    22
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 99,
+     "name": "Arugal's Folly"
+    },
+    "where": "Silverpine Forest"
+   }
+  },
+  {
+   "id": 12296,
+   "name": "Spark of the People's Militia",
+   "quality": 2,
+   "ilvl": 17,
+   "req": 9,
+   "side": "Alliance",
+   "school": "Arcane",
+   "dps": 12.778,
+   "damage": [
+    16,
+    30
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 14,
+     "name": "The People's Militia"
+    },
+    "where": "Westfall"
+   }
+  },
+  {
+   "id": 279896,
+   "name": "Deepblaze",
+   "quality": 3,
+   "ilvl": 18,
+   "req": 9,
+   "side": "Alliance",
+   "school": "Fire",
+   "dps": 18.529,
+   "damage": [
+    22,
+    41
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 96393,
+     "name": "Old Ironforge Incursion"
+    },
+    "where": "The Hall of Thanes"
+   }
+  },
+  {
+   "id": 263430,
+   "name": "Windbough Wand",
+   "quality": 2,
+   "ilvl": 10,
+   "req": 10,
+   "side": "Alliance",
+   "school": "Arcane",
+   "dps": 7.188,
+   "damage": [
+    8,
+    15
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 93797,
+     "name": "Boughs in the Wind"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 5356,
+   "name": "Branding Rod",
+   "quality": 2,
+   "ilvl": 27,
+   "req": 10,
+   "side": "Horde",
+   "school": "Fire",
+   "dps": 21.562,
+   "damage": [
+    24,
+    45
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 873,
+     "name": "Isha Awak"
+    },
+    "where": "The Barrens"
+   }
+  },
+  {
+   "id": 5212,
+   "name": "Blazing Wand",
+   "quality": 2,
+   "ilvl": 17,
+   "req": 12,
+   "side": null,
+   "school": "Fire",
+   "dps": 12.667,
+   "damage": [
+    13,
+    25
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5241,
+   "name": "Dwarven Flamestick",
+   "quality": 2,
+   "ilvl": 18,
+   "req": 13,
+   "side": "Alliance",
+   "school": "Fire",
+   "dps": 13.611,
+   "damage": [
+    17,
+    32
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 297,
+     "name": "Gathering Idols"
+    },
+    "where": "Loch Modan"
+   }
+  },
+  {
+   "id": 5326,
+   "name": "Flaring Baton",
+   "quality": 2,
+   "ilvl": 18,
+   "req": 13,
+   "side": null,
+   "school": "Fire",
+   "dps": 13.684,
+   "damage": [
+    18,
+    34
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 863,
+     "name": "The Escape"
+    },
+    "where": "The Barrens"
+   }
+  },
+  {
+   "id": 11288,
+   "name": "Greater Magic Wand",
+   "quality": 2,
+   "ilvl": 23,
+   "req": 13,
+   "side": null,
+   "school": "Arcane",
+   "dps": 17.5,
+   "damage": [
+    22,
+    41
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 14807,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 284193,
+   "name": "Moongazer's Wand",
+   "quality": 2,
+   "ilvl": 19,
+   "req": 14,
+   "side": null,
+   "school": "Arcane",
+   "dps": 14.412,
+   "damage": [
+    17,
+    32
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 2184,
+     "name": "Lady Moongazer"
+    },
+    "where": "Darkshore"
+   }
+  },
+  {
+   "id": 15204,
+   "name": "Moonstone Wand",
+   "quality": 2,
+   "ilvl": 18,
+   "req": 15,
+   "side": "Alliance",
+   "school": "Arcane",
+   "dps": 13.611,
+   "damage": [
+    17,
+    32
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4763,
+     "name": "The Blackwood Corrupted"
+    },
+    "where": "Darkshore"
+   }
+  },
+  {
+   "id": 5207,
+   "name": "Opaque Wand",
+   "quality": 2,
+   "ilvl": 20,
+   "req": 15,
+   "side": null,
+   "school": "Shadow",
+   "dps": 15.0,
+   "damage": [
+    14,
+    28
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5208,
+   "name": "Smoldering Wand",
+   "quality": 1,
+   "ilvl": 20,
+   "req": 15,
+   "side": null,
+   "school": "Fire",
+   "dps": 13.438,
+   "damage": [
+    15,
+    28
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 281925,
+   "name": "Whelpfire Wand",
+   "quality": 2,
+   "ilvl": 20,
+   "req": 15,
+   "side": null,
+   "school": "Fire",
+   "dps": 15.263,
+   "damage": [
+    20,
+    38
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 14272,
+     "name": "Snarlflare"
+    },
+    "where": "Redridge Mountains"
+   }
+  },
+  {
+   "id": 5240,
+   "name": "Torchlight Wand",
+   "quality": 2,
+   "ilvl": 21,
+   "req": 15,
+   "side": "Alliance",
+   "school": "Fire",
+   "dps": 15.769,
+   "damage": [
+    14,
+    27
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 104,
+     "name": "The Coastal Menace"
+    },
+    "where": "Westfall"
+   }
+  },
+  {
+   "id": 7607,
+   "name": "Sable Wand",
+   "quality": 2,
+   "ilvl": 22,
+   "req": 15,
+   "side": "Alliance",
+   "school": "Shadow",
+   "dps": 16.944,
+   "damage": [
+    21,
+    40
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 2040,
+     "name": "Underground Assault"
+    },
+    "where": "The Deadmines"
+   }
+  },
+  {
+   "id": 8071,
+   "name": "Sizzle Stick",
+   "quality": 2,
+   "ilvl": 23,
+   "req": 15,
+   "side": null,
+   "school": "Fire",
+   "dps": 17.647,
+   "damage": [
+    21,
+    39
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1487,
+     "name": "Deviate Eradication"
+    },
+    "where": "Wailing Caverns"
+   }
+  },
+  {
+   "id": 5209,
+   "name": "Gloom Wand",
+   "quality": 1,
+   "ilvl": 21,
+   "req": 16,
+   "side": null,
+   "school": "Shadow",
+   "dps": 14.444,
+   "damage": [
+    18,
+    34
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 12984,
+   "name": "Skycaller",
+   "quality": 3,
+   "ilvl": 21,
+   "req": 16,
+   "side": null,
+   "school": "Arcane",
+   "dps": 21.562,
+   "damage": [
+    24,
+    45
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5252,
+   "name": "Wand of Decay",
+   "quality": 2,
+   "ilvl": 21,
+   "req": 16,
+   "side": "Horde",
+   "school": "Shadow",
+   "dps": 15.667,
+   "damage": [
+    16,
+    31
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 516,
+     "name": "Beren's Peril"
+    },
+    "where": "Silverpine Forest"
+   }
+  },
+  {
+   "id": 5198,
+   "name": "Cookie's Stirring Rod",
+   "quality": 3,
+   "ilvl": 22,
+   "req": 17,
+   "side": null,
+   "school": "Arcane",
+   "dps": 22.308,
+   "damage": [
+    20,
+    38
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 645,
+     "name": "Cookie"
+    },
+    "where": "The Deadmines"
+   }
+  },
+  {
+   "id": 6677,
+   "name": "Spellcrafter Wand",
+   "quality": 2,
+   "ilvl": 26,
+   "req": 17,
+   "side": "Alliance",
+   "school": "Arcane",
+   "dps": 20.294,
+   "damage": [
+    24,
+    45
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1078,
+     "name": "Retrieval for Mauren"
+    },
+    "where": "Stonetalon Mountains"
+   }
+  },
+  {
+   "id": 5092,
+   "name": "Charred Razormane Wand",
+   "quality": 1,
+   "ilvl": 23,
+   "req": 18,
+   "side": null,
+   "school": "Fire",
+   "dps": 15.667,
+   "damage": [
+    16,
+    31
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 3458,
+     "name": "Razormane Seer"
+    },
+    "where": "The Barrens"
+   }
+  },
+  {
+   "id": 5243,
+   "name": "Firebelcher",
+   "quality": 3,
+   "ilvl": 23,
+   "req": 18,
+   "side": null,
+   "school": "Fire",
+   "dps": 23.235,
+   "damage": [
+    27,
+    52
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 5912,
+     "name": "Deviate Faerie Dragon"
+    },
+    "where": "Wailing Caverns"
+   }
+  },
+  {
+   "id": 7001,
+   "name": "Gravestone Scepter",
+   "quality": 3,
+   "ilvl": 29,
+   "req": 18,
+   "side": null,
+   "school": "Shadow",
+   "dps": 29.0,
+   "damage": [
+    30,
+    57
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest in Blackfathom Deeps",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5250,
+   "name": "Charred Wand",
+   "quality": 2,
+   "ilvl": 28,
+   "req": 19,
+   "side": "Horde",
+   "school": "Fire",
+   "dps": 22.222,
+   "damage": [
+    28,
+    52
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 567,
+     "name": "Dangerous!"
+    },
+    "where": "Hillsbrad Foothills"
+   }
+  },
+  {
+   "id": 5210,
+   "name": "Burning Wand",
+   "quality": 1,
+   "ilvl": 25,
+   "req": 20,
+   "side": null,
+   "school": "Fire",
+   "dps": 17.5,
+   "damage": [
+    17,
+    32
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5211,
+   "name": "Dusk Wand",
+   "quality": 1,
+   "ilvl": 25,
+   "req": 20,
+   "side": null,
+   "school": "Shadow",
+   "dps": 17.647,
+   "damage": [
+    21,
+    39
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 8186,
+   "name": "Dire Wand",
+   "quality": 2,
+   "ilvl": 26,
+   "req": 21,
+   "side": null,
+   "school": "Shadow",
+   "dps": 20.294,
+   "damage": [
+    24,
+    45
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 13062,
+   "name": "Thunderwood",
+   "quality": 3,
+   "ilvl": 27,
+   "req": 22,
+   "side": null,
+   "school": "Nature",
+   "dps": 27.105,
+   "damage": [
+    36,
+    67
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5246,
+   "name": "Excavation Rod",
+   "quality": 2,
+   "ilvl": 30,
+   "req": 22,
+   "side": "Alliance",
+   "school": "Fire",
+   "dps": 24.211,
+   "damage": [
+    32,
+    60
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 296,
+     "name": "Ormer's Revenge"
+    },
+    "where": "Wetlands"
+   }
+  },
+  {
+   "id": 5244,
+   "name": "Consecrated Wand",
+   "quality": 2,
+   "ilvl": 30,
+   "req": 23,
+   "side": "Alliance",
+   "school": "Nature",
+   "dps": 24.167,
+   "damage": [
+    20,
+    38
+   ],
+   "speed": 1.2,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 223,
+     "name": "Worgen in the Woods"
+    },
+    "where": "Duskwood"
+   }
+  },
+  {
+   "id": 15465,
+   "name": "Stingshot Wand",
+   "quality": 2,
+   "ilvl": 28,
+   "req": 24,
+   "side": "Horde",
+   "school": "Nature",
+   "dps": 22.222,
+   "damage": [
+    28,
+    52
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 5088,
+     "name": "Arikara"
+    },
+    "where": "Thousand Needles"
+   }
+  },
+  {
+   "id": 8184,
+   "name": "Firestarter",
+   "quality": 2,
+   "ilvl": 29,
+   "req": 24,
+   "side": null,
+   "school": "Fire",
+   "dps": 23.333,
+   "damage": [
+    24,
+    46
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 279847,
+   "name": "Unstable Power Core",
+   "quality": 2,
+   "ilvl": 36,
+   "req": 24,
+   "side": "Horde",
+   "school": "Arcane",
+   "dps": 29.706,
+   "damage": [
+    35,
+    66
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 96988,
+     "name": "Source of Power"
+    },
+    "where": "City of Dalaran"
+   }
+  },
+  {
+   "id": 5818,
+   "name": "Moonbeam Wand",
+   "quality": 2,
+   "ilvl": 30,
+   "req": 25,
+   "side": "Alliance",
+   "school": "Nature",
+   "dps": 24.167,
+   "damage": [
+    30,
+    57
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1044,
+     "name": "Answered Questions"
+    },
+    "where": "Ashenvale"
+   }
+  },
+  {
+   "id": 9489,
+   "name": "Gyromatic Icemaker",
+   "quality": 3,
+   "ilvl": 31,
+   "req": 26,
+   "side": null,
+   "school": "Frost",
+   "dps": 30.357,
+   "damage": [
+    29,
+    56
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop in Gnomeregan",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 11289,
+   "name": "Lesser Mystic Wand",
+   "quality": 2,
+   "ilvl": 31,
+   "req": 26,
+   "side": null,
+   "school": "Arcane",
+   "dps": 25.385,
+   "damage": [
+    23,
+    43
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 14809,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 6806,
+   "name": "Dancing Flame",
+   "quality": 2,
+   "ilvl": 38,
+   "req": 26,
+   "side": "Horde",
+   "school": "Fire",
+   "dps": 31.071,
+   "damage": [
+    30,
+    57
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1394,
+     "name": "Final Passage"
+    },
+    "where": "Thousand Needles"
+   }
+  },
+  {
+   "id": 5214,
+   "name": "Wand of Eventide",
+   "quality": 2,
+   "ilvl": 32,
+   "req": 27,
+   "side": null,
+   "school": "Arcane",
+   "dps": 25.769,
+   "damage": [
+    23,
+    44
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 273043,
+   "name": "Wand of Mana Concentration",
+   "quality": 3,
+   "ilvl": 32,
+   "req": 27,
+   "side": null,
+   "school": "Arcane",
+   "dps": 31.176,
+   "damage": [
+    37,
+    69
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 246016,
+     "name": "Arcanic Enigma"
+    },
+    "where": "Alterac Mountains"
+   }
+  },
+  {
+   "id": 6729,
+   "name": "Fizzle's Zippy Lighter",
+   "quality": 2,
+   "ilvl": 38,
+   "req": 28,
+   "side": null,
+   "school": "Fire",
+   "dps": 31.0,
+   "damage": [
+    32,
+    61
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1137,
+     "name": "News for Fizzle"
+    },
+    "where": "Thousand Needles"
+   }
+  },
+  {
+   "id": 270084,
+   "name": "Master Hunter's Wand",
+   "quality": 2,
+   "ilvl": 43,
+   "req": 28,
+   "side": null,
+   "school": "Shadow",
+   "dps": 34.667,
+   "damage": [
+    36,
+    68
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 208,
+     "name": "Big Game Hunter"
+    },
+    "where": "Stranglethorn Vale"
+   }
+  },
+  {
+   "id": 5236,
+   "name": "Combustible Wand",
+   "quality": 1,
+   "ilvl": 34,
+   "req": 29,
+   "side": null,
+   "school": "Fire",
+   "dps": 25.938,
+   "damage": [
+    29,
+    54
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 13063,
+   "name": "Starfaller",
+   "quality": 3,
+   "ilvl": 34,
+   "req": 29,
+   "side": null,
+   "school": "Arcane",
+   "dps": 32.857,
+   "damage": [
+    32,
+    60
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5245,
+   "name": "Summoner's Wand",
+   "quality": 2,
+   "ilvl": 34,
+   "req": 29,
+   "side": null,
+   "school": "Arcane",
+   "dps": 28.056,
+   "damage": [
+    35,
+    66
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 2358,
+     "name": "Dalaran Summoner"
+    },
+    "where": "Alterac Mountains"
+   }
+  },
+  {
+   "id": 217287,
+   "name": "Greater Mystic Wand",
+   "quality": 2,
+   "ilvl": 35,
+   "req": 30,
+   "side": null,
+   "school": "Arcane",
+   "dps": 29.0,
+   "damage": [
+    40,
+    76
+   ],
+   "speed": 2.0,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 14810,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 7708,
+   "name": "Necrotic Wand",
+   "quality": 3,
+   "ilvl": 35,
+   "req": 30,
+   "side": null,
+   "school": "Shadow",
+   "dps": 33.214,
+   "damage": [
+    32,
+    61
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 6490,
+     "name": "Azshir the Sleepless"
+    },
+    "where": "Scarlet Monastery"
+   }
+  },
+  {
+   "id": 5347,
+   "name": "Pestilent Wand",
+   "quality": 1,
+   "ilvl": 35,
+   "req": 30,
+   "side": null,
+   "school": "Nature",
+   "dps": 27.0,
+   "damage": [
+    28,
+    53
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5213,
+   "name": "Scorching Wand",
+   "quality": 2,
+   "ilvl": 35,
+   "req": 30,
+   "side": null,
+   "school": "Fire",
+   "dps": 28.846,
+   "damage": [
+    26,
+    49
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 16789,
+   "name": "Captain Rackmore's Tiller",
+   "quality": 2,
+   "ilvl": 36,
+   "req": 30,
+   "side": null,
+   "school": "Frost",
+   "dps": 29.667,
+   "damage": [
+    31,
+    58
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 6161,
+     "name": "Claim Rackmore's Treasure!"
+    },
+    "where": "Desolace"
+   }
+  },
+  {
+   "id": 6797,
+   "name": "Eyepoker",
+   "quality": 2,
+   "ilvl": 37,
+   "req": 30,
+   "side": "Horde",
+   "school": "Arcane",
+   "dps": 30.588,
+   "damage": [
+    36,
+    68
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1273,
+     "name": "Questioning Reethe"
+    },
+    "where": "Dustwallow Marsh"
+   }
+  },
+  {
+   "id": 5248,
+   "name": "Flash Wand",
+   "quality": 2,
+   "ilvl": 37,
+   "req": 30,
+   "side": null,
+   "school": "Nature",
+   "dps": 30.385,
+   "damage": [
+    27,
+    52
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 705,
+     "name": "Pearl Diving"
+    },
+    "where": "Badlands"
+   }
+  },
+  {
+   "id": 5249,
+   "name": "Burning Sliver",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 30,
+   "side": "Alliance",
+   "school": "Fire",
+   "dps": 32.692,
+   "damage": [
+    29,
+    56
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 504,
+     "name": "Crushridge Warmongers"
+    },
+    "where": "Alterac Mountains"
+   }
+  },
+  {
+   "id": 5253,
+   "name": "Goblin Igniter",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 30,
+   "side": null,
+   "school": "Fire",
+   "dps": 32.75,
+   "damage": [
+    46,
+    85
+   ],
+   "speed": 2.0,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 600,
+     "name": "Venture Company Mining"
+    },
+    "where": "Stranglethorn Vale"
+   }
+  },
+  {
+   "id": 5247,
+   "name": "Rod of Sorrow",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 30,
+   "side": "Alliance",
+   "school": "Shadow",
+   "dps": 32.632,
+   "damage": [
+    43,
+    81
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 685,
+     "name": "WANTED: Otto and Falconcrest"
+    },
+    "where": "Arathi Highlands"
+   }
+  },
+  {
+   "id": 15692,
+   "name": "Kodo Brander",
+   "quality": 2,
+   "ilvl": 38,
+   "req": 32,
+   "side": null,
+   "school": "Arcane",
+   "dps": 31.053,
+   "damage": [
+    41,
+    77
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 5943,
+     "name": "Gizelton Caravan"
+    },
+    "where": "Desolace"
+   }
+  },
+  {
+   "id": 9381,
+   "name": "Earthen Rod",
+   "quality": 3,
+   "ilvl": 38,
+   "req": 33,
+   "side": null,
+   "school": "Nature",
+   "dps": 35.588,
+   "damage": [
+    42,
+    79
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 4547,
+   "name": "Gnomish Zapper",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 35,
+   "side": null,
+   "school": "Arcane",
+   "dps": 32.692,
+   "damage": [
+    29,
+    56
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 666,
+     "name": "Sunken Treasure"
+    },
+    "where": "Arathi Highlands"
+   }
+  },
+  {
+   "id": 5215,
+   "name": "Ember Wand",
+   "quality": 2,
+   "ilvl": 41,
+   "req": 36,
+   "side": null,
+   "school": "Fire",
+   "dps": 33.667,
+   "damage": [
+    35,
+    66
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": [
+    {
+     "name": "of the Wolf",
+     "stats": "+3–4 Agility, +3–4 Spirit",
+     "chance": 12.8
+    },
+    {
+     "name": "of the Boar",
+     "stats": "+3–4 Spirit, +3–4 Strength",
+     "chance": 12.5
+    },
+    {
+     "name": "of the Gorilla",
+     "stats": "+3–4 Intellect, +3–4 Strength",
+     "chance": 10.7
+    },
+    {
+     "name": "of the Falcon",
+     "stats": "+3–4 Agility, +3–4 Intellect",
+     "chance": 9.7
+    },
+    {
+     "name": "of the Whale",
+     "stats": "+3–4 Spirit, +3–4 Stamina",
+     "chance": 9.2
+    },
+    {
+     "name": "of the Owl",
+     "stats": "+3–4 Intellect, +3–4 Spirit",
+     "chance": 7.6
+    },
+    {
+     "name": "of the Eagle",
+     "stats": "+3–4 Intellect, +3–4 Stamina",
+     "chance": 6.2
+    },
+    {
+     "name": "of Spirit",
+     "stats": "+5 Spirit",
+     "chance": 5.9
+    },
+    {
+     "name": "of Healing",
+     "stats": "+11–22 Healing Spells",
+     "chance": 4.9
+    },
+    {
+     "name": "of Stamina",
+     "stats": "+5 Stamina",
+     "chance": 4.5
+    },
+    {
+     "name": "of Intellect",
+     "stats": "+5 Intellect",
+     "chance": 3.8
+    },
+    {
+     "name": "of Arcane Wrath",
+     "stats": "+7–13 Arcane Spell Damage",
+     "chance": 3.8
+    },
+    {
+     "name": "of Fiery Wrath",
+     "stats": "+7 Fire Spell Damage",
+     "chance": 3.6
+    },
+    {
+     "name": "of Frozen Wrath",
+     "stats": "+7–13 Frost Spell Damage",
+     "chance": 3.4
+    },
+    {
+     "name": "of Shadow Wrath",
+     "stats": "+7–13 Shadow Spell Damage",
+     "chance": 1.3
+    }
+   ]
+  },
+  {
+   "id": 13064,
+   "name": "Jaina's Firestarter",
+   "quality": 3,
+   "ilvl": 42,
+   "req": 37,
+   "side": null,
+   "school": "Fire",
+   "dps": 39.375,
+   "damage": [
+    44,
+    82
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 249144,
+   "name": "Twisted Nether Wand",
+   "quality": 2,
+   "ilvl": 42,
+   "req": 37,
+   "side": null,
+   "school": "Shadow",
+   "dps": 34.0,
+   "damage": [
+    35,
+    67
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248461,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 10704,
+   "name": "Chillnail Splinter",
+   "quality": 2,
+   "ilvl": 46,
+   "req": 38,
+   "side": "Horde",
+   "school": "Frost",
+   "dps": 37.143,
+   "damage": [
+    36,
+    68
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1173,
+     "name": "Challenge Overlord Mok'Morokk"
+    },
+    "where": "Dustwallow Marsh"
+   }
+  },
+  {
+   "id": 277256,
+   "name": "Dudd's Second-Favorite Wand",
+   "quality": 2,
+   "ilvl": 45,
+   "req": 40,
+   "side": null,
+   "school": "Fire",
+   "dps": 35.667,
+   "damage": [
+    37,
+    70
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 95384,
+     "name": "Partial Mystical Notes"
+    },
+    "where": "Stranglethorn Vale"
+   }
+  },
+  {
+   "id": 5238,
+   "name": "Pitchwood Wand",
+   "quality": 1,
+   "ilvl": 45,
+   "req": 40,
+   "side": null,
+   "school": "Fire",
+   "dps": 34.706,
+   "damage": [
+    41,
+    77
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 5216,
+   "name": "Umbral Wand",
+   "quality": 2,
+   "ilvl": 45,
+   "req": 40,
+   "side": null,
+   "school": "Shadow",
+   "dps": 35.667,
+   "damage": [
+    37,
+    70
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": [
+    {
+     "name": "of the Boar",
+     "stats": "+3–4 Spirit, +3–4 Strength",
+     "chance": 12.9
+    },
+    {
+     "name": "of the Wolf",
+     "stats": "+3–4 Agility, +3–4 Spirit",
+     "chance": 12.7
+    },
+    {
+     "name": "of the Falcon",
+     "stats": "+3–4 Agility, +3–4 Intellect",
+     "chance": 10.5
+    },
+    {
+     "name": "of the Gorilla",
+     "stats": "+3–4 Intellect, +3–4 Strength",
+     "chance": 10.4
+    },
+    {
+     "name": "of the Whale",
+     "stats": "+3–4 Spirit, +3–4 Stamina",
+     "chance": 9.0
+    },
+    {
+     "name": "of the Owl",
+     "stats": "+3–4 Intellect, +3–4 Spirit",
+     "chance": 7.7
+    },
+    {
+     "name": "of the Eagle",
+     "stats": "+3–4 Intellect, +3–4 Stamina",
+     "chance": 6.2
+    },
+    {
+     "name": "of Spirit",
+     "stats": "+6 Spirit",
+     "chance": 5.3
+    },
+    {
+     "name": "of Stamina",
+     "stats": "+6 Stamina",
+     "chance": 4.6
+    },
+    {
+     "name": "of Healing",
+     "stats": "+13–22 Healing Spells",
+     "chance": 4.2
+    },
+    {
+     "name": "of Arcane Wrath",
+     "stats": "+9–14 Arcane Spell Damage",
+     "chance": 4.1
+    },
+    {
+     "name": "of Fiery Wrath",
+     "stats": "+9–14 Fire Spell Damage",
+     "chance": 3.9
+    },
+    {
+     "name": "of Intellect",
+     "stats": "+6 Intellect",
+     "chance": 3.8
+    },
+    {
+     "name": "of Frozen Wrath",
+     "stats": "+9–14 Frost Spell Damage",
+     "chance": 3.5
+    },
+    {
+     "name": "of Shadow Wrath",
+     "stats": "+9–14 Shadow Spell Damage",
+     "chance": 1.2
+    }
+   ]
+  },
+  {
+   "id": 5239,
+   "name": "Blackbone Wand",
+   "quality": 1,
+   "ilvl": 46,
+   "req": 41,
+   "side": null,
+   "school": "Shadow",
+   "dps": 35.312,
+   "damage": [
+    39,
+    74
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 9654,
+   "name": "Cairnstone Sliver",
+   "quality": 2,
+   "ilvl": 50,
+   "req": 42,
+   "side": "Alliance",
+   "school": "Arcane",
+   "dps": 41.389,
+   "damage": [
+    52,
+    97
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 2942,
+     "name": "The Morrow Stone"
+    },
+    "where": "Feralas"
+   }
+  },
+  {
+   "id": 11860,
+   "name": "Charged Lightning Rod",
+   "quality": 2,
+   "ilvl": 46,
+   "req": 43,
+   "side": null,
+   "school": "Nature",
+   "dps": 37.333,
+   "damage": [
+    39,
+    73
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4450,
+     "name": "Ledger from Tanaris"
+    },
+    "where": "Searing Gorge"
+   }
+  },
+  {
+   "id": 249234,
+   "name": "Dreambough Wand",
+   "quality": 2,
+   "ilvl": 48,
+   "req": 43,
+   "side": null,
+   "school": "Nature",
+   "dps": 39.167,
+   "damage": [
+    49,
+    92
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248509,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 13065,
+   "name": "Wand of Allistarj",
+   "quality": 3,
+   "ilvl": 50,
+   "req": 45,
+   "side": null,
+   "school": "Arcane",
+   "dps": 48.421,
+   "damage": [
+    64,
+    120
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 19118,
+   "name": "Nature's Breath",
+   "quality": 2,
+   "ilvl": 50,
+   "req": 46,
+   "side": "Horde",
+   "school": "Nature",
+   "dps": 41.071,
+   "damage": [
+    40,
+    75
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 7850,
+     "name": "Dark Vessels"
+    },
+    "where": "The Hinterlands"
+   }
+  },
+  {
+   "id": 15279,
+   "name": "Ivory Wand",
+   "quality": 2,
+   "ilvl": 51,
+   "req": 46,
+   "side": null,
+   "school": "Arcane",
+   "dps": 42.143,
+   "damage": [
+    41,
+    77
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": [
+    {
+     "name": "of the Boar",
+     "stats": "+4–5 Spirit, +4–5 Strength",
+     "chance": 12.0
+    },
+    {
+     "name": "of the Wolf",
+     "stats": "+4–5 Agility, +4–5 Spirit",
+     "chance": 11.6
+    },
+    {
+     "name": "of the Gorilla",
+     "stats": "+4–5 Intellect, +4–5 Strength",
+     "chance": 10.9
+    },
+    {
+     "name": "of the Falcon",
+     "stats": "+4–5 Agility, +4–5 Intellect",
+     "chance": 10.5
+    },
+    {
+     "name": "of the Whale",
+     "stats": "+4–5 Spirit, +4–5 Stamina",
+     "chance": 9.6
+    },
+    {
+     "name": "of the Owl",
+     "stats": "+4–5 Intellect, +4–5 Spirit",
+     "chance": 7.8
+    },
+    {
+     "name": "of the Eagle",
+     "stats": "+4–5 Intellect, +4–5 Stamina",
+     "chance": 6.7
+    },
+    {
+     "name": "of Spirit",
+     "stats": "+6–7 Spirit",
+     "chance": 5.5
+    },
+    {
+     "name": "of Stamina",
+     "stats": "+6–7 Stamina",
+     "chance": 4.7
+    },
+    {
+     "name": "of Healing",
+     "stats": "+13–26 Healing Spells",
+     "chance": 4.6
+    },
+    {
+     "name": "of Intellect",
+     "stats": "+6–7 Intellect",
+     "chance": 4.2
+    },
+    {
+     "name": "of Arcane Wrath",
+     "stats": "+9–17 Arcane Spell Damage",
+     "chance": 3.8
+    },
+    {
+     "name": "of Fiery Wrath",
+     "stats": "+9–17 Fire Spell Damage",
+     "chance": 3.8
+    },
+    {
+     "name": "of Frozen Wrath",
+     "stats": "+9–17 Frost Spell Damage",
+     "chance": 2.8
+    },
+    {
+     "name": "of Shadow Wrath",
+     "stats": "+9–17 Shadow Spell Damage",
+     "chance": 1.5
+    }
+   ]
+  },
+  {
+   "id": 15280,
+   "name": "Wizard's Hand",
+   "quality": 2,
+   "ilvl": 53,
+   "req": 48,
+   "side": null,
+   "school": "Arcane",
+   "dps": 44.444,
+   "damage": [
+    56,
+    104
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": [
+    {
+     "name": "of the Boar",
+     "stats": "+4–5 Spirit, +4–5 Strength",
+     "chance": 12.2
+    },
+    {
+     "name": "of the Wolf",
+     "stats": "+4–5 Agility, +4–5 Spirit",
+     "chance": 11.8
+    },
+    {
+     "name": "of the Falcon",
+     "stats": "+4–5 Agility, +4–5 Intellect",
+     "chance": 10.5
+    },
+    {
+     "name": "of the Gorilla",
+     "stats": "+4–5 Intellect, +4–5 Strength",
+     "chance": 10.4
+    },
+    {
+     "name": "of the Whale",
+     "stats": "+4–5 Spirit, +4–5 Stamina",
+     "chance": 9.6
+    },
+    {
+     "name": "of the Owl",
+     "stats": "+4–5 Intellect, +4–5 Spirit",
+     "chance": 8.1
+    },
+    {
+     "name": "of the Eagle",
+     "stats": "+4–5 Intellect, +4–5 Stamina",
+     "chance": 6.6
+    },
+    {
+     "name": "of Spirit",
+     "stats": "+7 Spirit",
+     "chance": 5.5
+    },
+    {
+     "name": "of Healing",
+     "stats": "+15–29 Healing Spells",
+     "chance": 4.7
+    },
+    {
+     "name": "of Stamina",
+     "stats": "+7 Stamina",
+     "chance": 4.6
+    },
+    {
+     "name": "of Intellect",
+     "stats": "+7 Intellect",
+     "chance": 4.1
+    },
+    {
+     "name": "of Arcane Wrath",
+     "stats": "+10–19 Arcane Spell Damage",
+     "chance": 3.7
+    },
+    {
+     "name": "of Fiery Wrath",
+     "stats": "+10–19 Fire Spell Damage",
+     "chance": 3.7
+    },
+    {
+     "name": "of Frozen Wrath",
+     "stats": "+10–19 Frost Spell Damage",
+     "chance": 3.1
+    },
+    {
+     "name": "of Shadow Wrath",
+     "stats": "+10 Shadow Spell Damage",
+     "chance": 1.5
+    }
+   ]
+  },
+  {
+   "id": 249232,
+   "name": "Lesser Eternal Wand",
+   "quality": 2,
+   "ilvl": 54,
+   "req": 49,
+   "side": null,
+   "school": "Arcane",
+   "dps": 45.75,
+   "damage": [
+    64,
+    119
+   ],
+   "speed": 2.0,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248505,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 19108,
+   "name": "Wand of Biting Cold",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 51,
+   "side": null,
+   "school": "Frost",
+   "dps": 64.0,
+   "damage": [
+    67,
+    125
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest in Alterac Valley",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 15281,
+   "name": "Glowstar Rod",
+   "quality": 2,
+   "ilvl": 57,
+   "req": 52,
+   "side": null,
+   "school": "Arcane",
+   "dps": 50.0,
+   "damage": [
+    52,
+    98
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": [
+    {
+     "name": "of the Boar",
+     "stats": "+4–5 Spirit, +4–5 Strength",
+     "chance": 10.1
+    },
+    {
+     "name": "of the Gorilla",
+     "stats": "+4–5 Intellect, +4–5 Strength",
+     "chance": 10.0
+    },
+    {
+     "name": "of the Wolf",
+     "stats": "+4–5 Agility, +4–5 Spirit",
+     "chance": 9.7
+    },
+    {
+     "name": "of the Whale",
+     "stats": "+4–5 Spirit, +4–5 Stamina",
+     "chance": 9.6
+    },
+    {
+     "name": "of the Falcon",
+     "stats": "+4–5 Agility, +4–5 Intellect",
+     "chance": 9.4
+    },
+    {
+     "name": "of the Owl",
+     "stats": "+4–5 Intellect, +4–5 Spirit",
+     "chance": 8.7
+    },
+    {
+     "name": "of the Eagle",
+     "stats": "+4–5 Intellect, +4–5 Stamina",
+     "chance": 8.0
+    },
+    {
+     "name": "of Healing",
+     "stats": "+15–31 Healing Spells",
+     "chance": 5.9
+    },
+    {
+     "name": "of Intellect",
+     "stats": "+7–8 Intellect",
+     "chance": 5.5
+    },
+    {
+     "name": "of Spirit",
+     "stats": "+7–8 Spirit",
+     "chance": 5.1
+    },
+    {
+     "name": "of Stamina",
+     "stats": "+7–8 Stamina",
+     "chance": 5.1
+    },
+    {
+     "name": "of Fiery Wrath",
+     "stats": "+10–20 Fire Spell Damage",
+     "chance": 4.3
+    },
+    {
+     "name": "of Arcane Wrath",
+     "stats": "+10–20 Arcane Spell Damage",
+     "chance": 3.4
+    },
+    {
+     "name": "of Frozen Wrath",
+     "stats": "+10–20 Frost Spell Damage",
+     "chance": 2.9
+    },
+    {
+     "name": "of Shadow Wrath",
+     "stats": "+10–20 Shadow Spell Damage",
+     "chance": 2.0
+    }
+   ]
+  },
+  {
+   "id": 13004,
+   "name": "Torch of Austen",
+   "quality": 3,
+   "ilvl": 58,
+   "req": 53,
+   "side": null,
+   "school": "Fire",
+   "dps": 56.786,
+   "damage": [
+    55,
+    104
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 16993,
+   "name": "Smokey's Fireshooter",
+   "quality": 2,
+   "ilvl": 60,
+   "req": 54,
+   "side": null,
+   "school": "Fire",
+   "dps": 53.158,
+   "damage": [
+    70,
+    132
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 6041,
+     "name": "When Smokey Sings, I Get Violent"
+    },
+    "where": "Eastern Plaguelands"
+   }
+  },
+  {
+   "id": 249385,
+   "name": "Brilliant Wand",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 55,
+   "side": null,
+   "school": "Fire",
+   "dps": 59.583,
+   "damage": [
+    50,
+    93
+   ],
+   "speed": 1.2,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248650,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 15282,
+   "name": "Dragon Finger",
+   "quality": 2,
+   "ilvl": 60,
+   "req": 55,
+   "side": null,
+   "school": "Fire",
+   "dps": 53.214,
+   "damage": [
+    52,
+    97
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": [
+    {
+     "name": "of the Falcon",
+     "stats": "+5 Agility, +5 Intellect",
+     "chance": 9.8
+    },
+    {
+     "name": "of the Owl",
+     "stats": "+5 Intellect, +5 Spirit",
+     "chance": 9.5
+    },
+    {
+     "name": "of the Whale",
+     "stats": "+5 Spirit, +5 Stamina",
+     "chance": 9.5
+    },
+    {
+     "name": "of the Gorilla",
+     "stats": "+5 Intellect, +5 Strength",
+     "chance": 9.2
+    },
+    {
+     "name": "of the Boar",
+     "stats": "+5 Spirit, +5 Strength",
+     "chance": 9.1
+    },
+    {
+     "name": "of the Eagle",
+     "stats": "+5 Intellect, +5 Stamina",
+     "chance": 9.0
+    },
+    {
+     "name": "of the Wolf",
+     "stats": "+5 Agility, +5 Spirit",
+     "chance": 8.9
+    },
+    {
+     "name": "of Healing",
+     "stats": "+18–33 Healing Spells",
+     "chance": 6.9
+    },
+    {
+     "name": "of Spirit",
+     "stats": "+8 Spirit",
+     "chance": 5.1
+    },
+    {
+     "name": "of Stamina",
+     "stats": "+8 Stamina",
+     "chance": 5.0
+    },
+    {
+     "name": "of Intellect",
+     "stats": "+8 Intellect",
+     "chance": 4.8
+    },
+    {
+     "name": "of Fiery Wrath",
+     "stats": "+11–21 Fire Spell Damage",
+     "chance": 4.3
+    },
+    {
+     "name": "of Frozen Wrath",
+     "stats": "+11–21 Frost Spell Damage",
+     "chance": 3.5
+    },
+    {
+     "name": "of Arcane Wrath",
+     "stats": "+11–21 Arcane Spell Damage",
+     "chance": 3.3
+    },
+    {
+     "name": "of Shadow Wrath",
+     "stats": "+11–21 Shadow Spell Damage",
+     "chance": 2.0
+    },
+    {
+     "name": "of Nature Resistance",
+     "stats": "+8 Nature Resistance",
+     "chance": 0.1
+    }
+   ]
+  },
+  {
+   "id": 249237,
+   "name": "Greater Eternal Wand",
+   "quality": 2,
+   "ilvl": 60,
+   "req": 55,
+   "side": null,
+   "school": "Arcane",
+   "dps": 53.333,
+   "damage": [
+    56,
+    104
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248515,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 16997,
+   "name": "Stormrager",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 56,
+   "side": null,
+   "school": "Nature",
+   "dps": 62.692,
+   "damage": [
+    57,
+    106
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest in Eastern Plaguelands",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 15283,
+   "name": "Lunar Wand",
+   "quality": 2,
+   "ilvl": 64,
+   "req": 59,
+   "side": null,
+   "school": "Arcane",
+   "dps": 56.765,
+   "damage": [
+    67,
+    126
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": [
+    {
+     "name": "of the Eagle",
+     "stats": "+5–6 Intellect, +5–6 Stamina",
+     "chance": 10.8
+    },
+    {
+     "name": "of the Owl",
+     "stats": "+5–6 Intellect, +5–6 Spirit",
+     "chance": 9.2
+    },
+    {
+     "name": "of the Wolf",
+     "stats": "+5–6 Agility, +5–6 Spirit",
+     "chance": 9.1
+    },
+    {
+     "name": "of the Whale",
+     "stats": "+5–6 Spirit, +5–6 Stamina",
+     "chance": 9.0
+    },
+    {
+     "name": "of the Falcon",
+     "stats": "+5–6 Agility, +5–6 Intellect",
+     "chance": 8.9
+    },
+    {
+     "name": "of the Gorilla",
+     "stats": "+5–6 Intellect, +5–6 Strength",
+     "chance": 8.0
+    },
+    {
+     "name": "of the Boar",
+     "stats": "+5–6 Spirit, +5–6 Strength",
+     "chance": 7.8
+    },
+    {
+     "name": "of Stamina",
+     "stats": "+9 Stamina",
+     "chance": 6.7
+    },
+    {
+     "name": "of Intellect",
+     "stats": "+9 Intellect",
+     "chance": 5.7
+    },
+    {
+     "name": "of Healing",
+     "stats": "+20 Healing Spells",
+     "chance": 5.6
+    },
+    {
+     "name": "of Fiery Wrath",
+     "stats": "+13 Fire Spell Damage",
+     "chance": 4.7
+    },
+    {
+     "name": "of Spirit",
+     "stats": "+9 Spirit",
+     "chance": 4.2
+    },
+    {
+     "name": "of Frozen Wrath",
+     "stats": "+13 Frost Spell Damage",
+     "chance": 4.1
+    },
+    {
+     "name": "of Shadow Wrath",
+     "stats": "+13 Shadow Spell Damage",
+     "chance": 3.5
+    },
+    {
+     "name": "of Arcane Wrath",
+     "stats": "+13 Arcane Spell Damage",
+     "chance": 2.6
+    },
+    {
+     "name": "of the Tiger",
+     "stats": "+5 Agility, +6 Strength",
+     "chance": 0.1
+    },
+    {
+     "name": "of Frost Resistance",
+     "stats": "+9 Frost Resistance",
+     "chance": 0.1
+    },
+    {
+     "name": "of Power",
+     "stats": "+12 Attack Power",
+     "chance": 0.1
+    }
+   ]
+  },
+  {
+   "id": 279246,
+   "name": "Torch of Light",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "side": null,
+   "school": "Arcane",
+   "dps": 76.765,
+   "damage": [
+    91,
+    170
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1306520,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  }
+ ],
+ "noSource": [
+  {
+   "id": 281733,
+   "name": "Restored Wand",
+   "quality": 2,
+   "ilvl": 1,
+   "req": 1,
+   "side": null,
+   "school": "Physical",
+   "dps": 2.647,
+   "damage": [
+    3,
+    6
+   ],
+   "speed": 1.7,
+   "source": null
+  },
+  {
+   "id": 5235,
+   "name": "Alchemist's Wand",
+   "quality": 1,
+   "ilvl": 7,
+   "req": null,
+   "side": null,
+   "school": "Fire",
+   "dps": 4.444,
+   "damage": [
+    5,
+    11
+   ],
+   "speed": 1.8,
+   "source": null
+  },
+  {
+   "id": 284574,
+   "name": "Snapped Branch Wand",
+   "quality": 2,
+   "ilvl": 27,
+   "req": 22,
+   "side": null,
+   "school": "Nature",
+   "dps": 21.176,
+   "damage": [
+    25,
+    47
+   ],
+   "speed": 1.7,
+   "source": null
+  },
+  {
+   "id": 281263,
+   "name": "Wicked Lich's Finger",
+   "quality": 2,
+   "ilvl": 29,
+   "req": null,
+   "side": null,
+   "school": "Physical",
+   "dps": 23.235,
+   "damage": [
+    27,
+    52
+   ],
+   "speed": 1.7,
+   "source": null
+  },
+  {
+   "id": 274919,
+   "name": "Neophyte's Wand",
+   "quality": 2,
+   "ilvl": 40,
+   "req": null,
+   "side": null,
+   "school": "Shadow",
+   "dps": 32.75,
+   "damage": [
+    46,
+    85
+   ],
+   "speed": 2.0,
+   "source": null
+  },
+  {
+   "id": 274425,
+   "name": "White Obsidian Wand",
+   "quality": 3,
+   "ilvl": 44,
+   "req": 39,
+   "side": null,
+   "school": "Arcane",
+   "dps": 41.471,
+   "damage": [
+    49,
+    92
+   ],
+   "speed": 1.7,
+   "source": null
+  },
+  {
+   "id": 275837,
+   "name": "Felflick's Fire Flicker",
+   "quality": 2,
+   "ilvl": 58,
+   "req": null,
+   "side": null,
+   "school": "Fire",
+   "dps": 51.25,
+   "damage": [
+    86,
+    160
+   ],
+   "speed": 2.4,
+   "source": null
+  },
+  {
+   "id": 281600,
+   "name": "Wail of Death",
+   "quality": 2,
+   "ilvl": 61,
+   "req": 56,
+   "side": null,
+   "school": "Fire",
+   "dps": 54.167,
+   "damage": [
+    68,
+    127
+   ],
+   "speed": 1.8,
+   "source": null
+  }
+ ],
+ "affixSource": "Classic 1.12 server data (cmangos classic-db): item_enchantment_template, with suffix names and stats from the game client"
+}

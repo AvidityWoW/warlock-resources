@@ -1,0 +1,47 @@
+---
+import { ClientRouter, slide } from 'astro:transitions';
+import { getImage } from 'astro:assets';
+import Header from '../components/Header.astro';
+import { SITE } from '../data/site';
+import logo from '../assets/brand/shadowbolt.jpg';
+import '@fontsource/cinzel-decorative/latin-700.css';   // title font, served with the site
+import titleFont from '@fontsource/cinzel-decorative/files/cinzel-decorative-latin-700-normal.woff2?url';
+import '../styles/global.css';
+
+interface Props {
+  /** page name, shown before the site name in the tab ("Wands · The Grimoire"); leave out on the home page */
+  title?: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE}` : SITE;
+const favicon = await getImage({ src: logo, width: 32, height: 32, format: 'png' });
+const touchIcon = await getImage({ src: logo, width: 56, height: 56, format: 'png' });
+---
+<!doctype html>
+<html lang="en" transition:animate="none">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{fullTitle}</title>
+  <link rel="preload" href={titleFont} as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/png" href={favicon.src}>
+  <link rel="apple-touch-icon" href={touchIcon.src}>
+  {description && <meta name="description" content={description}>}
+  <script is:inline>
+    // Apply a saved light theme before first paint, and again whenever in-site navigation swaps in a new <html>.
+    (function () {
+      var apply = function (doc) { try { if (localStorage.getItem('theme') === 'light') doc.documentElement.dataset.theme = 'light'; } catch (e) {} };
+      apply(document);
+      if (!window.__themeHook) { window.__themeHook = true; document.addEventListener('astro:before-swap', function (e) { apply(e.newDocument); }); }
+    })();
+  </script>
+  <ClientRouter />
+  <slot name="head" />
+</head>
+<body>
+  <Header />
+  <!-- only the page content slides; the header stays put (it persists between pages) -->
+  <main class="container" transition:animate={slide({ duration: '0.28s' })}><slot /></main>
+</body>
+</html>

@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import WandItem from '../components/WandItem.astro';
+import FactionIcon from '../components/FactionIcon.astro';
+import { data, type Wand } from '../data/wands';
+import { upgradePaths } from '../lib/path';
+import '../styles/wands.css';
+
+const paths = upgradePaths(data.wands);
+
+// Source types for the Type menu, with how many wands each has.
+const KINDS = ['Quest', 'Drop', 'World drop', 'Crafted', 'Vendor', 'Other'] as const;
+const kinds = KINDS.map((k) => ({ k, n: data.wands.filter((w) => (w.source?.kind ?? 'Other') === k).length })).filter((x) => x.n);
+
+// Group by the level you can equip the wand: 1–10, 11–20, …
+const bands = new Map<number, Wand[]>();
+for (const w of data.wands) {
+  const top = Math.max(10, Math.ceil((w.req ?? 1) / 10) * 10);
+  bands.set(top, [...(bands.get(top) ?? []), w]);
+}
+---
+<Layout title="Wands" description="Every wand a warlock can use in WoW Forever, grouped by level.">
+  <Fragment slot="head">
+    <script is:inline>window.whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };   // read by Wowhead's tooltips.js</script>
+    <script is:inline src="https://wow.zamimg.com/js/tooltips.js"></script>
+  </Fragment>
+
+  <div class="page-head">
+    <h1>Wands</h1>
+    <p>Wands for warlocks in WoW Forever, sorted by level. Tick the ones you want on your upgrade path.</p>
+  </div>
+
+  <div class="legend muted">
+    <span><span class="mark up"></span>Green: suggested upgrades</span>
+    <span><span class="mark pick"></span>Gold: ones you added</span>
+    <span id="edits" hidden><span class="what"></span> · <button type="button" id="reset-path" class="link">reset path</button></span>
+  </div>
+
+  <!-- sticks under the header: the level band you're scrolled to, plus the controls -->
+  <div class="toolbar">
+    <span class="now" id="now" aria-hidden="true">Levels 1–10</span>
+    <span id="count" class="muted" aria-live="polite">{data.wands.length} wands</span>
+    <label class="search">
+      <span class="sr-only">Search wands, quests, zones and schools</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search" autocomplete="off">
+    </label>
+    <div class="seg" role="group" aria-label="Faction">
+      <button type="button" data-fac="b" aria-pressed="true">Both</button>
+      <button type="button" data-fac="a" aria-pressed="false" aria-label="Alliance"><FactionIcon side="Alliance" /><span class="t">Alliance</span></button>
+      <button type="button" data-fac="h" aria-pressed="false" aria-label="Horde"><FactionIcon side="Horde" /><span class="t">Horde</span></button>
+    </div>
+    <details class="types" id="types">
+      <summary>Type: <span id="typesum">All</span></summary>
+      <div class="menu" role="menu" aria-label="Source types">
+        {kinds.map(({ k, n }) => <button type="button" role="menuitemcheckbox" aria-checked="true" data-kind={k}><span class="tick" aria-hidden="true"></span>{k}<span class="muted">{n}</span></button>)}
+      </div>
+    </details>
+    <label class="check"><input id="only" type="checkbox"><span>Path<span class="t"> only</span></span></label>
+    <button type="button" id="defaults" class="reset" hidden>Reset</button>
+  </div>
+  <p id="empty" class="empty muted" hidden>Nothing here. <button type="button" id="reset" class="link">Back to defaults</button></p>
+
+  {[...bands].map(([top, list]) => (
+    <section class="band" aria-labelledby={`lv${top}`} data-label={`Levels ${top - 9}–${top}`}>
+      <h2 id={`lv${top}`}>Levels {top - 9}–{top} <span class="muted">· <span class="n">{list.length}</span> wands</span></h2>
+      <ul class="wands">{list.map((w) => <WandItem w={w} path={paths.get(w.id)} />)}</ul>
+    </section>
+  ))}
+
+  <details class="extra">
+    <summary>{data.noSource.length} more without a known source</summary>
+    <p class="muted">These are in the game files, but nobody's found where they drop yet.</p>
+    <ul class="wands">{data.noSource.map((w) => <WandItem w={w} pathable={false} />)}</ul>
+  </details>
+
+  <script>import '../scripts/wands';</script>
+
+  <div class="notes">
+    <p>Info comes from Wowhead's Forever database and the game files (build {data.build}), so things may shift as the beta goes on.</p>
+    <p>Ticks start on the suggested upgrades: each wand that beats everything before it. Untick one to drop it, or tick any other to add it. Your path and filters stay in this browser; "Reset" clears the filters and "reset path" clears your ticks.</p>
+    <p>A crest means only that faction can get it. "Random enchant" wands roll a bonus suffix with extra stats. DPS here is the wand alone; your spell power adds to it in game.</p>
+  </div>
+</Layout>
