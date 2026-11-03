@@ -11,7 +11,7 @@ export interface Wand {
   req: number | null;            // required level; null when the item data has none
   side: Side | null;             // null = both factions
   school: string;
-  dps: number;                   // average hit ÷ speed, before spell power
+  dps: number;                   // average hit ÷ speed
   damage: [number, number] | null;
   speed: number;
   /** <Random enchantment> wands: each possible suffix, its stat range and % chance to roll */

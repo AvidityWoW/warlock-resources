@@ -34,6 +34,18 @@ const touchIcon = await getImage({ src: logo, width: 56, height: 56, format: 'pn
       var apply = function (doc) { try { if (localStorage.getItem('theme') === 'light') doc.documentElement.dataset.theme = 'light'; } catch (e) {} };
       apply(document);
       if (!window.__themeHook) { window.__themeHook = true; document.addEventListener('astro:before-swap', function (e) { apply(e.newDocument); }); }
+      // The fel backdrop hangs off <body>, which in-site navigation replaces, so its animations would restart from frame 0.
+      // Pin every backdrop animation to the page clock's zero instead: a restarted one lands on the same frame it would
+      // have shown anyway, so the flames and smoke carry on smoothly across pages.
+      var pin = function () {
+        if (!document.getAnimations) return;
+        document.getAnimations().forEach(function (a) { if (a.animationName === 'fel' || a.animationName === 'smoke') a.startTime = 0; });
+      };
+      if (!window.__felHook) {
+        window.__felHook = true;
+        document.addEventListener('DOMContentLoaded', pin);
+        document.addEventListener('astro:after-swap', pin);
+      }
     })();
   </script>
   <ClientRouter />

@@ -23,6 +23,7 @@
   --header:56px;
   font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --title-font:"Cinzel Decorative",Georgia,"Times New Roman",serif;
+  --fel:.42;--smoke:.2;--fel-blend:screen;   /* strength of the fel-flame backdrop; screen makes it glow on the dark page */
 }
 :root[data-theme="light"]{
   color-scheme:light;
@@ -40,6 +41,7 @@
   --gold:#c99400;--on-gold:#ffffff;
   --q1:#1f1a2b;--q2:#1a7f00;--q3:#005fbf;--q4:#7f26d6;
   --fire:#b85500;--shadow:#5442c8;--arcane:#a8309a;--frost:#0a7598;--nature:#2a8030;--physical:#62594a;
+  --fel:.2;--smoke:.16;--fel-blend:multiply;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -50,6 +52,22 @@ h1,h2,h3{margin:0;line-height:1.2;font-weight:650;letter-spacing:-.01em}
 h1{font-family:var(--title-font);font-weight:700;letter-spacing:.01em;font-size:clamp(1.7rem,1.25rem + 1.7vw,2.4rem)}
 h2{font-size:1.05rem}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Backdrop: faint fel flames rising from the bottom of the screen, behind everything. Two layers: a taller, still one
+   at the back and a shorter, brighter one that sways slowly. Transform-only animation (cheap); off for reduced motion. */
+body::before,body::after{content:"";mix-blend-mode:var(--fel-blend);position:fixed;left:0;right:0;bottom:0;z-index:-1;pointer-events:none;background-repeat:repeat-x;background-position:bottom center}
+body::before{height:min(52vh,480px);opacity:var(--fel);
+  background-image:url('../assets/backdrop/fel-back.svg'),radial-gradient(ellipse 75% 100% at 50% 100%,rgb(46 209 42 / .45),transparent 70%);
+  background-size:max(1200px,100%) 100%,100% 100%}
+body::after{left:-40px;right:-40px;height:min(34vh,320px);opacity:var(--fel);background-image:url('../assets/backdrop/fel-front.svg');
+  background-size:max(1000px,90%) 100%;transform-origin:50% 100%;animation:fel 7s ease-in-out infinite alternate}
+@keyframes fel{0%{transform:translateX(-14px) scaleY(.94)}50%{transform:translateX(6px) scaleY(1.05)}100%{transform:translateX(16px) scaleY(.97)}}
+/* smoke above the flames: one wide layer of tiles sliding left by exactly one tile a minute, so it loops seamlessly */
+html::before{content:"";position:fixed;left:0;bottom:0;z-index:-1;pointer-events:none;width:calc(100% + 1200px);height:min(78vh,640px);
+  mix-blend-mode:var(--fel-blend);opacity:var(--smoke);background:url('../assets/backdrop/fel-smoke.svg') left bottom/1200px 100% repeat-x;
+  animation:smoke 60s linear infinite}
+@keyframes smoke{to{transform:translateX(-1200px)}}
+@media (prefers-reduced-motion:reduce){body::after,html::before{animation:none}}
 
 .container{width:min(100% - 2*var(--gap),1200px);margin-inline:auto}
 .muted{color:var(--muted)}
@@ -80,11 +98,16 @@ h2{font-size:1.05rem}
 .theme-toggle .sun{display:none}
 :root[data-theme="light"] .theme-toggle .sun{display:block}
 :root[data-theme="light"] .theme-toggle .moon{display:none}
+/* which game the pages are for: a quiet note beside the theme button, on the tab row */
+.game{align-self:flex-end;margin-bottom:2px;line-height:36px;color:var(--muted);font-size:.85em;font-style:italic;white-space:nowrap}
+@media (max-width:360px){.game{display:none}}
 @media (max-width:480px){.brand span{display:none}.site-header .brand{margin-left:-8px;padding-left:8px;padding-right:8px}}
 
 /* Page */
 main{padding-block:clamp(20px,4vw,40px) 48px}
 .page-head{margin-bottom:clamp(16px,3vw,28px)}
 .page-head p{margin:8px 0 0;max-width:62ch;color:var(--muted)}
-.notes{margin-top:40px;max-width:72ch;color:var(--muted);font-size:.85em}
-.notes p{margin:0 0 .8em}
+/* notes: a full-width panel (same width as the lists), with the text kept to a readable line length */
+.notes{margin-top:28px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--muted);font-size:.85em}
+.notes p{max-width:80ch;margin:0 0 .8em}
+.notes p:last-child{margin-bottom:0}

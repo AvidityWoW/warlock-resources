@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "backdrop": "node tools/backdrop.mjs"
   },
   "dependencies": {
     "@fontsource/cinzel-decorative": "^5.3.0",

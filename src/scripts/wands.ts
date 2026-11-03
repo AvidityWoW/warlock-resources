@@ -2,7 +2,7 @@
 // and the sticky toolbar's level label. Rows carry what's needed in data-* attributes; everything here runs in the browser.
 type Fac = 'b' | 'a' | 'h';
 const SIDE: Record<Fac, string> = { b: '', a: 'Alliance', h: 'Horde' };
-const VIEW = 'wands:view', PICKS = 'wands:picks', REMOVED = 'wands:removed';
+const VIEW = 'wands:view', PICKS = 'wands:picks', REMOVED = 'wands:removed', BLANK = 'wands:blank';
 
 const load = <T>(key: string, fallback: T): T => { try { return JSON.parse(localStorage.getItem(key) ?? 'null') ?? fallback; } catch { return fallback; } };
 const store = (key: string, value: unknown, empty: boolean) => { try { empty ? localStorage.removeItem(key) : localStorage.setItem(key, JSON.stringify(value)); } catch {} };
@@ -33,10 +33,13 @@ document.addEventListener('astro:page-load', () => {
   const picks = new Set<string>(load<string[]>(PICKS, []).map(String));
   // Your path edits: wands you ticked on top of the suggestions (gold), and suggestions you unticked.
   const removed = new Set<string>(load<string[]>(REMOVED, []).map(String));
+  // "Deselect all" switches the suggestions off: your path is then only the wands you tick.
+  let blank = load<boolean>(BLANK, false) === true;
   const save = () => {
     store(VIEW, { fac, only: only.checked, off: [...off] }, fac === 'b' && !only.checked && !off.size);
     store(PICKS, [...picks], !picks.size);
     store(REMOVED, [...removed], !removed.size);
+    store(BLANK, true, !blank);
   };
 
   // ---- the toolbar's label follows the level band under it; a divider shows once the toolbar is stuck
@@ -63,12 +66,14 @@ document.addEventListener('astro:page-load', () => {
     const d = r.dataset, sd = side();
     return (!sd || !d.side || d.side === sd) && !off.has(d.kind || 'Other');
   };
-  /** Your path, in level order: every wand in play that beats all before it (unless you unticked it), plus the ones you ticked. */
+  /** Your path, in level order: every wand in play that beats all before it (unless you unticked it), plus the ones you
+   *  ticked. After "Deselect all" there are no suggestions, so it's just the ones you ticked. */
   function pathIds() {
     const ids = new Set<string>(); let best = -1;
     for (const r of listed) {
       if (!inPlay(r)) continue;
       const id = r.dataset.id!, dps = +r.dataset.dps!;
+      if (blank) { if (picks.has(id)) ids.add(id); continue; }
       if (removed.has(id)) continue;
       if (dps > best) { best = dps; ids.add(id); } else if (picks.has(id)) ids.add(id);
     }
@@ -122,10 +127,16 @@ document.addEventListener('astro:page-load', () => {
     // One Reset button, always there: greyed out when there's nothing to reset; its tooltip says what it will reset.
     const filters = [fac !== 'b' && 'faction', off.size && 'source', only.checked && 'show selected', q!.value && 'search'].filter(Boolean) as string[];
     const added = picks.size, dropped = removed.size;
-    const edits = [added && `${added} added`, dropped && `${dropped} dropped`].filter(Boolean).join(', ');
+    const edits = [blank && 'deselected all', added && `${added} added`, dropped && `${dropped} dropped`].filter(Boolean).join(', ');
     const rb = $('reset-all') as HTMLButtonElement, what = [...filters, edits && `your path (${edits})`].filter(Boolean);
     rb.disabled = !what.length;
     rb.title = what.length ? `Reset ${what.join(', ')}` : 'Nothing to reset';
+    // Deselect all while anything's ticked; once nothing is, the same button brings the suggestions back.
+    const empty = path.size === 0, db = $('desel');
+    db.classList.toggle('on', empty);
+    db.setAttribute('aria-label', empty ? 'Use suggested' : 'Deselect all');
+    db.title = empty ? 'Tick the suggested upgrades again' : 'Untick every wand, including the suggested upgrades';
+    shareBtn.disabled = empty;
     $('edits').hidden = !edits;
     $('edits').querySelector('.what')!.textContent = edits;
     track();
@@ -158,6 +169,53 @@ document.addEventListener('astro:page-load', () => {
     });
   }
 
+  // ---- sharing: a link lists the wands on your path (base-36 ids, in level order) and your faction.
+  // Opening one makes that your path, keeping green for what's suggested and gold for what was added; Undo puts yours back.
+  const shareUrl = () => {
+    const u = new URL(location.pathname, location.origin);
+    u.searchParams.set('path', [...pathIds()].map((id) => (+id).toString(36)).join('.'));
+    if (fac !== 'b') u.searchParams.set('f', fac);
+    return u.href;
+  };
+  const shareBtn = $('share') as HTMLButtonElement;
+  let copiedTimer = 0;
+  shareBtn.addEventListener('click', async () => {
+    const url = shareUrl();
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) { navigator.share({ title: 'My wand path', url }).catch(() => {}); return; }
+    try { await navigator.clipboard.writeText(url); } catch { window.prompt('Copy this link', url); return; }
+    shareBtn.classList.add('done'); clearTimeout(copiedTimer);
+    copiedTimer = window.setTimeout(() => shareBtn.classList.remove('done'), 2000);
+  });
+  const params = new URLSearchParams(location.search);
+  if (params.has('path')) {
+    const known = new Set(listed.map((r) => r.dataset.id!));
+    const want = new Set((params.get('path') ?? '').split('.').filter(Boolean).map((t) => String(parseInt(t, 36))).filter((id) => known.has(id)));
+    const before = { fac, only: only.checked, off: [...off], picks: [...picks], removed: [...removed], blank };
+    const f = params.get('f') as Fac | null;
+    fac = f && f in SIDE ? f : 'b'; only.checked = false; off.clear();
+    picks.clear(); removed.clear(); blank = want.size === 0;
+    if (!blank) {
+      for (const id of want) picks.add(id);
+      // drop suggestions that aren't on the shared path (dropping one can promote another, so repeat until settled)
+      for (let extra = [...pathIds()].filter((id) => !want.has(id)); extra.length; extra = [...pathIds()].filter((id) => !want.has(id)))
+        for (const id of extra) removed.add(id);
+      // anything that's on the path as a suggestion anyway doesn't need to be an added (gold) one
+      for (const id of [...picks]) { picks.delete(id); if (!pathIds().has(id)) picks.add(id); }
+    }
+    save();
+    history.replaceState(history.state, '', location.pathname + location.hash);   // tidy the address bar; keep Astro's state
+    const note = $('shared');
+    note.hidden = false;
+    $('share-keep').addEventListener('click', () => { note.hidden = true; });
+    $('share-undo').addEventListener('click', () => {
+      fac = before.fac; only.checked = before.only; blank = before.blank;
+      off.clear(); before.off.forEach((k) => off.add(k));
+      picks.clear(); before.picks.forEach((k) => picks.add(k));
+      removed.clear(); before.removed.forEach((k) => removed.add(k));
+      note.hidden = true; save(); apply();
+    });
+  }
+
   // ---- controls
   segs.forEach((s) => s.addEventListener('click', () => { fac = s.dataset.fac as Fac; save(); apply(); }));
   for (const t of typeItems) t.addEventListener('click', () => { const k = t.dataset.kind!; off.has(k) ? off.delete(k) : off.add(k); save(); apply(); });
@@ -173,8 +231,12 @@ document.addEventListener('astro:page-load', () => {
   document.addEventListener('click', (e) => { if (types.open && !types.contains(e.target as Node)) types.open = false; }, { signal });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && types.open) { types.open = false; types.querySelector('summary')!.focus(); } }, { signal });
 
+  $('desel').addEventListener('click', () => {
+    if (pathIds().size) { blank = true; picks.clear(); } else blank = false;   // deselect all / use suggested
+    removed.clear(); save(); apply();
+  });
   // Reset: faction, sources, show selected, search and your ticks, all back to how the page started.
-  $('reset-all').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); picks.clear(); removed.clear(); save(); apply(); });
+  $('reset-all').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); picks.clear(); removed.clear(); blank = false; save(); apply(); });
   // "Nothing here" only needs the filters cleared; your ticks stay.
   $('reset').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); save(); apply(); });
 

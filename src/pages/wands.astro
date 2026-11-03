@@ -30,10 +30,18 @@ for (const w of data.wands) {
     <p>Wands for warlocks in WoW Forever, sorted by level. Tick the ones you want on your upgrade path.</p>
   </div>
 
+  <!-- shown after opening someone's shared link -->
+  <p id="shared" class="shared" hidden role="status">Loaded a shared path. <button type="button" class="link" id="share-undo">Undo</button> <button type="button" class="link" id="share-keep">Keep it</button></p>
+
   <div class="legend muted">
     <span><span class="mark up"></span>Green: suggested upgrades</span>
     <span><span class="mark pick"></span>Gold: ones you added</span>
     <span id="edits" hidden>Your path: <span class="what"></span></span>
+    <!-- copies a link to your path (on phones, opens the share sheet); the two labels share one slot so nothing moves -->
+    <button type="button" class="share" id="share" title="Copy a link to your upgrade path">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>
+      <span class="labels"><span class="a">Share path</span><span class="b" aria-hidden="true">Link copied</span></span>
+    </button>
   </div>
 
   <!-- sticks under the header: the level band you're scrolled to, plus the controls -->
@@ -58,6 +66,10 @@ for (const w of data.wands) {
       </div>
     </details>
     <label class="check"><input id="only" type="checkbox"><span class="long">Show selected</span><span class="short">Selected</span></label>
+    <!-- Deselect all ⇄ Use suggested: an icon button beside Reset (box with a minus / with a tick); the label is its tooltip -->
+    <button type="button" class="gbtn" id="desel" aria-label="Deselect all" title="Untick every wand, including the suggested upgrades">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path class="minus" d="M8.5 12h7"/><path class="tickmark" d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+    </button>
     <button type="button" class="rbtn" id="reset-all" disabled aria-label="Reset" title="Nothing to reset">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span class="t">Reset</span>
     </button>
@@ -80,8 +92,8 @@ for (const w of data.wands) {
   <script>import '../scripts/wands';</script>
 
   <div class="notes">
-    <p>Info comes from Wowhead's Forever database and the game files (build {data.build}), so things may shift as the beta goes on.</p>
-    <p>Ticks start on the suggested upgrades: each wand that beats everything before it. Untick one to drop it, or tick any other to add it. Your path and filters stay in this browser; "Reset" puts everything (filters and your ticks) back to how it started.</p>
-    <p>A crest means only that faction can get it. "Random enchant" wands roll a bonus suffix with extra stats. DPS here is the wand alone; your spell power adds to it in game.</p>
+    <p>Info comes from Wowhead's Forever database and the pre-release client's game files (build {data.build}), so things may shift before launch.</p>
+    <p>Ticks start on the suggested upgrades: each wand that beats everything before it. Untick one to drop it, or tick any other to add it. "Deselect all" starts you from an empty path; "Use suggested" brings the suggestions back. Your path and filters stay in this browser, and "Share path" copies a link to it; "Reset" puts everything (filters and your ticks) back to how it started.</p>
+    <p>A crest means only that faction can get it. "Random enchant" wands roll a bonus suffix with extra stats.</p>
   </div>
 </Layout>
