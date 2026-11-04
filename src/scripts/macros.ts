@@ -1,5 +1,5 @@
 // Macros page: search, the stone level (kept in localStorage as macros:level), and the Copy buttons.
-import { LIMIT, MAX_LEVEL, fill, highlight, stonesIn, stoneRank, usesStones, cqsSlowsFiller } from '../lib/macro';
+import { LIMIT, MAX_LEVEL, fill, highlight, stonesIn, stoneRank, cqsSlowsFiller } from '../lib/macro';
 
 const KEY = 'macros:level';
 
@@ -71,12 +71,14 @@ document.addEventListener('astro:page-load', () => {
   };
   const draw = (to: number) => {
     lvl = to;
-    for (const pre of document.querySelectorAll<HTMLElement>('.code[data-body]')) if (usesStones(pre.dataset.body!)) drawCard(pre);
+    for (const pre of document.querySelectorAll<HTMLElement>('.code[data-body]')) drawCard(pre);   // any card may use the level (a stone, or a rank on "Your level")
   };
-  // Spell / aim pairs that can't work (Corruption at the cursor, Rain of Fire on your target's mouseover chain): grey out the
-  // choices that don't fit the other dropdown, and explain if a bad pair is selected anyway (a restored form, say).
+  // Spell / aim pairs that can't work (Corruption at the cursor, Rain of Fire on a mouseover chain). Any spell can always be
+  // picked: if it doesn't fit the current aim, the aim moves to the first one that does, with a short note. The aim menu
+  // greys out the aims that don't fit the chosen spells, so the pair stays valid. (Greying out spells as well would lock
+  // you in: Rain of Fire greyed out until the aim is Cursor, Cursor greyed out until the spell is a ground spell.)
   interface Validate { spells: string[]; aim: string; allowed: Record<string, string[] | null>; kinds: Record<string, string>; says: Record<string, string> }
-  const validate = (card: HTMLElement) => {
+  const validate = (card: HTMLElement, changed?: EventTarget | null) => {
     const warn = card.querySelector<HTMLElement>('.mwarn[data-validate]');
     if (!warn) return;
     const v: Validate = JSON.parse(warn.dataset.validate!);
@@ -86,11 +88,20 @@ document.addEventListener('astro:page-load', () => {
       return !allowed || !(spell in v.kinds) || allowed.includes(v.kinds[spell]);
     };
     const spells = v.spells.map(sel);
-    for (const s of spells) for (const o of s.options) o.disabled = !ok(aim.value, o.value);
-    for (const o of aim.options) o.disabled = !spells.every((s) => ok(o.value, s.value));
-    const bad = spells.find((s) => !ok(aim.value, s.value));
-    warn.hidden = !bad;
-    if (bad) warn.textContent = `${bad.value} ${v.says[v.kinds[bad.value]]}, so "${aim.selectedOptions[0].text}" won't work for it. Pick another aim or spell.`;
+    const fits = (aimValue: string) => spells.every((s) => ok(aimValue, s.value));
+    let note = '';
+    if (!fits(aim.value)) {
+      const to = [...aim.options].find((o) => fits(o.value));
+      const bad = spells.find((s) => !ok(aim.value, s.value))!;
+      if (to) {
+        if (spells.includes(changed as HTMLSelectElement)) note = `${bad.value} ${v.says[v.kinds[bad.value]]}, so the aim is now "${to.text}".`;
+        aim.value = to.value;
+      } else note = `${bad.value} ${v.says[v.kinds[bad.value]]}, and no aim here fits it together with the other spell.`;
+    }
+    for (const s of spells) for (const o of s.options) o.disabled = false;
+    for (const o of aim.options) o.disabled = !fits(o.value);
+    warn.hidden = !note;
+    warn.textContent = note;
   };
   for (const card of document.querySelectorAll<HTMLElement>('.macro')) if (card.querySelector('.mwarn[data-validate]')) validate(card);
 
@@ -98,9 +109,9 @@ document.addEventListener('astro:page-load', () => {
   for (const card of document.querySelectorAll<HTMLElement>('.macro')) {
     if (!card.querySelector('[data-token]')) continue;
     const pre = card.querySelector<HTMLElement>('.code')!;
-    const redraw = () => { validate(card); drawCard(pre); };
+    const redraw = (e?: Event) => { validate(card, e?.target); drawCard(pre); };
     card.addEventListener('change', redraw, on);
-    card.addEventListener('input', (e) => { if ((e.target as HTMLElement).matches('input[type="number"]')) redraw(); }, on);
+    card.addEventListener('input', (e) => { if ((e.target as HTMLElement).matches('input[type="number"]')) redraw(e); }, on);
     drawCard(pre);
   }
   const clamp = (n: number) => Math.min(MAX_LEVEL, Math.max(1, Math.round(n)));

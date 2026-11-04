@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MacroGuide from '../components/MacroGuide.astro';
+import PickSelect from '../components/PickSelect.astro';
 import { groups, flatChoices, SPELL_KIND, KIND_SAYS } from '../data/macros';
 import { LIMIT, MAX_LEVEL, choice, fill, highlight, usesStones, stonesIn, stoneRank, cqsSlowsFiller, type Picked } from '../lib/macro';
 import '../styles/macros.css';
@@ -54,7 +55,15 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
           const derive = { cqs: m.cqs, reset: m.reset };
           const text = fill(m.body, MAX_LEVEL, picked, derive);
           const slowed = cqsSlowsFiller(picked, m.cqs);
-          const stones = usesStones(m.body);
+          // a stone card: its body, or one of its choices, uses the level box (the rank dropdowns' "Your level")
+          const stones = usesStones(m.body) || picks.some((p) => p.choices.some((c) => usesStones(c[1])));
+          // controls in cells: a modifier ("on") shares its subject's cell, e.g. [Trinkets ▾] on [Shift ▾]
+          const cells: { a: (typeof picks)[number]; on?: (typeof picks)[number] }[] = [];
+          for (let i = 0; i < picks.length; i++) {
+            if (picks[i + 1]?.label === 'on') { cells.push({ a: picks[i], on: picks[i + 1] }); i++; } else cells.push({ a: picks[i] });
+          }
+          // a long note shows its first sentence, with the rest behind "More"
+          const [lead, rest] = m.note.length > 170 ? (m.note.match(/^(.+?[.!?])\s+(.+)$/s)?.slice(1) ?? [m.note, '']) : [m.note, ''];
           const search = [m.name, m.note, m.needs, text, ...picks.flatMap((p) => p.choices.map((c) => c[0]))].filter(Boolean).join(' ').toLowerCase();
           return (
             <article class:list={['macro', { wide: picks.length > 2 }]} data-search={search}>
@@ -66,22 +75,29 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
                 </button>
               </header>
               {picks.length > 0 && (
-                <div class:list={['picks', { many: picks.length > 2 }]}>{picks.map((p) => p.type === 'checks' ? (
-                  <fieldset class="pick checks" data-token={p.token}>
-                    <legend>{p.label}</legend>
-                    {p.choices.map(([label, value]) => <label><input type="checkbox" value={value} checked={picked[p.token].split('/').includes(value)}> {label}</label>)}
+                <div class="picks">{cells.map(({ a: p, on }) => on ? (
+                  <div class:list={['pick', 'pair', { full: p.wide }]}>
+                    <span class="pl">{p.label}</span>
+                    <div class="pair-in">
+                      <PickSelect token={p.token} menu={p.menu} value={picked[p.token]} label={p.label} />
+                      <span class="on-l">on</span>
+                      <PickSelect token={on.token} menu={on.menu} value={picked[on.token]} label={`${p.label}: which key`} class="mod" />
+                    </div>
+                  </div>
+                ) : p.type === 'checks' ? (
+                  <fieldset class="pick checks full" data-token={p.token}>
+                    <legend class="pl">{p.label}</legend>
+                    <div class="checks-in">{p.choices.map(([label, value]) => <label><input type="checkbox" value={value} checked={picked[p.token].split('/').includes(value)}> {label}</label>)}</div>
                   </fieldset>
                 ) : p.type === 'number' ? (
-                  <label class="pick">
-                    <span>{p.label}</span>
+                  <label class:list={['pick', 'num', { full: p.wide }]}>
+                    <span class="pl">{p.label}</span>
                     <input type="number" data-token={p.token} min="0" max="600" step="1" inputmode="numeric" placeholder="off" value={picked[p.token]}>
                   </label>
                 ) : (
-                  <label class="pick">
-                    <span>{p.label}</span>
-                    <select data-token={p.token}>{p.menu.map((e) => 'group' in e
-                      ? <optgroup label={e.group}>{e.options!.map(([label, value]) => <option value={value} selected={value === picked[p.token]}>{label}</option>)}</optgroup>
-                      : <option value={e.option![1]} selected={e.option![1] === picked[p.token]}>{e.option![0]}</option>)}</select>
+                  <label class:list={['pick', { full: p.wide }]}>
+                    <span class="pl">{p.label}</span>
+                    <PickSelect token={p.token} menu={p.menu} value={picked[p.token]} />
                   </label>
                 ))}</div>
               )}
@@ -92,7 +108,12 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
                   <strong>/cqs runs on your unmodified presses.</strong> Every <span class="cqs-spell">{slowed}</span> then waits for the cast before it to finish before it starts, so your filler gets slower. Put the cooldowns on a modifier key to keep unmodified presses at full speed.
                 </p>
               )}
-              <p class="note">{m.note}</p>
+              {rest ? (
+                <details class="note">
+                  <summary>{lead} <span class="more" aria-hidden="true"></span></summary>
+                  <p>{rest}</p>
+                </details>
+              ) : <p class="note">{m.note}</p>}
               <footer>
                 {m.needs && <span class="badge">{m.needs}</span>}
                 {stones && <span class="rank muted">{rankNote(m.body, MAX_LEVEL, picked)}</span>}

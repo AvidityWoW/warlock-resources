@@ -28,10 +28,10 @@
    the note and footer across the bottom. Stacks again when the list is narrow. */
 .macro.wide{grid-column:1/-1}
 @container (min-width:720px){
-  .macro.wide{display:grid;grid-template-columns:minmax(300px,1fr) minmax(0,1.3fr);grid-template-areas:"head head" "picks code" "note note" "foot foot";gap:12px 24px;align-items:start}
+  .macro.wide{display:grid;grid-template-columns:minmax(300px,440px) minmax(0,1fr);grid-template-areas:"head head" "picks code" "note note" "foot foot";gap:12px 24px;align-items:start}
   .macro.wide>header{grid-area:head}
   .macro.wide>.picks{grid-area:picks}
-  .macro.wide>.code{grid-area:code;align-self:stretch}
+  .macro.wide>.code{grid-area:code;align-self:start}
   .macro.wide>.note{grid-area:note;max-width:none}
   /* the /cqs warning, when showing, gets its own row right above the note (only then, so a hidden one leaves no gap) */
   .macro.wide:has(>.cqs-warn:not([hidden])){grid-template-areas:"head head" "picks code" "warn warn" "note note" "foot foot"}
@@ -54,24 +54,26 @@
 .copy .b,.copy.done .a{visibility:hidden}
 .copy.done .b{visibility:visible}
 
-/* a card's dropdowns (spell, version, racial…): between the name and the macro */
-.picks{display:flex;flex-wrap:wrap;gap:8px 16px}
-/* reset checkboxes: a row of ticks under a small heading */
-.pick.checks{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:0;padding:0;border:0;min-width:0}
-.pick.checks legend{float:left;margin-right:4px;padding:0}
-.pick.checks label{display:inline-flex;align-items:center;gap:5px;color:var(--text);cursor:pointer}
-.pick.checks input{width:15px;height:15px;margin:0;accent-color:var(--accent)}
-.pick input[type="number"]{width:5.5em;height:32px;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-variant-numeric:tabular-nums}
-.pick input[type="number"]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.picks.many .pick.checks{grid-column:1/-1}
-/* several dropdowns: the spell on its own row, then pairs (Trinkets + on, Racial + on, Potion + on), one pair per row */
-.picks.many{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
-.picks.many .pick:first-child{grid-column:1/-1}
-.picks.many .pick select{max-width:100%}
-.picks.many .pick:nth-child(even) span{min-width:4.2em}   /* Trinkets, Racial, Potion: same label width so their menus line up */
-.pick{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.85em}
-.pick select{flex:0 1 auto;min-width:0;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-size:1.05em;cursor:pointer}
-.pick select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+/* Card controls, the same on every card: label beside the control in a fixed column, so menus line up down the card.
+   Single controls wrap two to a row where there's room (a rotation's 1st to 4th spells); a modifier shares its
+   subject's row ([Trinkets ▾] on [Shift ▾]), and pairs and .full controls (Aim at, Cast on, reset checkboxes) take a
+   whole row, so a card's menus line up edge to edge. Kept compact: short controls, tight gaps. */
+.picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:6px 16px}
+.pick{display:grid;grid-template-columns:5.6em minmax(0,1fr);align-items:center;column-gap:8px;min-width:0;margin:0}
+.pick.full,.pick.pair{grid-column:1/-1}   /* a modifier pair always takes a full row, so its menus line up with the full-width rows around it */
+.pl{color:var(--muted);font-size:.8em;font-weight:600;line-height:1.2}
+.pick select,.pick input[type="number"]{width:100%;min-width:0;height:30px;padding:0 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--text);font:inherit;font-size:.9em;text-overflow:ellipsis;cursor:pointer}
+.pick select:focus,.pick input[type="number"]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.pick.num input{width:6em;font-variant-numeric:tabular-nums;cursor:text}
+.pair-in{display:flex;align-items:center;gap:6px;min-width:0}
+.pair-in select{flex:1 1 auto}
+.pair-in select.mod{flex:0 0 6.8em}
+.on-l{flex:none;color:var(--muted);font-size:.8em}
+.pick.checks{display:flex;flex-wrap:wrap;align-items:center;padding:0;border:0}
+.pick.checks legend{float:left;width:5.6em;margin-right:8px;padding:0}
+.checks-in{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.88em}
+.checks-in label{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.checks-in input{width:14px;height:14px;margin:0;accent-color:var(--accent)}
 .code{margin:0;padding:10px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}
 .m-dir{color:var(--muted);font-style:italic}
 .m-cmd{color:var(--accent);font-weight:600}
@@ -80,14 +82,20 @@
 .m-chat{color:var(--good)}
 .m-lua{color:var(--frost)}
 
-/* a spell / aim pair that can't work (builders) */
-.mwarn{margin:0;padding:8px 12px;border-left:3px solid var(--fire);border-radius:4px;background:color-mix(in srgb,var(--fire) 12%,transparent);font-size:.88em}
+/* builders: a note when the aim moves to fit the spell you picked */
+.mwarn{margin:0;padding:8px 12px;border-left:3px solid var(--accent);border-radius:4px;background:var(--accent-soft);font-size:.88em}   /* a builder note: the aim moved to fit the spell you picked */
 .mwarn[hidden]{display:none}
 /* the /cqs-every-press warning on the cooldown card */
 .cqs-warn{margin:0;padding:8px 12px;border-left:3px solid var(--warn);border-radius:4px;background:color-mix(in srgb,var(--warn) 12%,transparent);font-size:.88em}
 .cqs-warn[hidden]{display:none}
 .cqs-warn strong{color:var(--warn)}
 .note{margin:0;color:var(--muted);font-size:.9em}
+/* a long note: first sentence, then "More" opens the rest */
+details.note summary{list-style:none;cursor:pointer}
+details.note summary::-webkit-details-marker{display:none}
+details.note .more::after{content:"More";color:var(--accent);font-weight:600;white-space:nowrap}
+details.note[open] .more::after{content:"Less"}
+details.note p{margin:6px 0 0}
 .macro footer{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:auto;font-size:.8em}
 .badge{padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.92em;font-weight:600;white-space:nowrap}
 .chars{margin-left:auto;font-variant-numeric:tabular-nums}

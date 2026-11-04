@@ -1,0 +1,10 @@
+---
+// One dropdown on a macro card: plain options, or options under headings (<optgroup>, e.g. spellbook tabs).
+// scripts/macros.ts reads it by data-token.
+interface Option { option?: [string, string]; group?: string; options?: [string, string][] }
+interface Props { token: string; menu: Option[]; value: string; label?: string; class?: string }
+const { token, menu, value, label, class: cls } = Astro.props;
+---
+<select data-token={token} aria-label={label} class={cls}>{menu.map((e) => e.group
+  ? <optgroup label={e.group}>{e.options!.map(([text, v]) => <option value={v} selected={v === value}>{text}</option>)}</optgroup>
+  : <option value={e.option![1]} selected={e.option![1] === value}>{e.option![0]}</option>)}</select>
