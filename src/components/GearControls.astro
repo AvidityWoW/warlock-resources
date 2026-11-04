@@ -1,0 +1,63 @@
+---
+// The controls every gear page shares: the shared-link notice, the legend (with Share path), the sticky toolbar
+// (search, faction, sources, show selected, deselect all, reset) and the "nothing here" message.
+// scripts/gear.ts drives them; it finds everything by id, so a page has one of these.
+import FactionIcon from './FactionIcon.astro';
+import { SOURCE_KINDS } from '../data/gear';
+interface Props {
+  store: string;         // saved-settings prefix for this page ("wands" keeps the wand page's original keys)
+  total: number;
+  noun: string;          // plural, for the count: "wands", "items"
+  one: string;           // singular, for tooltips: "wand", "item"
+  searchLabel: string;
+  kindsOf: (string | undefined)[];   // each listed item's source kind, for the Source menu's counts
+}
+const { store, total, noun, one, searchLabel, kindsOf } = Astro.props;
+const kinds = SOURCE_KINDS.map((k) => ({ k, n: kindsOf.filter((x) => (x ?? 'Other') === k).length })).filter((x) => x.n);
+---
+  <!-- shown after opening someone's shared link -->
+  <p id="shared" class="shared" hidden role="status">Loaded a shared path. <button type="button" class="link" id="share-undo">Undo</button> <button type="button" class="link" id="share-keep">Keep it</button></p>
+
+  <div class="legend muted">
+    <span><span class="mark up"></span>Green: suggested upgrades</span>
+    <span><span class="mark pick"></span>Gold: ones you added</span>
+    <span id="edits" hidden>Your path: <span class="what"></span></span>
+    <!-- copies a link to your path (on phones, opens the share sheet); the two labels share one slot so nothing moves -->
+    <button type="button" class="share" id="share" title="Copy a link to your upgrade path">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>
+      <span class="labels"><span class="a">Share path</span><span class="b" aria-hidden="true">Link copied</span></span>
+    </button>
+  </div>
+
+  <!-- sticks under the header: the level band you're scrolled to, plus the controls -->
+  <div class="toolbar" data-gear={store} data-noun={noun} data-one={one}>
+    <span class="now" id="now" aria-hidden="true">Levels 1–10</span>
+    <span id="count" class="muted" aria-live="polite">{total} {noun}</span>
+    <label class="search">
+      <span class="sr-only">{searchLabel}</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search" autocomplete="off">
+    </label>
+    <div class="seg" role="group" aria-label="Faction">
+      <button type="button" data-fac="b" aria-pressed="true">Both</button>
+      <button type="button" data-fac="a" aria-pressed="false" aria-label="Alliance"><FactionIcon side="Alliance" /><span class="t">Alliance</span></button>
+      <button type="button" data-fac="h" aria-pressed="false" aria-label="Horde"><FactionIcon side="Horde" /><span class="t">Horde</span></button>
+    </div>
+    <span class="brk" aria-hidden="true"></span>
+    <details class="dd types" id="types">
+      <summary aria-label="Source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg><span class="t">Source:</span><span id="typesum">All</span></summary>
+      <div class="menu" role="menu" aria-label="Sources">
+        {kinds.map(({ k, n }) => <button type="button" role="menuitemcheckbox" aria-checked="true" data-kind={k}><span class="tick" aria-hidden="true"></span>{k}<span class="muted">{n}</span></button>)}
+      </div>
+    </details>
+    <label class="check"><input id="only" type="checkbox"><span class="long">Show selected</span><span class="short">Selected</span></label>
+    <!-- Deselect all ⇄ Use suggested: an icon button beside Reset (box with a minus / with a tick); the label is its tooltip -->
+    <button type="button" class="gbtn" id="desel" aria-label="Deselect all" title={`Untick every ${one}, including the suggested upgrades`}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path class="minus" d="M8.5 12h7"/><path class="tickmark" d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+    </button>
+    <button type="button" class="rbtn" id="reset-all" disabled aria-label="Reset" title="Nothing to reset">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span class="t">Reset</span>
+    </button>
+  </div>
+  <p id="empty" class="empty muted" hidden>Nothing here. <button type="button" id="reset" class="link">Clear the filters</button></p>
+

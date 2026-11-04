@@ -1,17 +1,22 @@
-// Wand page: faction, sources, search, "show selected", ticking wands on / off your upgrade path, the reset button,
-// and the sticky toolbar's level label. Rows carry what's needed in data-* attributes; everything here runs in the browser.
+// Gear pages (wands, one-hand & off-hand, staves): faction, sources, search, "show selected", ticking items on / off your
+// upgrade path, deselect all, reset, share links, and the sticky toolbar's level label. Rows carry what's needed in data-*
+// attributes (data-score is what the path ranks by: wand DPS or item level; data-dp is how many decimals its gain shows, 1 if absent). A page can have several sections
+// (data-group on its bands, e.g. main hand and off-hand); each gets its own path. Saved settings are per page
+// (the toolbar's data-gear names it: "wands" keeps the keys the wand page has always used).
 type Fac = 'b' | 'a' | 'h';
 const SIDE: Record<Fac, string> = { b: '', a: 'Alliance', h: 'Horde' };
 // exact check: values come from links and storage, and `in` would also accept names like "toString"
 const isFac = (v: unknown): v is Fac => v === 'b' || v === 'a' || v === 'h';
-const VIEW = 'wands:view', PICKS = 'wands:picks', REMOVED = 'wands:removed', BLANK = 'wands:blank';
 
 const load = <T>(key: string, fallback: T): T => { try { return JSON.parse(localStorage.getItem(key) ?? 'null') ?? fallback; } catch { return fallback; } };
 const store = (key: string, value: unknown, empty: boolean) => { try { empty ? localStorage.removeItem(key) : localStorage.setItem(key, JSON.stringify(value)); } catch {} };
 
 document.addEventListener('astro:page-load', () => {
-  const q = document.getElementById('q') as HTMLInputElement | null;
-  if (!q) return;                                  // not the wand page
+  const toolbar = document.querySelector<HTMLElement>('.toolbar[data-gear]');
+  if (!toolbar) return;                            // not a gear page
+  const K = toolbar.dataset.gear!, ONE = toolbar.dataset.one!, MANY = toolbar.dataset.noun!;
+  const VIEW = `${K}:view`, PICKS = `${K}:picks`, REMOVED = `${K}:removed`, BLANK = `${K}:blank`;
+  const q = document.getElementById('q') as HTMLInputElement;
   const $ = (id: string) => document.getElementById(id)!;
   const only = $('only') as HTMLInputElement;
   const segs = [...document.querySelectorAll<HTMLButtonElement>('.seg button')];
@@ -20,7 +25,7 @@ document.addEventListener('astro:page-load', () => {
   const listed = rows.filter((r) => r.closest('.band'));   // the no-source wands stay out of counts and the path
   const bands = [...document.querySelectorAll<HTMLElement>('.band')];
   const lists = [...document.querySelectorAll<HTMLElement>('.wands')];
-  const toolbar = document.querySelector<HTMLElement>('.toolbar')!;
+  const group = new Map(listed.map((r) => [r, r.closest<HTMLElement>('.band')!.dataset.group ?? '']));
   const types = $('types') as HTMLDetailsElement;
 
   // Leaving the page (in-site navigation) removes the window / document listeners added below.
@@ -52,11 +57,11 @@ document.addEventListener('astro:page-load', () => {
     toolbar.classList.toggle('stuck', window.scrollY > 0 && bar.top <= parseFloat(getComputedStyle(toolbar).top) + 0.5);
     const visible = bands.filter((b) => !b.hidden);
     // the label only appears once the first level heading has scrolled up under the toolbar
-    const firstHead = visible[0]?.querySelector('h2');
+    const firstHead = visible[0]?.querySelector('h2, h3');
     toolbar.classList.toggle('show-now', !!firstHead && firstHead.getBoundingClientRect().bottom <= bar.bottom);
     let cur = visible[0];
     for (const b of visible) if (b.getBoundingClientRect().top <= bar.bottom + 8) cur = b;
-    $('now').textContent = cur ? cur.dataset.label! : 'No wands';
+    $('now').textContent = cur ? cur.dataset.label! : `No ${MANY}`;
   };
   const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(track); } };
   window.addEventListener('scroll', onScroll, { passive: true, signal });
@@ -68,37 +73,38 @@ document.addEventListener('astro:page-load', () => {
     const d = r.dataset, sd = side();
     return (!sd || !d.side || d.side === sd) && !off.has(d.kind || 'Other');
   };
-  /** Your path, in level order: every wand in play that beats all before it (unless you unticked it), plus the ones you
-   *  ticked. After "Deselect all" there are no suggestions, so it's just the ones you ticked. */
+  /** Your path, in level order: every item in play that beats all before it in its section (unless you unticked it),
+   *  plus the ones you ticked. After "Deselect all" there are no suggestions, so it's just the ones you ticked. */
   function pathIds() {
-    const ids = new Set<string>(); let best = -1;
+    const ids = new Set<string>(), best = new Map<string, number>();
     for (const r of listed) {
       if (!inPlay(r)) continue;
-      const id = r.dataset.id!, dps = +r.dataset.dps!;
+      const id = r.dataset.id!, v = +r.dataset.score!, g = group.get(r)!;
       if (blank) { if (picks.has(id)) ids.add(id); continue; }
       if (removed.has(id)) continue;
-      if (dps > best) { best = dps; ids.add(id); } else if (picks.has(id)) ids.add(id);
+      if (v > (best.get(g) ?? 0)) { best.set(g, v); ids.add(id); }   // a suggestion needs a value above zero else if (picks.has(id)) ids.add(id);
     }
     return ids;
   }
 
   function apply() {
     const terms = q!.value.trim().toLowerCase().split(/\s+/).filter(Boolean), path = pathIds();
-    // Each path wand's gain is its DPS minus the previous path wand's (a weaker added wand shows a minus).
-    let prev: number | null = null, shown = 0;
+    // Each path item's gain is its value minus the previous path item's in the same section (a weaker added one shows a minus).
+    const prevOf = new Map<string, number>(); let shown = 0;
     for (const r of rows) {
-      const d = r.dataset, ok = inPlay(r), dps = +d.dps!, isListed = listed.includes(r), id = d.id!;
+      const d = r.dataset, ok = inPlay(r), v = +d.score!, isListed = listed.includes(r), id = d.id!, sec = group.get(r) ?? '';
       const onPath = path.has(id);
       const g = r.querySelector('.gain')!;
       g.textContent = '';
       g.classList.remove('down');
       if (onPath) {
-        if (prev !== null) {
-          const diff = dps - prev;
-          g.textContent = (diff >= 0 ? '+' : '−') + Math.abs(diff).toFixed(1);
+        const prev = prevOf.get(sec);
+        if (prev !== undefined) {
+          const diff = v - prev;
+          g.textContent = (diff >= 0 ? '+' : '−') + Math.abs(diff).toFixed(+(d.dp ?? 1));
           g.classList.toggle('down', diff < 0);
         }
-        prev = dps;
+        prevOf.set(sec, v);
       }
       r.classList.toggle('up', onPath);
       r.classList.toggle('pick', onPath && picks.has(id));
@@ -124,7 +130,7 @@ document.addEventListener('astro:page-load', () => {
     for (const t of typeItems) t.setAttribute('aria-checked', String(!off.has(t.dataset.kind!)));
     const onTypes = typeItems.filter((t) => !off.has(t.dataset.kind!));
     $('typesum').textContent = onTypes.length === typeItems.length ? 'All' : onTypes.length === 1 ? onTypes[0].dataset.kind! : onTypes.length ? `${onTypes.length} of ${typeItems.length}` : 'None';
-    $('count').textContent = `${shown} ${shown === 1 ? 'wand' : 'wands'}`;
+    $('count').textContent = `${shown} ${shown === 1 ? ONE : MANY}`;
     $('empty').hidden = shown > 0;
     // One Reset button, always there: greyed out when there's nothing to reset; its tooltip says what it will reset.
     const filters = [fac !== 'b' && 'faction', off.size && 'source', only.checked && 'show selected', q!.value && 'search'].filter(Boolean) as string[];
@@ -137,7 +143,7 @@ document.addEventListener('astro:page-load', () => {
     const empty = path.size === 0, db = $('desel');
     db.classList.toggle('on', empty);
     db.setAttribute('aria-label', empty ? 'Use suggested' : 'Deselect all');
-    db.title = empty ? 'Tick the suggested upgrades again' : 'Untick every wand, including the suggested upgrades';
+    db.title = empty ? 'Tick the suggested upgrades again' : `Untick every ${ONE}, including the suggested upgrades`;
     shareBtn.disabled = empty;
     $('edits').hidden = !edits;
     $('edits').querySelector('.what')!.textContent = edits;
@@ -183,7 +189,7 @@ document.addEventListener('astro:page-load', () => {
   let copiedTimer = 0;
   shareBtn.addEventListener('click', async () => {
     const url = shareUrl();
-    if (navigator.share && matchMedia('(pointer: coarse)').matches) { navigator.share({ title: 'My wand path', url }).catch(() => {}); return; }
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) { navigator.share({ title: `My ${document.title.split(' · ')[0].toLowerCase()} path`, url }).catch(() => {}); return; }
     try { await navigator.clipboard.writeText(url); } catch { window.prompt('Copy this link', url); return; }
     shareBtn.classList.add('done'); clearTimeout(copiedTimer);
     copiedTimer = window.setTimeout(() => shareBtn.classList.remove('done'), 2000);

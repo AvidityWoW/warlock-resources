@@ -22,10 +22,25 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
 - `src/layouts/Layout.astro`, `src/components/Header.astro`: the page shell, header and light/dark toggle.
   Astro's `ClientRouter` swaps pages without a full reload, and the header persists between them.
 - `src/styles/global.css`: colour tokens (purple Monokai dark, plus light) and base styles. One file per page beside it.
-- `src/data/wands.json` (typed in `wands.ts`): the wand data. Replace it to update the wand guide for a new build.
-- `src/components/WandItem.astro`: one wand row. Rows reflow with container queries: stacked, two-line, or one line.
-- `src/scripts/wands.ts`: the wand page's controls (faction, sources, search, your path, Deselect all, Reset, Share path).
-  Choices are kept in `localStorage`; a shared link is `/wands/?path=<base-36 ids joined by .>&f=<a|h>`.
+- Gear pages (`wands`, `one-hand`, `staves`) share their parts. One-hand and Staves are not released yet: their pages are
+  `src/pages/_one-hand.astro` and `_staves.astro` (Astro skips files starting with `_`) and their nav entries are commented out.
+  Rename them and uncomment the entries to publish them.
+  - `src/data/wands.json` (typed in `wands.ts`): the wand data, ranked by DPS.
+  - `src/data/weapons.json` (typed in `weapons.ts`): one-hand weapons, off-hands and staves, in level then item-level order.
+    Rows show spell damage (SP, ShP, FP) up front, and the suggested path follows item level. Built by `tools/weapons/gen.py`
+    (usage in its docstring) from the spelldb client tables and the cmangos dump. Spell damage is taken from Wowhead's Forever
+    tooltips (cached in `tools/weapons/wowhead-cache/`, not committed), because server hotfixes add spell power the client lacks.
+    Stats are from the Forever client and sources from classic server data (cmangos classic-db), so items new to Forever
+    mostly have none. Only items with spell damage (SP, ShP or FP) are listed. Without a Wowhead tooltip, spell damage falls back to the client: stat 45/42, and the unnamed stats 88 (Shadow) and 85 (Fire).
+  - `src/components/GearControls.astro` (legend, Share path, sticky toolbar) and `LevelBands.astro` (level bands; with
+    `group`, a page section with its own upgrade path, like Main hand and Off-hand).
+  - `src/components/WandItem.astro`, `GearItem.astro`: one row each. Rows reflow with container queries: stacked, two-line, or one line.
+  - `src/scripts/gear.ts`: the controls (faction, sources, search, your path, Deselect all, Reset, Share path). Choices are
+    kept in `localStorage` per page (`wands:*`, `one-hand:*`, `staves:*`); a shared link is
+    `<page>/?path=<base-36 ids joined by .>&f=<a|h>`.
+- Macros page: the macros are in `src/data/macros.ts`; `src/lib/macro.ts` colours them and swaps `{item:Healthstone}` /
+  `{create:Healthstone}` for the stone rank of the level picked on the page (saved as `macros:level`); `src/scripts/macros.ts`
+  handles search, the level and Copy.
 - `src/assets/backdrop/`: the fel fire and smoke behind the page, drawn by `tools/backdrop.mjs` from SVG noise filters.
   Strength is `--fel` / `--smoke` in `global.css`; `Layout.astro` keeps the animation smooth across page changes.
 

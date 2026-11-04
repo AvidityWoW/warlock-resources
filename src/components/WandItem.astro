@@ -11,7 +11,7 @@ const first = path.b;                               // gain on the default (both
 const text = [w.name, w.school, s?.text, s?.link?.name, s?.where].filter(Boolean).join(' ').toLowerCase();
 ---
 <li class:list={['wand', { up: 'b' in path }]} data-id={w.id} data-school={w.school} data-side={w.side ?? ''} data-text={text}
-  data-kind={s?.kind ?? ''} data-dps={w.dps}>
+  data-kind={s?.kind ?? ''} data-score={w.dps}>
   {pathable && <input class="tog" type="checkbox" checked={'b' in path} aria-label={`${w.name} on my upgrade path`} title="On my upgrade path">}
   <span class="lvl" title="Required level">{w.req ?? '—'}</span>
   <div class="name">

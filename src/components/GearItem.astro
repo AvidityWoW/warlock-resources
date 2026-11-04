@@ -1,0 +1,35 @@
+---
+// One weapon / off-hand as a list row, laid out like a wand row (gear.css): spell damage (SP, ShP, FP) takes the DPS spot,
+// and item level plus the other stats take the damage line. The upgrade path ranks by item level (data-score).
+// data-* attributes drive scripts/gear.ts.
+import FactionIcon from './FactionIcon.astro';
+import { wowhead } from '../data/gear';
+import { statLine, powerOf, type Weapon } from '../data/weapons';
+import type { FactionKey } from '../lib/path';
+interface Props { w: Weapon; path?: Partial<Record<FactionKey, number | null>>; pathable?: boolean }
+const { w, path = {}, pathable = true } = Astro.props;
+const s = w.source;
+const first = path.b;
+const stats = statLine(w);
+const power = powerOf(w);
+const text = [w.name, w.type, stats, ...power.map((p) => `${p.value} ${p.label} ${p.full}`), s?.text, s?.link?.name, s?.where].filter(Boolean).join(' ').toLowerCase();
+const lvlTitle = w.reqFrom === 'quest' ? `No level requirement; the quest opens at level ${w.req}`
+  : w.reqFrom === 'ilvl' ? `No level requirement; about level ${w.req} going by item level` : 'Required level';
+---
+<li class:list={['wand', 'gear', { up: 'b' in path }]} data-id={w.id} data-side={w.side ?? ''} data-text={text}
+  data-kind={s?.kind ?? ''} data-score={w.ilvl} data-dp="0">
+  {pathable && <input class="tog" type="checkbox" checked={'b' in path} aria-label={`${w.name} on my upgrade path`} title="On my upgrade path">}
+  <span class:list={['lvl', { est: w.reqFrom }]} title={lvlTitle}>{w.req ?? '—'}</span>
+  <div class="name">
+    <a class={`iq${w.quality}`} href={wowhead('item', w.id)} aria-label={w.name}>{w.name}</a>
+    {w.side && <span class="side" title={`${w.side} only`}><FactionIcon side={w.side} /></span>}
+    {w.affixes && <span class="badge">Random enchant</span>}
+  </div>
+  <div class="src muted">{s ? (s.link
+    ? <Fragment>{s.text}: <a href={wowhead(s.link.type, s.link.id)}>{s.link.name}</a>{s.where && ` · ${s.where}`}</Fragment>
+    : <Fragment>{s.text}{s.where && ` · ${s.where}`}</Fragment>) : 'No known source'}</div>
+  <span class="dps pow">{power.length
+    ? power.map((p) => <span class={`pw pw-${p.key}`} title={p.full}><b>{p.value}</b> {p.label}</span>)
+    : <span class="muted" title={w.affixes ? 'Depends on the suffix it rolls' : 'No spell damage'}>{w.affixes ? 'Random' : '—'}</span>}</span>
+  <span class="meta muted"><span class="typ">{w.type}</span> · <span class="il" title="Item level: the upgrade path ranks by this">ilvl {w.ilvl}<span class="gain">{first != null ? `+${first}` : ''}</span></span>{stats && ` · ${stats}`}</span>
+</li>

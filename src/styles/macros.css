@@ -1,0 +1,121 @@
+/* Macros page: a toolbar, then each group's macros as cards in a grid. */
+.page-head code,.notes code{padding:1px 5px;border-radius:5px;background:var(--raised);color:var(--text);font-size:.92em}
+
+/* toolbar: count, search, stone level, and links to the groups */
+.mtools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+#mcount{flex:none;min-width:7.5em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mtools .search{position:relative;flex:0 1 250px;min-width:150px}
+.search svg{position:absolute;left:12px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--muted);pointer-events:none}
+.search input,.mlevel input{height:38px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);font:inherit}
+.search input{width:100%;padding:0 12px 0 38px}
+.search input::placeholder{color:var(--muted)}
+.mlevel{display:inline-flex;align-items:center;gap:8px;color:var(--muted);white-space:nowrap}
+.mlevel input{width:4.5em;padding:0 8px 0 14px;font-variant-numeric:tabular-nums}
+:is(.search,.mlevel) input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.jump{display:flex;flex-wrap:wrap;gap:4px 14px;margin-left:auto;font-size:.9em}
+.jump a{text-decoration:none}
+.jump a:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:640px){.jump{margin-left:0;flex-basis:100%}}
+
+/* groups */
+.mgroup{margin-top:32px;scroll-margin-top:calc(var(--header) + 16px)}
+.mgroup[hidden],.macro[hidden],.mnone[hidden]{display:none}
+.mgroup h2{padding-bottom:6px;margin-bottom:14px;border-bottom:1px solid var(--line);font-size:1.3rem}
+.mgroup h2 .muted{margin-left:6px;font-size:.62em;font-weight:400}
+.mgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))}
+
+/* a macro card: name and Copy, the macro, what it does, then badges and length */
+.macro{display:flex;flex-direction:column;gap:10px;min-width:0;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.macro header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.macro h3{font-size:1rem;font-weight:600}
+.copy{flex:none;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);font:inherit;font-size:.85em;font-weight:500;cursor:pointer;transition:color .15s,background .15s,border-color .15s}
+.copy:hover{color:var(--text);background:var(--raised)}
+.copy svg{width:15px;height:15px}
+.copy.done{border-color:var(--good);color:var(--good)}
+/* "Copy" and "Copied" share one slot, sized to the longer, so the button doesn't change width */
+.copy .labels{display:grid}
+.copy .labels>span{grid-area:1/1}
+.copy .b,.copy.done .a{visibility:hidden}
+.copy.done .b{visibility:visible}
+
+/* a card's dropdowns (spell, version, racial…): between the name and the macro */
+.picks{display:flex;flex-wrap:wrap;gap:8px 16px}
+.pick{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.85em}
+.pick select{flex:0 1 auto;min-width:0;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-size:1.05em;cursor:pointer}
+.pick select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.code{margin:0;padding:10px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}
+.m-dir{color:var(--muted);font-style:italic}
+.m-cmd{color:var(--accent);font-weight:600}
+.m-cond{color:var(--warn)}
+.m-sep{color:var(--muted);font-weight:700}
+.m-chat{color:var(--good)}
+.m-lua{color:var(--frost)}
+
+.note{margin:0;color:var(--muted);font-size:.9em}
+.macro footer{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:auto;font-size:.8em}
+.badge{padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.92em;font-weight:600;white-space:nowrap}
+.chars{margin-left:auto;font-variant-numeric:tabular-nums}
+.chars.over{color:var(--fire);font-weight:600}
+
+.mnone{margin-top:28px;text-align:center}
+.link{padding:0;border:0;background:none;color:var(--accent);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* Tabs: Library | Guide & builder, underlined like a folder divider */
+.mtabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.mtabs button{margin-bottom:-1px;padding:9px 16px;border:1px solid transparent;border-bottom:0;border-radius:8px 8px 0 0;background:none;color:var(--muted);font:inherit;font-weight:500;cursor:pointer}
+.mtabs button:hover{color:var(--text)}
+.mtabs button[aria-selected="true"]{border-color:var(--line);background:var(--bg);color:var(--text)}
+.mpanel[hidden]{display:none}
+.mpanel code,.guide code,.builder code{padding:1px 5px;border-radius:5px;background:var(--raised);color:var(--text);font-size:.92em}
+.mpanel pre code,.mpanel .code code{padding:0;background:none;font-size:inherit}
+
+/* Builder */
+.builder,.guide{container-type:inline-size}
+.builder>h2,.guide>h2,.g-h{font-size:1.3rem;padding-bottom:6px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.builder>p{margin:0 0 14px;max-width:70ch}
+.b-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-bottom:14px}
+.b-field,.b-cond{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.9em}
+.b-check{display:inline-flex;align-items:center;gap:6px;font-size:.9em;cursor:pointer}
+.b-check input{width:16px;height:16px;margin:0;accent-color:var(--accent)}
+.builder select,.b-spell input{height:34px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:.95em}
+.builder select:focus,.b-spell input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.b-clauses{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.b-clause{padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.b-clausehead{display:flex;align-items:center;gap:10px}
+.b-num{flex:none;min-width:2.2em;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
+.b-spell{flex:1;min-width:0;max-width:380px}
+.b-spell input{width:100%;font-weight:600}
+.b-x{flex:none;margin-left:auto;width:30px;height:30px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);font-size:1.1rem;line-height:1;cursor:pointer}
+.b-x:hover{color:var(--text);background:var(--raised)}
+.b-x[hidden]{display:none}
+.b-sets{display:grid;gap:8px;margin-top:10px}
+.b-set{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 10px;border-radius:8px;background:var(--bg)}
+.b-set .b-x{width:26px;height:26px;font-size:1rem}
+.b-ortag{flex-basis:100%;color:var(--warn);font-size:.8em;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.b-cond select{height:30px;padding:0 6px;font-size:.92em;background:var(--surface)}
+.b-cond select.set{border-color:var(--warn);color:var(--warn)}   /* a condition that's switched on */
+.b-or,.b-add{margin-top:10px;padding:6px 12px;border:1px dashed var(--line);border-radius:8px;background:none;color:var(--muted);font:inherit;font-size:.88em;cursor:pointer}
+.b-or:hover,.b-add:hover{color:var(--text);border-color:var(--accent)}
+.b-add{margin-top:12px}
+.b-out{margin-top:18px;display:grid;gap:12px;padding:14px 16px;border:1px solid var(--accent);border-radius:var(--radius);background:var(--surface)}
+.b-outhead{display:flex;align-items:center;gap:12px}
+.b-outhead .chars{margin-left:auto}
+.b-read{font-size:.92em}
+.b-read ol{margin:6px 0 0;padding-left:1.4em;color:var(--muted)}
+.b-read ol b{color:var(--text)}
+.b-warn{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.b-warn:empty{display:none}
+.b-warn li{padding:6px 10px;border-left:3px solid var(--warn);border-radius:4px;background:color-mix(in srgb,var(--warn) 10%,transparent)}
+
+/* Guide */
+.guide{margin-top:40px}
+.g-h{margin-top:32px}
+.g-grid,.g-ref{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.g-card{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.g-card h3{font-size:1rem;font-weight:600}
+.g-card p{margin:0;font-size:.9em}
+.g-card dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:6px 12px;margin:0;font-size:.9em}
+.g-card dt{max-width:20em;overflow-wrap:anywhere}
+.g-card dd{margin:0;color:var(--muted)}
+@container (max-width:420px){.g-card dl{grid-template-columns:1fr}.g-card dd{margin-bottom:4px}}
+.guide .notes a{color:var(--accent)}

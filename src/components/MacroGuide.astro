@@ -1,0 +1,163 @@
+---
+// The macros page's second tab: a builder for /cast lines (scripts/macro-builder.ts drives it), then a guide to how
+// macros read, with a reference of conditionals, targets and commands. Code samples are coloured like the macro cards.
+import { highlight } from '../lib/macro';
+import { SPELLS, PRESETS } from '../data/macro-guide';
+const ex = (s: string) => highlight(s);
+---
+<section class="builder" id="builder" aria-labelledby="builder-h">
+  <h2 id="builder-h">Macro builder</h2>
+  <p class="muted">Build a <code>/cast</code> line one clause at a time. The game tries the clauses left to right and casts the first one whose conditions all hold.</p>
+
+  <div class="b-top">
+    <label class="b-field"><span>Start from</span>
+      <select id="b-preset">
+        <option value="">Blank</option>
+        {PRESETS.map((p, i) => <option value={i}>{p.name}</option>)}
+      </select>
+    </label>
+    <label class="b-field"><span>Command</span>
+      <select id="b-cmd"><option>/cast</option><option>/use</option></select>
+    </label>
+    <label class="b-check"><input type="checkbox" id="b-tip" checked> <code>#showtooltip</code></label>
+    <label class="b-check"><input type="checkbox" id="b-stop"> <code>/stopcasting</code> first</label>
+    <label class="b-check"><input type="checkbox" id="b-petattack"> <code>/petattack</code> too</label>
+  </div>
+
+  <ol class="b-clauses" id="b-clauses"></ol>
+  <button type="button" class="b-add" id="b-add">+ Add a clause (another spell, after <code>;</code>)</button>
+
+  <div class="b-out">
+    <div class="b-outhead">
+      <strong>Your macro</strong>
+      <span class="chars muted" id="b-chars"></span>
+      <button type="button" class="copy" id="b-copy" aria-label="Copy the macro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+        <span class="labels"><span class="a">Copy</span><span class="b" aria-hidden="true">Copied</span></span>
+      </button>
+    </div>
+    <pre class="code"><code id="b-code"></code></pre>
+    <div class="b-read">
+      <strong>What it does</strong>
+      <ol id="b-explain"></ol>
+      <ul class="b-warn" id="b-warn"></ul>
+    </div>
+  </div>
+
+  <datalist id="b-spells">{SPELLS.map((s) => <option value={s} />)}</datalist>
+
+  <!-- one clause; the script clones it -->
+  <template id="b-clause-tpl">
+    <li class="b-clause">
+      <div class="b-clausehead">
+        <span class="b-num"></span>
+        <label class="b-spell"><span class="sr-only">Spell or item</span><input type="text" list="b-spells" placeholder="Spell or item name" autocomplete="off"></label>
+        <button type="button" class="b-x" data-act="del-clause" aria-label="Remove this clause" title="Remove this clause">×</button>
+      </div>
+      <div class="b-sets"></div>
+      <button type="button" class="b-or" data-act="add-set">+ or try another condition set (<code>][</code>)</button>
+    </li>
+  </template>
+</section>
+
+<section class="guide" aria-labelledby="guide-h">
+  <h2 id="guide-h">How macros read</h2>
+
+  <div class="g-grid">
+    <article class="g-card">
+      <h3>Conditions in one <code>[ ]</code>: all must hold (AND)</h3>
+      <pre class="code"><code set:html={ex('/cast [@mouseover,harm,nodead] Corruption')} /></pre>
+      <p>Casts only if there's a mob under your cursor, it's hostile, and it's alive. Separate conditions with commas.</p>
+    </article>
+    <article class="g-card">
+      <h3>Several <code>[ ][ ]</code> in a row: any can hold (OR)</h3>
+      <pre class="code"><code set:html={ex('/cast [@mouseover,harm,nodead][] Corruption')} /></pre>
+      <p>Tries the mouseover first; the empty <code>[]</code> always holds, so otherwise it falls back to your normal target.</p>
+    </article>
+    <article class="g-card">
+      <h3><code>;</code> starts the next spell (else if)</h3>
+      <pre class="code"><code set:html={ex('/cast [mod:shift] Bane of Doom; [mod:ctrl] Bane of Havoc; Bane of Agony')} /></pre>
+      <p>Shift: Doom. Otherwise Ctrl: Havoc. Otherwise: Agony. The first clause that holds wins and the rest are skipped.</p>
+    </article>
+    <article class="g-card">
+      <h3><code>@unit</code> picks who it's cast on</h3>
+      <pre class="code"><code set:html={ex('/cast [@focus,harm,nodead][] Banish')} /></pre>
+      <p>An <code>@</code> inside a set aims that set's spell, and the other conditions in the set are checked against that unit, not your target.</p>
+    </article>
+  </div>
+
+  <h2 class="g-h">Reference</h2>
+  <div class="g-ref">
+    <article class="g-card">
+      <h3>Modifier keys</h3>
+      <dl>
+        <dt><code>[mod]</code> / <code>[nomod]</code></dt><dd>any modifier held / none held</dd>
+        <dt><code>[mod:shift]</code></dt><dd>also <code>ctrl</code>, <code>alt</code></dd>
+        <dt><code>[mod:shift/ctrl]</code></dt><dd>either one (<code>/</code> means "or" inside a condition)</dd>
+        <dt><code>[mod:shift,mod:ctrl]</code></dt><dd>both held</dd>
+      </dl>
+      <p class="muted">Checked when you press the button, so they work from keybinds too.</p>
+    </article>
+    <article class="g-card">
+      <h3>The unit</h3>
+      <dl>
+        <dt><code>[harm]</code> / <code>[noharm]</code></dt><dd>you can / can't attack it</dd>
+        <dt><code>[help]</code> / <code>[nohelp]</code></dt><dd>you can / can't help it</dd>
+        <dt><code>[dead]</code> / <code>[nodead]</code></dt><dd>it's dead / alive</dd>
+        <dt><code>[exists]</code> / <code>[noexists]</code></dt><dd>there's a unit at all. <code>harm</code>, <code>help</code> and <code>dead</code> already check this.</dd>
+      </dl>
+    </article>
+    <article class="g-card">
+      <h3>You and your demon</h3>
+      <dl>
+        <dt><code>[combat]</code> / <code>[nocombat]</code></dt><dd>you're in combat / not</dd>
+        <dt><code>[pet]</code> / <code>[nopet]</code></dt><dd>a demon is out / none</dd>
+        <dt><code>[pet:Felhunter]</code></dt><dd>also Imp, Voidwalker, Succubus, Incubus; <code>[pet:Imp/Felhunter]</code> for either</dd>
+        <dt><code>[channeling]</code></dt><dd>you're channeling; <code>[nochanneling:Drain Soul]</code> for one spell</dd>
+        <dt><code>[group]</code> / <code>[group:raid]</code></dt><dd>in a party or raid / in a raid; <code>[nogroup]</code> solo</dd>
+        <dt><code>[known:Shadowburn]</code></dt><dd>you know the spell: one macro for any talent build</dd>
+      </dl>
+      <p class="muted">A dead but summoned demon still counts as <code>[pet]</code>. To check it's alive use <code>[@pet,nodead]</code>, but that takes the set's target slot.</p>
+    </article>
+    <article class="g-card">
+      <h3>Targets</h3>
+      <dl>
+        <dt><code>[]</code></dt><dd>your normal target (or self-cast rules)</dd>
+        <dt><code>@target</code>, <code>@player</code>, <code>@pet</code>, <code>@focus</code></dt><dd>who you'd expect</dd>
+        <dt><code>@mouseover</code></dt><dd>the unit under your cursor, in the world or on a unit frame</dd>
+        <dt><code>@cursor</code></dt><dd>drops a ground spell (Rain of Fire) where the cursor is, no circle to place</dd>
+        <dt><code>@targettarget</code></dt><dd>your target's target; also <code>@focustarget</code>, <code>@pettarget</code></dd>
+        <dt><code>@Name</code></dt><dd>a party or raid member by name; <code>@Name-target</code> for their target</dd>
+      </dl>
+    </article>
+    <article class="g-card">
+      <h3>The icon line</h3>
+      <dl>
+        <dt><code>#showtooltip</code></dt><dd>with the question-mark icon, the button shows the spell it will cast now, its cooldown and tooltip</dd>
+        <dt><code>#showtooltip Spell</code></dt><dd>always show that spell</dd>
+        <dt><code>#show</code></dt><dd>icon only, no tooltip</dd>
+      </dl>
+      <pre class="code"><code set:html={ex('#showtooltip [pet:Felhunter] Spell Lock; [pet:Succubus] Seduction')} /></pre>
+      <p class="muted">It takes conditions too, for a different icon than the cast line would pick.</p>
+    </article>
+    <article class="g-card">
+      <h3>Commands</h3>
+      <dl>
+        <dt><code>/cast</code>, <code>/use</code></dt><dd>cast a spell or use an item (either works for both); <code>/use 13</code> is your top trinket</dd>
+        <dt><code>/castsequence reset=target/combat A, B, C</code></dt><dd>the next spell in the list each press; <code>reset=</code> seconds, <code>target</code>, <code>combat</code>, <code>shift</code>…</dd>
+        <dt><code>/stopcasting</code></dt><dd>cancel the current cast, so the next line goes off now</dd>
+        <dt><code>/stopmacro [cond]</code></dt><dd>stop reading the macro here if the conditions hold</dd>
+        <dt><code>/focus</code>, <code>/clearfocus</code></dt><dd>set or clear your focus (to your target, or <code>/focus [@mouseover]</code>)</dd>
+        <dt><code>/petattack</code>, <code>/petfollow</code>, <code>/petpassive</code>, <code>/petdefensive</code></dt><dd>demon orders</dd>
+        <dt><code>/targetenemy</code>, <code>/cleartarget</code>, <code>/startattack</code></dt><dd>targeting and melee</dd>
+        <dt><code>/use 16</code> after an oil or stone</dt><dd>puts it on your main hand; <code>/click StaticPopup1Button1</code> then says yes to "replace enchant?"</dd>
+      </dl>
+    </article>
+  </div>
+
+  <div class="notes">
+    <p>Only one spell on the global cooldown can go off per press, so a macro with two GCD spells casts the first one that works. Spells off the global cooldown (Amplify Curse, Fel Domination, trinkets) can share a press with one that's on it.</p>
+    <p>A set with only an <code>@unit</code> and no other check always holds, even if nobody is there; add <code>harm</code>, <code>help</code> or <code>exists</code> to make it fall through. Macros can be up to 255 characters. Spell names are case-insensitive but must be spelled exactly; add <code>(Rank 1)</code> for a specific rank.</p>
+    <p>Further reading: <a href="https://warcraft.wiki.gg/wiki/Macro_conditionals">Macro conditionals</a> on the Warcraft Wiki, and the <a href="https://us.forums.blizzard.com/en/wow/t/useful-macro-templates/42937">useful macro templates</a> forum thread. Both cover retail too, so some things there (forms, arena frames, spells like Metamorphosis, Singe Magic or Shadow Bite) don't apply to Forever.</p>
+  </div>
+</section>

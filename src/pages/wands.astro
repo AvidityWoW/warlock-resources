@@ -1,23 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import WandItem from '../components/WandItem.astro';
-import FactionIcon from '../components/FactionIcon.astro';
-import { data, type Wand } from '../data/wands';
-import { upgradePaths } from '../lib/path';
-import '../styles/wands.css';
-
-const paths = upgradePaths(data.wands);
-
-// Source types for the Source menu, with how many wands each has.
-const KINDS = ['Quest', 'Drop', 'World drop', 'Crafted', 'Vendor', 'Other'] as const;
-const kinds = KINDS.map((k) => ({ k, n: data.wands.filter((w) => (w.source?.kind ?? 'Other') === k).length })).filter((x) => x.n);
-
-// Group by the level you can equip the wand: 1–10, 11–20, …
-const bands = new Map<number, Wand[]>();
-for (const w of data.wands) {
-  const top = Math.max(10, Math.ceil((w.req ?? 1) / 10) * 10);
-  bands.set(top, [...(bands.get(top) ?? []), w]);
-}
+import GearControls from '../components/GearControls.astro';
+import LevelBands from '../components/LevelBands.astro';
+import { data } from '../data/wands';
+import '../styles/gear.css';
 ---
 <Layout title="Wands" description="Every wand a warlock can use in WoW Forever, grouped by level.">
   <Fragment slot="head">
@@ -30,58 +17,10 @@ for (const w of data.wands) {
     <p>Wands for warlocks in WoW Forever, sorted by level. Tick the ones you want on your upgrade path.</p>
   </div>
 
-  <!-- shown after opening someone's shared link -->
-  <p id="shared" class="shared" hidden role="status">Loaded a shared path. <button type="button" class="link" id="share-undo">Undo</button> <button type="button" class="link" id="share-keep">Keep it</button></p>
+  <GearControls store="wands" total={data.wands.length} noun="wands" one="wand" searchLabel="Search wands, quests, zones and schools"
+    kindsOf={data.wands.map((w) => w.source?.kind)} />
 
-  <div class="legend muted">
-    <span><span class="mark up"></span>Green: suggested upgrades</span>
-    <span><span class="mark pick"></span>Gold: ones you added</span>
-    <span id="edits" hidden>Your path: <span class="what"></span></span>
-    <!-- copies a link to your path (on phones, opens the share sheet); the two labels share one slot so nothing moves -->
-    <button type="button" class="share" id="share" title="Copy a link to your upgrade path">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></svg>
-      <span class="labels"><span class="a">Share path</span><span class="b" aria-hidden="true">Link copied</span></span>
-    </button>
-  </div>
-
-  <!-- sticks under the header: the level band you're scrolled to, plus the controls -->
-  <div class="toolbar">
-    <span class="now" id="now" aria-hidden="true">Levels 1–10</span>
-    <span id="count" class="muted" aria-live="polite">{data.wands.length} wands</span>
-    <label class="search">
-      <span class="sr-only">Search wands, quests, zones and schools</span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-      <input id="q" type="search" placeholder="Search" autocomplete="off">
-    </label>
-    <div class="seg" role="group" aria-label="Faction">
-      <button type="button" data-fac="b" aria-pressed="true">Both</button>
-      <button type="button" data-fac="a" aria-pressed="false" aria-label="Alliance"><FactionIcon side="Alliance" /><span class="t">Alliance</span></button>
-      <button type="button" data-fac="h" aria-pressed="false" aria-label="Horde"><FactionIcon side="Horde" /><span class="t">Horde</span></button>
-    </div>
-    <span class="brk" aria-hidden="true"></span>
-    <details class="dd types" id="types">
-      <summary aria-label="Source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg><span class="t">Source:</span><span id="typesum">All</span></summary>
-      <div class="menu" role="menu" aria-label="Sources">
-        {kinds.map(({ k, n }) => <button type="button" role="menuitemcheckbox" aria-checked="true" data-kind={k}><span class="tick" aria-hidden="true"></span>{k}<span class="muted">{n}</span></button>)}
-      </div>
-    </details>
-    <label class="check"><input id="only" type="checkbox"><span class="long">Show selected</span><span class="short">Selected</span></label>
-    <!-- Deselect all ⇄ Use suggested: an icon button beside Reset (box with a minus / with a tick); the label is its tooltip -->
-    <button type="button" class="gbtn" id="desel" aria-label="Deselect all" title="Untick every wand, including the suggested upgrades">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path class="minus" d="M8.5 12h7"/><path class="tickmark" d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
-    </button>
-    <button type="button" class="rbtn" id="reset-all" disabled aria-label="Reset" title="Nothing to reset">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span class="t">Reset</span>
-    </button>
-  </div>
-  <p id="empty" class="empty muted" hidden>Nothing here. <button type="button" id="reset" class="link">Clear the filters</button></p>
-
-  {[...bands].map(([top, list]) => (
-    <section class="band" aria-labelledby={`lv${top}`} data-label={`Levels ${top - 9}–${top}`}>
-      <h2 id={`lv${top}`}>Levels {top - 9}–{top} <span class="muted">· <span class="n">{list.length}</span> wands</span></h2>
-      <ul class="wands">{list.map((w) => <WandItem w={w} path={paths.get(w.id)} />)}</ul>
-    </section>
-  ))}
+  <LevelBands kind="wand" items={data.wands} noun="wands" />
 
   <details class="extra">
     <summary>{data.noSource.length} more without a known source</summary>
@@ -89,7 +28,7 @@ for (const w of data.wands) {
     <ul class="wands">{data.noSource.map((w) => <WandItem w={w} pathable={false} />)}</ul>
   </details>
 
-  <script>import '../scripts/wands';</script>
+  <script>import '../scripts/gear';</script>
 
   <div class="notes">
     <p>Info comes from Wowhead's Forever database and the pre-release client's game files (build {data.build}), so things may shift before launch.</p>

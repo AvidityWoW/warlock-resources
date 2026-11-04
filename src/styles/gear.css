@@ -1,8 +1,12 @@
 /* Wand list. Rows reflow with the width of the list itself (container queries), so there is no separate phone layout. */
 .band{margin-top:28px}
 .band[hidden],.wand[hidden],.empty[hidden]{display:none}
-.band h2{padding:10px 0}
-.band h2 .muted{font-weight:400}
+.band :is(h2,h3){padding:10px 0;font-size:1.05rem}
+.band :is(h2,h3) .muted{font-weight:400}
+/* a page section (e.g. Main hand / Off-hand): its own heading above its level bands */
+.section-head{margin:44px 0 0;padding-bottom:6px;border-bottom:1px solid var(--line);font-size:1.3rem}
+.section-head:first-of-type{margin-top:20px}
+.section-head .muted{font-size:.75em;font-weight:400}
 
 .wands{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;container-type:inline-size}
 .wand{display:grid;grid-template-columns:1.25rem 2.25rem minmax(0,1fr) auto;grid-template-areas:"tog lvl name dps" "tog lvl src src" "tog lvl meta meta";gap:2px 14px;align-items:center;padding:10px 14px}
@@ -37,11 +41,17 @@
 /* upgrade path */
 .wand.up:not(.pick){box-shadow:inset 3px 0 0 var(--good);background-image:linear-gradient(var(--up-tint),var(--up-tint))}
 .gain{display:inline-block;min-width:3.2em;margin-left:8px;color:var(--good);font-weight:600;text-align:left}
+/* weapon rows: spell damage in the DPS spot (Shadow and Fire in their school colours), item level and its gain in the details */
+.pow{display:flex;gap:12px}
+.pw-shadow b{color:var(--shadow)}.pw-fire b{color:var(--fire)}
+.il{white-space:nowrap}
+.il .gain{min-width:2em;margin-left:5px}
 .gain:empty{min-width:0;margin:0}
 .gain.down{color:var(--muted);font-weight:500}
 
 /* item quality, damage school */
-.iq1{color:var(--q1)}.iq2{color:var(--q2)}.iq3{color:var(--q3)}.iq4{color:var(--q4)}
+.iq1{color:var(--q1)}.iq2{color:var(--q2)}.iq3{color:var(--q3)}.iq4{color:var(--q4)}.iq5{color:var(--q5)}
+.lvl.est{box-shadow:inset 0 0 0 1px var(--line);background:none;font-style:italic}   /* no level requirement: the level shown is the quest's, or an estimate */
 [data-school="Fire"] .sch{color:var(--fire)}[data-school="Shadow"] .sch{color:var(--shadow)}[data-school="Arcane"] .sch{color:var(--arcane)}
 [data-school="Frost"] .sch{color:var(--frost)}[data-school="Nature"] .sch{color:var(--nature)}[data-school="Physical"] .sch{color:var(--physical)}
 .sch{font-weight:600}
@@ -59,6 +69,10 @@
   .name a{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .dps{justify-self:start}
   .gain:empty{display:inline-block;min-width:3.2em;margin-left:8px}
+  .il .gain:empty{min-width:2em;margin-left:5px}
+  /* weapon rows: a narrower spell-damage column and room for item level plus stats, which may wrap */
+  .gear{grid-template-columns:1.25rem 2rem minmax(0,1fr) minmax(0,1fr) 8.5em minmax(0,16em)}
+  .gear .meta{white-space:normal}
 }
 
 .extra{margin-top:28px;padding:14px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}   /* a panel, same width as the lists */

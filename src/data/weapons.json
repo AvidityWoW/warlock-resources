@@ -1,0 +1,2415 @@
+{
+ "build": "1.60.1.70755",
+ "pulled": "2026-11-04",
+ "sourceNote": "Classic 1.12 server data (cmangos classic-db), plus crafting recipes from the game client",
+ "items": [
+  {
+   "id": 9603,
+   "name": "Gritroot Staff",
+   "quality": 2,
+   "ilvl": 10,
+   "req": 4,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Alliance",
+   "stats": {
+    "sta": 1,
+    "sp": 2
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 483,
+     "name": "The Relics of Wakening"
+    },
+    "where": "Teldrassil"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 4302,
+   "name": "Small Green Dagger",
+   "quality": 2,
+   "ilvl": 12,
+   "req": 7,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 1,
+    "sp": 4
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 1910,
+     "name": "Muad"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 3446,
+   "name": "Darkwood Staff",
+   "quality": 2,
+   "ilvl": 13,
+   "req": 7,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "sta": 3,
+    "sp": 6
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 408,
+     "name": "The Family Crypt"
+    },
+    "where": "Tirisfal Glades"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 5340,
+   "name": "Cauldron Stirrer",
+   "quality": 2,
+   "ilvl": 15,
+   "req": 10,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "sta": 4,
+    "sp": 8
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 853,
+     "name": "Apothecary Zamah"
+    },
+    "where": "The Barrens"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 5306,
+   "name": "Wind Rider Staff",
+   "quality": 2,
+   "ilvl": 20,
+   "req": 10,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "spi": 6,
+    "sp": 12
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 913,
+     "name": "Cry of the Thunderhawk"
+    },
+    "where": "The Barrens"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 3452,
+   "name": "Ceranium Rod",
+   "quality": 2,
+   "ilvl": 22,
+   "req": 10,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "sta": 7,
+    "sp": 14
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 480,
+     "name": "The Weaver"
+    },
+    "where": "Silverpine Forest"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 15397,
+   "name": "Oakthrush Staff",
+   "quality": 2,
+   "ilvl": 14,
+   "req": 12,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Alliance",
+   "stats": {
+    "sta": 2,
+    "int": 2,
+    "sp": 6
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4813,
+     "name": "The Fragments Within"
+    },
+    "where": "Darkshore"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 5613,
+   "name": "Staff of the Purifier",
+   "quality": 2,
+   "ilvl": 23,
+   "req": 13,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Alliance",
+   "stats": {
+    "spi": 8,
+    "sp": 16
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 973,
+     "name": "The Tower of Althalaxx"
+    },
+    "where": "Darkshore"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 16894,
+   "name": "Clear Crystal Rod",
+   "quality": 2,
+   "ilvl": 21,
+   "req": 15,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "int": 5,
+    "sta": 4,
+    "sp": 14
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 6284,
+     "name": "Arachnophobia"
+    },
+    "where": "Stonetalon Mountains"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 16889,
+   "name": "Polished Walking Staff",
+   "quality": 2,
+   "ilvl": 24,
+   "req": 20,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "int": 7,
+    "sta": 3,
+    "sp": 16
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 6544,
+     "name": "Torek's Assault"
+    },
+    "where": "Ashenvale"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 2950,
+   "name": "Icicle Rod",
+   "quality": 2,
+   "ilvl": 25,
+   "req": 20,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Alliance",
+   "stats": {
+    "int": 4,
+    "sp": 18
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 286,
+     "name": "Return the Statuette"
+    },
+    "where": "Wetlands"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 6898,
+   "name": "Orb of Soran'ruk",
+   "quality": 3,
+   "ilvl": 25,
+   "req": 20,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "fire": 9,
+    "shadow": 9
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1740,
+     "name": "The Orb of Soran'ruk"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 15109,
+   "name": "Staff of Soran'ruk",
+   "quality": 3,
+   "ilvl": 25,
+   "req": 20,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 14,
+    "fire": 34,
+    "shadow": 34
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 1740,
+     "name": "The Orb of Soran'ruk"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 2943,
+   "name": "Eye of Paleth",
+   "quality": 2,
+   "ilvl": 31,
+   "req": 22,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": "Alliance",
+   "stats": {
+    "sp": 4
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 293,
+     "name": "Cleansing the Eye"
+    },
+    "where": "Wetlands"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 249392,
+   "name": "Glimmering Staff",
+   "quality": 3,
+   "ilvl": 30,
+   "req": 25,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 11,
+    "sta": 11,
+    "sp": 34
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248703,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 249394,
+   "name": "Orb of Mystic Insight",
+   "quality": 3,
+   "ilvl": 30,
+   "req": 25,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 6,
+    "sp": 7
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248745,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 249395,
+   "name": "Orb of Souls",
+   "quality": 3,
+   "ilvl": 30,
+   "req": 25,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "spi": 6,
+    "sp": 4
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248748,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 249393,
+   "name": "Soulstaff",
+   "quality": 3,
+   "ilvl": 30,
+   "req": 25,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 11,
+    "spi": 11,
+    "sp": 34
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1248739,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 4134,
+   "name": "Nimboya's Mystical Staff",
+   "quality": 2,
+   "ilvl": 46,
+   "req": 30,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "int": 8,
+    "spi": 15,
+    "sp": 38
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 592,
+     "name": "Saving Yenniku"
+    },
+    "where": "Stranglethorn Vale"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 12260,
+   "name": "Searing Golden Blade",
+   "quality": 2,
+   "ilvl": 39,
+   "req": 34,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 7,
+    "fire": 39
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 15973,
+     "name": "Blacksmithing"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 15108,
+   "name": "Orb of Dar'Orahil",
+   "quality": 3,
+   "ilvl": 40,
+   "req": 35,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 5,
+    "shadow": 14
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4964,
+     "name": "The Completed Orb of Dar'Orahil"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 15107,
+   "name": "Orb of Noh'Orahil",
+   "quality": 3,
+   "ilvl": 40,
+   "req": 35,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 5,
+    "fire": 14
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4975,
+     "name": "The Completed Orb of Noh'Orahil"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 15106,
+   "name": "Staff of Dar'Orahil",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 35,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 11,
+    "sta": 3,
+    "hit": 10,
+    "shadow": 39
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4964,
+     "name": "The Completed Orb of Dar'Orahil"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 15105,
+   "name": "Staff of Noh'Orahil",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 35,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 4,
+    "sta": 3,
+    "crit": 14,
+    "fire": 39
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4975,
+     "name": "The Completed Orb of Noh'Orahil"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 11857,
+   "name": "Sanctimonial Rod",
+   "quality": 2,
+   "ilvl": 46,
+   "req": 40,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Alliance",
+   "stats": {
+    "sta": 4,
+    "spi": 17,
+    "sp": 38
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4266,
+     "name": "A Hero's Welcome"
+    },
+    "where": "Feralas"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 9683,
+   "name": "Strength of the Treant",
+   "quality": 2,
+   "ilvl": 50,
+   "req": 40,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "sta": 7,
+    "int": 18,
+    "sp": 42
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 3129,
+     "name": "Weapons of Spirit"
+    },
+    "where": "Feralas"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 10826,
+   "name": "Staff of Lore",
+   "quality": 2,
+   "ilvl": 48,
+   "req": 43,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 5,
+    "spi": 18,
+    "sp": 40
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 3161,
+     "name": "Gahz'ridian"
+    },
+    "where": "Tanaris"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 249454,
+   "name": "Dreamstaff",
+   "quality": 3,
+   "ilvl": 50,
+   "req": 45,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "spi": 19,
+    "sta": 19,
+    "sp": 35
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1249064,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 249453,
+   "name": "Radiant Staff",
+   "quality": 3,
+   "ilvl": 50,
+   "req": 45,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 19,
+    "sta": 19,
+    "sp": 56
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1249061,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 249455,
+   "name": "Truesilver Conduit",
+   "quality": 3,
+   "ilvl": 50,
+   "req": 45,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 8,
+    "sta": 8,
+    "sp": 10
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1249069,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 249456,
+   "name": "Twisting Essence Jar",
+   "quality": 3,
+   "ilvl": 50,
+   "req": 45,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "spi": 8,
+    "sta": 8,
+    "sp": 6
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 1249070,
+     "name": "Enchanting"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 19115,
+   "name": "Flask of Forest Mojo",
+   "quality": 2,
+   "ilvl": 51,
+   "req": 46,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": "Horde",
+   "stats": {
+    "int": 8,
+    "sp": 9
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 7847,
+     "name": "Return to Primal Torntusk"
+    },
+    "where": "The Hinterlands"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 18762,
+   "name": "Shard of the Green Flame",
+   "quality": 3,
+   "ilvl": 54,
+   "req": 50,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 12,
+    "fire": 16
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 7603,
+     "name": "Kroshius' Infernal Core"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 15801,
+   "name": "Valiant Shortsword",
+   "quality": 2,
+   "ilvl": 58,
+   "req": 50,
+   "slot": "main",
+   "type": "Sword",
+   "side": null,
+   "stats": {
+    "int": 11,
+    "sp": 50
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 5237,
+     "name": "Mission Accomplished!"
+    },
+    "where": "Western Plaguelands"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 20647,
+   "name": "Black Crystal Dagger",
+   "quality": 2,
+   "ilvl": 59,
+   "req": 54,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 3,
+    "mp5": 4,
+    "sp": 52
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8283,
+     "name": "Wanted - Deathclasp, Terror of the Sands"
+    },
+    "where": "Silithus"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 20069,
+   "name": "Ironbark Staff",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Alliance",
+   "stats": {
+    "int": 15,
+    "sta": 18,
+    "crit": 28,
+    "sp": 88
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 15127,
+     "name": "Samuel Hawke"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 20220,
+   "name": "Ironbark Staff",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "int": 15,
+    "sta": 18,
+    "crit": 28,
+    "sp": 88
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 15126,
+     "name": "Rutherford Twing"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 19312,
+   "name": "Lei of the Lifegiver",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "mp5": 5,
+    "sta": 11,
+    "sp": 12
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 13216,
+     "name": "Gaelden Hammersmith"
+    },
+    "where": "Alterac Valley"
+   }
+  },
+  {
+   "id": 20214,
+   "name": "Mindfang",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "main",
+   "type": "Dagger",
+   "side": "Horde",
+   "stats": {
+    "sta": 8,
+    "crit": 14,
+    "sp": 88
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 15126,
+     "name": "Rutherford Twing"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 20070,
+   "name": "Sageclaw",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "main",
+   "type": "Dagger",
+   "side": "Alliance",
+   "stats": {
+    "sta": 8,
+    "crit": 14,
+    "sp": 88
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 15127,
+     "name": "Samuel Hawke"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 19315,
+   "name": "Therazane's Touch",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sp": 29
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 13216,
+     "name": "Gaelden Hammersmith"
+    },
+    "where": "Alterac Valley"
+   }
+  },
+  {
+   "id": 19311,
+   "name": "Tome of Fiery Arcana",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "fire": 37
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 13216,
+     "name": "Gaelden Hammersmith"
+    },
+    "where": "Alterac Valley"
+   }
+  },
+  {
+   "id": 19309,
+   "name": "Tome of Shadow Force",
+   "quality": 4,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 7,
+    "shadow": 31
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 13216,
+     "name": "Gaelden Hammersmith"
+    },
+    "where": "Alterac Valley"
+   }
+  },
+  {
+   "id": 22688,
+   "name": "Verimonde's Last Resort",
+   "quality": 3,
+   "ilvl": 66,
+   "req": 55,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 7,
+    "int": 8,
+    "sp": 74
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 9221,
+     "name": "Superior Armaments of Battle - Friend of the Dawn"
+    },
+    "where": "Eastern Plaguelands"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 17004,
+   "name": "Sarah's Guide",
+   "quality": 2,
+   "ilvl": 61,
+   "req": 56,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "sta": 20,
+    "int": 15,
+    "sp": 54
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 6136,
+     "name": "The Corpulent One"
+    },
+    "where": "Eastern Plaguelands"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 20724,
+   "name": "Corrupted Blackwood Staff",
+   "quality": 2,
+   "ilvl": 62,
+   "req": 58,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 11,
+    "int": 22,
+    "sp": 54
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8306,
+     "name": "Into The Maw of Madness"
+    },
+    "where": "Silithus"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 22383,
+   "name": "Sageblade",
+   "quality": 4,
+   "ilvl": 64,
+   "req": 59,
+   "slot": "main",
+   "type": "Sword",
+   "side": null,
+   "stats": {
+    "sta": 14,
+    "int": 6,
+    "hit": 10,
+    "sp": 94
+   },
+   "source": {
+    "kind": "Crafted",
+    "text": "Crafted",
+    "link": {
+     "type": "spell",
+     "id": 27832,
+     "name": "Blacksmithing"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 18602,
+   "name": "Tome of Sacrifice",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 12,
+    "shadow": 13
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 7583,
+     "name": "Suppression"
+    },
+    "where": null
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 21185,
+   "name": "Earthcalm Orb",
+   "quality": 4,
+   "ilvl": 62,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 10,
+    "mp5": 8,
+    "sp": 6
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8574,
+     "name": "Stalwart's Battlegear"
+    },
+    "where": "Silithus"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 19102,
+   "name": "Crackling Staff",
+   "quality": 3,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Alliance",
+   "stats": {
+    "int": 25,
+    "sp": 99
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 13216,
+     "name": "Gaelden Hammersmith"
+    },
+    "where": "Alterac Valley"
+   }
+  },
+  {
+   "id": 22379,
+   "name": "Shivsprocket's Shiv",
+   "quality": 3,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 13,
+    "sp": 74
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 9023,
+     "name": "The Perfect Poison"
+    },
+    "where": "Silithus"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 19101,
+   "name": "Whiteout Staff",
+   "quality": 3,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": "Horde",
+   "stats": {
+    "int": 16,
+    "sta": 25,
+    "sp": 74
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 13218,
+     "name": "Grunnda Wolfheart"
+    },
+    "where": "Alterac Valley"
+   }
+  },
+  {
+   "id": 19884,
+   "name": "Jin'do's Judgement",
+   "quality": 4,
+   "ilvl": 66,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 10,
+    "sta": 10,
+    "hit": 20,
+    "mp5": 14,
+    "sp": 94
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 11380,
+     "name": "Jin'do the Hexxer"
+    },
+    "where": "Zul'Gurub"
+   }
+  },
+  {
+   "id": 21416,
+   "name": "Kris of Unspoken Names",
+   "quality": 4,
+   "ilvl": 70,
+   "req": 60,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 9,
+    "int": 7,
+    "sp": 59
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8710,
+     "name": "Kris of Unspoken Names"
+    },
+    "where": "Ahn'Qiraj"
+   }
+  },
+  {
+   "id": 21523,
+   "name": "Fang of Korialstrasz",
+   "quality": 4,
+   "ilvl": 76,
+   "req": 60,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 14,
+    "sta": 9,
+    "spi": 13,
+    "sp": 65
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8745,
+     "name": "Treasure of the Timeless One"
+    },
+    "where": "Silithus"
+   }
+  },
+  {
+   "id": 21521,
+   "name": "Runesword of the Red",
+   "quality": 4,
+   "ilvl": 76,
+   "req": 60,
+   "slot": "main",
+   "type": "Sword",
+   "side": null,
+   "stats": {
+    "sta": 17,
+    "int": 9,
+    "spi": 7,
+    "sp": 104
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8745,
+     "name": "Treasure of the Timeless One"
+    },
+    "where": "Silithus"
+   }
+  },
+  {
+   "id": 23451,
+   "name": "Grand Marshal's Mageblade",
+   "quality": 4,
+   "ilvl": 78,
+   "req": 60,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 14,
+    "int": 8,
+    "crit": 14,
+    "sp": 106
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 12782,
+     "name": "Captain O'Neal"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 18873,
+   "name": "Grand Marshal's Stave",
+   "quality": 4,
+   "ilvl": 78,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 41,
+    "int": 23,
+    "spi": 17,
+    "sp": 71
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 12782,
+     "name": "Captain O'Neal"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 23452,
+   "name": "Grand Marshal's Tome of Power",
+   "quality": 4,
+   "ilvl": 78,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 17,
+    "int": 16,
+    "sp": 20
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 12782,
+     "name": "Captain O'Neal"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 23466,
+   "name": "High Warlord's Spellblade",
+   "quality": 4,
+   "ilvl": 78,
+   "req": 60,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 14,
+    "int": 8,
+    "crit": 14,
+    "sp": 106
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 14581,
+     "name": "Sergeant Thunderhorn"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 23468,
+   "name": "High Warlord's Tome of Destruction",
+   "quality": 4,
+   "ilvl": 78,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 17,
+    "int": 16,
+    "sp": 20
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 14581,
+     "name": "Sergeant Thunderhorn"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 18874,
+   "name": "High Warlord's War Staff",
+   "quality": 4,
+   "ilvl": 78,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 41,
+    "int": 23,
+    "spi": 17,
+    "sp": 106
+   },
+   "source": {
+    "kind": "Vendor",
+    "text": "Vendor",
+    "link": {
+     "type": "npc",
+     "id": 14581,
+     "name": "Sergeant Thunderhorn"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 21622,
+   "name": "Sharpened Silithid Femur",
+   "quality": 4,
+   "ilvl": 78,
+   "req": 60,
+   "slot": "main",
+   "type": "Sword",
+   "side": null,
+   "stats": {
+    "int": 7,
+    "sta": 14,
+    "crit": 14,
+    "sp": 106
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 15299,
+     "name": "Viscidus"
+    },
+    "where": "Ahn'Qiraj Temple"
+   }
+  },
+  {
+   "id": 21273,
+   "name": "Blessed Qiraji Acolyte Staff",
+   "quality": 4,
+   "ilvl": 79,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 33,
+    "sta": 32,
+    "hit": 20,
+    "crit": 14,
+    "sp": 108
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8790,
+     "name": "Imperial Qiraji Regalia"
+    },
+    "where": "Ahn'Qiraj"
+   }
+  },
+  {
+   "id": 21275,
+   "name": "Blessed Qiraji Augur Staff",
+   "quality": 4,
+   "ilvl": 79,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 24,
+    "sta": 23,
+    "mp5": 15,
+    "sp": 67
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8790,
+     "name": "Imperial Qiraji Regalia"
+    },
+    "where": "Ahn'Qiraj"
+   }
+  },
+  {
+   "id": 21597,
+   "name": "Royal Scepter of Vek'lor",
+   "quality": 4,
+   "ilvl": 81,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 9,
+    "sta": 10,
+    "crit": 14,
+    "hit": 10,
+    "sp": 20
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 15276,
+     "name": "Emperor Vek'lor"
+    },
+    "where": "Ahn'Qiraj Temple"
+   }
+  },
+  {
+   "id": 19366,
+   "name": "Master Dragonslayer's Orb",
+   "quality": 4,
+   "ilvl": 83,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 14,
+    "sta": 10,
+    "sp": 28
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 7782,
+     "name": "The Lord of Blackrock"
+    },
+    "where": "Stormwind City"
+   }
+  },
+  {
+   "id": 22630,
+   "name": "Atiesh, Greatstaff of the Guardian",
+   "quality": 5,
+   "ilvl": 90,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 30,
+    "int": 29,
+    "crit": 28,
+    "sp": 150
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 9271,
+     "name": "Atiesh, Greatstaff of the Guardian"
+    },
+    "where": null
+   }
+  }
+ ],
+ "noSource": [
+  {
+   "id": 276888,
+   "name": "Quilboar Toothpick",
+   "quality": 2,
+   "ilvl": 24,
+   "req": 1,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 2,
+    "spi": 2,
+    "sp": 16
+   },
+   "source": null
+  },
+  {
+   "id": 276897,
+   "name": "A Lesson in Destruction",
+   "quality": 3,
+   "ilvl": 38,
+   "req": 1,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 8,
+    "spi": 6,
+    "sp": 6
+   },
+   "source": null
+  },
+  {
+   "id": 276898,
+   "name": "Salve and Salvation",
+   "quality": 3,
+   "ilvl": 38,
+   "req": 1,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "spi": 9,
+    "sp": 3
+   },
+   "source": null
+  },
+  {
+   "id": 281274,
+   "name": "Makeshift Stormcaller",
+   "quality": 2,
+   "ilvl": 11,
+   "req": 6,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 2,
+    "sp": 4
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 248008,
+   "name": "Apprentice's Spellstaff",
+   "quality": 2,
+   "ilvl": 12,
+   "req": 7,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 2,
+    "sp": 4
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 269716,
+   "name": "Keen Skinning Knife",
+   "quality": 2,
+   "ilvl": 18,
+   "req": 13,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 2,
+    "sp": 10
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 10049,
+   "name": "Diabolist's Blade",
+   "quality": 2,
+   "ilvl": 25,
+   "req": 20,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "shadow": 6
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 281297,
+   "name": "Royal Dagger",
+   "quality": 2,
+   "ilvl": 25,
+   "req": 20,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 4,
+    "sp": 18
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 2944,
+   "name": "Cursed Eye of Paleth",
+   "quality": 2,
+   "ilvl": 31,
+   "req": 26,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": -3,
+    "shadow": 10
+   },
+   "source": null
+  },
+  {
+   "id": 281312,
+   "name": "Fallen Dragon's Scepter",
+   "quality": 3,
+   "ilvl": 32,
+   "req": 27,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 11,
+    "spi": 13,
+    "sp": 36
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 271767,
+   "name": "Healer's Staff",
+   "quality": 3,
+   "ilvl": 33,
+   "req": 28,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 12,
+    "mp5": 5,
+    "sp": 22
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 271799,
+   "name": "Desert Crawler's Claw",
+   "quality": 2,
+   "ilvl": 38,
+   "req": 35,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 5,
+    "sta": 2,
+    "sp": 30
+   },
+   "source": null
+  },
+  {
+   "id": 271797,
+   "name": "Staff of Revelations",
+   "quality": 2,
+   "ilvl": 38,
+   "req": 35,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 8,
+    "spi": 11,
+    "sp": 30
+   },
+   "source": null
+  },
+  {
+   "id": 270070,
+   "name": "Madman's Blade",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 35,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "spi": 7,
+    "sp": 32
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 271803,
+   "name": "Greatstaff of the Necrokhans",
+   "quality": 3,
+   "ilvl": 42,
+   "req": 35,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 12,
+    "sta": 16,
+    "spi": 6,
+    "sp": 48
+   },
+   "source": null
+  },
+  {
+   "id": 270069,
+   "name": "Mindslicer",
+   "quality": 2,
+   "ilvl": 41,
+   "req": 36,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 7,
+    "sp": 34
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 274948,
+   "name": "Bottle of Powderfuse Port",
+   "quality": 2,
+   "ilvl": 42,
+   "req": 37,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 7,
+    "sp": 21
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 272181,
+   "name": "Phantasmal Shiv",
+   "quality": 2,
+   "ilvl": 43,
+   "req": 38,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 4,
+    "sta": 5,
+    "sp": 36
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 277248,
+   "name": "Notched Ritual Rib",
+   "quality": 3,
+   "ilvl": 45,
+   "req": 40,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 9,
+    "sta": 4,
+    "sp": 52
+   },
+   "source": null
+  },
+  {
+   "id": 277260,
+   "name": "Researcher's Night Light",
+   "quality": 3,
+   "ilvl": 45,
+   "req": 40,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 12,
+    "fire": 7
+   },
+   "source": null
+  },
+  {
+   "id": 19989,
+   "name": "Tome of Devouring Shadows",
+   "quality": 3,
+   "ilvl": 52,
+   "req": 47,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "shadow": 20
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 270112,
+   "name": "Gryphon Rider's Crop",
+   "quality": 2,
+   "ilvl": 53,
+   "req": 48,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 7,
+    "sp": 12
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 260201,
+   "name": "Highborne Memory Crystal",
+   "quality": 2,
+   "ilvl": 55,
+   "req": 50,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "spi": 9,
+    "sp": 6
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 260207,
+   "name": "Staff of Archmage Selwyn",
+   "quality": 2,
+   "ilvl": 55,
+   "req": 50,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 16,
+    "sta": 16,
+    "sp": 48
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 275836,
+   "name": "Acolyte Blade",
+   "quality": 2,
+   "ilvl": 57,
+   "req": 52,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "spi": 8,
+    "sta": 5,
+    "sp": 50
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 274417,
+   "name": "Barkskin Baubles",
+   "quality": 3,
+   "ilvl": 58,
+   "req": 53,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 10,
+    "spi": 10,
+    "sp": 7
+   },
+   "source": null
+  },
+  {
+   "id": 275630,
+   "name": "Depleted Eye of Influence",
+   "quality": 2,
+   "ilvl": 58,
+   "req": 53,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sp": 12
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 275291,
+   "name": "Staff of the Deeproar",
+   "quality": 2,
+   "ilvl": 58,
+   "req": 53,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 12,
+    "sta": 13,
+    "spi": 14,
+    "sp": 31
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 274420,
+   "name": "Wisepaw Totem",
+   "quality": 3,
+   "ilvl": 58,
+   "req": 53,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 23,
+    "sta": 19,
+    "sp": 66
+   },
+   "source": null
+  },
+  {
+   "id": 275647,
+   "name": "Cleansed Ritual Kris",
+   "quality": 2,
+   "ilvl": 59,
+   "req": 54,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "spi": 4,
+    "sp": 32
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 275648,
+   "name": "Purified Gnarlybark Staff",
+   "quality": 2,
+   "ilvl": 59,
+   "req": 54,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "spi": 19,
+    "crit": 14,
+    "sp": 52
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 276336,
+   "name": "Yashiro's Spirit Bead",
+   "quality": 2,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "spi": 12,
+    "sp": 5
+   },
+   "source": null,
+   "reqFrom": "ilvl"
+  },
+  {
+   "id": 272856,
+   "name": "Premier Grand Marshal's Mageblade",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 8,
+    "int": 7,
+    "crit": 14,
+    "sp": 94
+   },
+   "source": null
+  },
+  {
+   "id": 272850,
+   "name": "Premier Grand Marshal's Stave",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 36,
+    "int": 20,
+    "sp": 94
+   },
+   "source": null
+  },
+  {
+   "id": 278158,
+   "name": "Premier Grand Marshal's Tome of Power",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 15,
+    "int": 14,
+    "sp": 18
+   },
+   "source": null
+  },
+  {
+   "id": 278157,
+   "name": "Premier Grand Marshal's Tome of Restoration",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 13,
+    "int": 13,
+    "spi": 13,
+    "sp": 9
+   },
+   "source": null
+  },
+  {
+   "id": 272683,
+   "name": "Premier High Warlord's Spellblade",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 8,
+    "int": 7,
+    "crit": 14,
+    "sp": 94
+   },
+   "source": null
+  },
+  {
+   "id": 272685,
+   "name": "Premier High Warlord's Tome of Destruction",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 15,
+    "int": 14,
+    "sp": 18
+   },
+   "source": null
+  },
+  {
+   "id": 272686,
+   "name": "Premier High Warlord's Tome of Mending",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 13,
+    "int": 13,
+    "spi": 13,
+    "sp": 9
+   },
+   "source": null
+  },
+  {
+   "id": 272603,
+   "name": "Premier High Warlord's War Staff",
+   "quality": 4,
+   "ilvl": 65,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 36,
+    "int": 20,
+    "sp": 94
+   },
+   "source": null
+  },
+  {
+   "id": 22589,
+   "name": "Atiesh, Greatstaff of the Guardian",
+   "quality": 5,
+   "ilvl": 90,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 31,
+    "int": 32,
+    "spi": 24,
+    "hit": 20,
+    "sp": 150
+   },
+   "source": null
+  },
+  {
+   "id": 22631,
+   "name": "Atiesh, Greatstaff of the Guardian",
+   "quality": 5,
+   "ilvl": 90,
+   "req": 60,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 28,
+    "int": 28,
+    "spi": 27,
+    "sp": 120
+   },
+   "source": null
+  }
+ ]
+}

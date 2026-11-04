@@ -1,0 +1,26 @@
+---
+// Items in level bands (1–10, 11–20, …), each band a list of rows. With `group`, the bands are one section of a page
+// (e.g. main hand): they get a section heading, their own upgrade path (scripts/gear.ts), and the sticky label names it.
+import WandItem from './WandItem.astro';
+import GearItem from './GearItem.astro';
+import { levelBands } from '../data/gear';
+import { upgradePaths } from '../lib/path';
+import type { Wand } from '../data/wands';
+import type { Weapon } from '../data/weapons';
+type Props =
+  | { kind: 'wand'; items: Wand[]; noun: string; group?: string; title?: string; short?: string; blurb?: string }
+  | { kind: 'gear'; items: Weapon[]; noun: string; group?: string; title?: string; short?: string; blurb?: string };
+const { kind, items, noun, group, title, short = title, blurb } = Astro.props;   // short: the section's name in the sticky label, which has little room
+const paths = kind === 'wand' ? upgradePaths(items as Wand[], (w) => w.dps) : upgradePaths(items as Weapon[], (w) => w.ilvl);
+const H = group ? 'h3' : 'h2';
+const id = (top: number) => `${group ? group + '-' : ''}lv${top}`;
+---
+{title && <h2 class="section-head" id={group}>{title}{blurb && <span class="muted">{` ${blurb}`}</span>}</h2>}
+{levelBands(items as { req: number | null }[]).map(([top, list]) => (
+  <section class="band" aria-labelledby={id(top)} data-group={group} data-label={short ? `${short} ${top - 9}–${top}` : `Levels ${top - 9}–${top}`}>
+    <H id={id(top)}>{`Levels ${top - 9}–${top} `}<span class="muted">{'· '}<span class="n">{list.length}</span>{` ${noun}`}</span></H>
+    <ul class="wands">{kind === 'wand'
+      ? (list as Wand[]).map((w) => <WandItem w={w} path={paths.get(w.id)} />)
+      : (list as Weapon[]).map((w) => <GearItem w={w} path={paths.get(w.id)} />)}</ul>
+  </section>
+))}

@@ -14,7 +14,7 @@
   --warn:#e6db74;
   --gold:#f0c040;--on-gold:#2a1f00;
   /* item quality */
-  --q1:#f8f8f2;--q2:#a6e22e;--q3:#66d9ef;--q4:#c69bff;
+  --q1:#f8f8f2;--q2:#a6e22e;--q3:#66d9ef;--q4:#c69bff;--q5:#ff9f43;
   /* damage schools */
   --fire:#fd971f;--shadow:#ae81ff;--arcane:#ff79c6;--frost:#78dce8;--nature:#a9dc76;--physical:#d6cfc0;
 
@@ -39,7 +39,7 @@
   --good:#3b7d0e;
   --warn:#8a6400;
   --gold:#c99400;--on-gold:#ffffff;
-  --q1:#1f1a2b;--q2:#1a7f00;--q3:#005fbf;--q4:#7f26d6;
+  --q1:#1f1a2b;--q2:#1a7f00;--q3:#005fbf;--q4:#7f26d6;--q5:#b85c00;
   --fire:#b85500;--shadow:#5442c8;--arcane:#a8309a;--frost:#0a7598;--nature:#2a8030;--physical:#62594a;
   --fel:.2;--smoke:.16;--fel-blend:multiply;
 }
@@ -100,7 +100,12 @@ html::before{content:"";position:fixed;left:0;bottom:0;z-index:-1;pointer-events
 :root[data-theme="light"] .theme-toggle .moon{display:none}
 /* which game the pages are for: a quiet note beside the theme button, on the tab row */
 .game{align-self:flex-end;margin-bottom:2px;line-height:36px;color:var(--muted);font-size:.85em;font-style:italic;white-space:nowrap}
-@media (max-width:360px){.game{display:none}}
+@media (max-width:600px){.game{display:none}}   /* phones: no room beside three tabs; every page's intro says WoW Forever */
+/* phones: four tabs only just fit, so they tighten up; if they still don't, the tab row scrolls sideways rather than spilling out */
+.nav{overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+@media (max-width:480px){.nav a{padding:0 11px}}
+@media (max-width:400px){.nav a{padding:0 8px;font-size:.92em}}
 @media (max-width:480px){.brand span{display:none}.site-header .brand{margin-left:-8px;padding-left:8px;padding-right:8px}}
 
 /* Page */

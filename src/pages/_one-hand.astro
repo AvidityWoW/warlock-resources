@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GearItem from '../components/GearItem.astro';
+import GearControls from '../components/GearControls.astro';
+import LevelBands from '../components/LevelBands.astro';
+import { data } from '../data/weapons';
+import '../styles/gear.css';
+
+const main = data.items.filter((w) => w.slot === 'main'), off = data.items.filter((w) => w.slot === 'off');
+const listed = [...main, ...off];
+const none = data.noSource.filter((w) => w.slot !== 'staff');
+---
+<Layout title="One-hand & off-hand" description="Daggers, one-handed swords and off-hands for warlocks in WoW Forever, with their spell damage.">
+  <Fragment slot="head">
+    <script is:inline>window.whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };   // read by Wowhead's tooltips.js</script>
+    <script is:inline src="https://wow.zamimg.com/js/tooltips.js"></script>
+  </Fragment>
+
+  <div class="page-head">
+    <h1>One-hand &amp; off-hand</h1>
+    <p>Daggers, swords and off-hands with spell damage, sorted by level and item level, with their Spell Power (SP), Shadow (ShP) and Fire (FP) spell damage up front. Main hand and off-hand each get their own upgrade path.</p>
+  </div>
+
+  <GearControls store="one-hand" total={listed.length} noun="items" one="item" searchLabel="Search items, stats, quests and zones"
+    kindsOf={listed.map((w) => w.source?.kind)} />
+
+  <LevelBands kind="gear" items={main} noun="items" group="main" title="Main hand" short="Main" blurb="daggers and swords" />
+  <LevelBands kind="gear" items={off} noun="items" group="off" title="Off-hand" short="Off" blurb="held in off-hand, and off-hand daggers" />
+
+  <details class="extra">
+    <summary>{none.length} more without a known source</summary>
+    <p class="muted">These are in the game files, but the classic server data has no source for them; most are new in Forever.</p>
+    <ul class="wands">{none.map((w) => <GearItem w={w} pathable={false} />)}</ul>
+  </details>
+
+  <script>import '../scripts/gear';</script>
+
+  <div class="notes">
+    <p>Stats come from the pre-release client's game files (build {data.build}), except spell damage, which comes from Wowhead's Forever tooltips: the game servers add spell power to many items that the client files don't show. Sources are from classic server data, so items new to Forever mostly have none yet, and things may shift before launch.</p>
+    <p>SP is Spell Power (every school), ShP is Shadow spell damage and FP is Fire spell damage. Items are sorted by level, then by item level, and the suggested path follows item level, since that's what sets an item's stat budget. Only items with spell damage are listed; weapons with just Intellect, Stamina or the like are left out.</p>
+    <p>Ticks start on the suggested upgrades: in each section, every item with a higher item level than everything before it. Untick one to drop it, or tick any other to add it. "Deselect all" starts you from an empty path; "Use suggested" brings the suggestions back. Your path and filters stay in this browser, and "Share path" copies a link to it.</p>
+    <p>A staff takes both hands, so compare it with your main hand and off-hand added together (see Staves). A crest means only that faction can get it. A level in an outlined box means the item has no level requirement: it's the quest's level, or an estimate.</p>
+  </div>
+</Layout>

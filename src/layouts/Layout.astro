@@ -41,6 +41,18 @@ const touchIcon = await getImage({ src: logo, width: 56, height: 56, format: 'pn
         if (!document.getAnimations) return;
         document.getAnimations().forEach(function (a) { if (a.animationName === 'fel' || a.animationName === 'smoke') a.startTime = 0; });
       };
+      // Wowhead's tooltips.js adds its stylesheet (wow.zamimg.com/css/…) to <head> once, when it first loads. In-site
+      // navigation swaps <head> for the new page's and would drop it, leaving tooltips unstyled. Copy it into the incoming
+      // head so the swap sees it on both sides and keeps the loaded one.
+      if (!window.__whHook) {
+        window.__whHook = true;
+        document.addEventListener('astro:before-swap', function (e) {
+          document.head.querySelectorAll('link[rel="stylesheet"][href*="zamimg.com"]').forEach(function (l) {
+            var href = l.getAttribute('href');
+            if (!e.newDocument.head.querySelector('link[rel="stylesheet"][href="' + href + '"]')) e.newDocument.head.appendChild(e.newDocument.importNode(l, false));
+          });
+        });
+      }
       if (!window.__felHook) {
         window.__felHook = true;
         document.addEventListener('DOMContentLoaded', pin);

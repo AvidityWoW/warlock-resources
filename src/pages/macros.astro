@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MacroGuide from '../components/MacroGuide.astro';
+import { groups } from '../data/macros';
+import { LIMIT, MAX_LEVEL, choice, fill, highlight, usesStones, stonesIn, stoneRank, type Picked } from '../lib/macro';
+import '../styles/macros.css';
+
+const total = groups.reduce((n, g) => n + g.macros.length, 0);
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// "Major Healthstone (58)": which rank a stone macro is using at this level
+const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body, picked).map((s) => {
+  const [lvl, rank] = stoneRank(s, level);
+  return `${rank ? `${rank} ` : ''}${s} (${lvl})`;
+}).join(', ');
+---
+<Layout title="Macros" description="Copy-ready warlock macros for WoW Forever: casting, crowd control, demons and stones.">
+  <div class="page-head">
+    <h1>Macros</h1>
+    <p>Warlock macros for WoW Forever, ready to copy. Paste one into the game's macro window (<code>/macro</code>), choose the question-mark icon, and drag it to your bars.</p>
+  </div>
+
+  <!-- two tabs: the macro library, and the guide with its builder (#guide links straight to it) -->
+  <div class="mtabs" role="tablist" aria-label="Macros">
+    <button type="button" role="tab" id="tab-lib" aria-controls="panel-lib" aria-selected="true">Library</button>
+    <button type="button" role="tab" id="tab-guide" aria-controls="panel-guide" aria-selected="false" tabindex="-1">Guide &amp; builder</button>
+  </div>
+
+  <div class="mpanel" id="panel-lib" role="tabpanel" aria-labelledby="tab-lib">
+  <div class="mtools">
+    <span id="mcount" class="muted" aria-live="polite">{total} macros</span>
+    <label class="search">
+      <span class="sr-only">Search macros, spells and notes</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="mq" type="search" placeholder="Search" autocomplete="off">
+    </label>
+    <label class="mlevel" title="The stone macros use the best Healthstone, Soulstone and Spellstone you can make at this level">
+      <span>Stones for level</span>
+      <input id="mlevel" type="number" inputmode="numeric" min="1" max={MAX_LEVEL} value={MAX_LEVEL}>
+    </label>
+    <nav class="jump muted" aria-label="Groups">
+      {groups.map((g) => <a href={`#${slug(g.group)}`}>{g.group}</a>)}
+    </nav>
+  </div>
+
+  {groups.map((g) => (
+    <section class="mgroup" id={slug(g.group)}>
+      <h2>{g.group} <span class="muted">{g.blurb}</span></h2>
+      <div class="mgrid">
+        {g.macros.map((m) => {
+          const picks = (m.picks ?? []).map((p) => ({ ...p, choices: p.choices.map(choice) }));
+          const picked: Picked = Object.fromEntries(picks.map((p) => [p.token, p.choices[0][1]]));
+          const text = fill(m.body, MAX_LEVEL, picked);
+          const stones = usesStones(m.body);
+          const search = [m.name, m.note, m.needs, text, ...picks.flatMap((p) => p.choices.map((c) => c[0]))].filter(Boolean).join(' ').toLowerCase();
+          return (
+            <article class="macro" data-search={search}>
+              <header>
+                <h3>{m.name}</h3>
+                <button type="button" class="copy" aria-label={`Copy ${m.name}`}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+                  <span class="labels"><span class="a">Copy</span><span class="b" aria-hidden="true">Copied</span></span>
+                </button>
+              </header>
+              {picks.length > 0 && (
+                <div class="picks">{picks.map((p) => (
+                  <label class="pick">
+                    <span>{p.label}</span>
+                    <select data-token={p.token}>{p.choices.map(([label, value]) => <option value={value}>{label}</option>)}</select>
+                  </label>
+                ))}</div>
+              )}
+              <pre class="code" data-body={stones || picks.length ? m.body : undefined}><code set:html={highlight(text)} /></pre>
+              <p class="note">{m.note}</p>
+              <footer>
+                {m.needs && <span class="badge">{m.needs}</span>}
+                {stones && <span class="rank muted">{rankNote(m.body, MAX_LEVEL, picked)}</span>}
+                <span class={`chars muted${text.length > LIMIT ? ' over' : ''}`} title={`Macros can be up to ${LIMIT} characters`}>{text.length}/{LIMIT}</span>
+              </footer>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  ))}
+
+  <p id="mnone" class="mnone muted" hidden>No macros match. <button type="button" class="link" id="mclear">Clear the search</button></p>
+
+  <script>import '../scripts/macros';</script>
+
+  <div class="notes">
+    <p>Written for the Classic client's macro syntax. <code>[mod:shift]</code> and friends check the key as you press the button, so they work from keybinds too. <code>@mouseover</code> means the unit under your cursor, including its unit frame; the empty <code>[]</code> after it falls back to your target.</p>
+    <p><code>#showtooltip</code> makes the button show the spell it will cast (and its cooldown) when you give the macro the question-mark icon. Macros without it need an icon picked by hand.</p>
+    <p>Spell and item names have to match the game exactly, rank words included. The stone macros follow the level you set above (it's kept in this browser); the number by each stone is the level its rank is learned. Forever is still in testing, so if a name or command has changed, swap it in before you save.</p>
+  </div>
+  </div>
+
+  <div class="mpanel" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+    <MacroGuide />
+    <script>import '../scripts/macro-builder';</script>
+  </div>
+</Layout>
