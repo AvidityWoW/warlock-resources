@@ -6,12 +6,12 @@
 export const SPELLS = [
   'Shadow Bolt', 'Immolate', 'Corruption', 'Bane of Agony', 'Bane of Doom', 'Bane of Havoc', 'Curse of the Elements',
   'Curse of Recklessness', 'Curse of Weakness', 'Curse of Tongues', 'Curse of Exhaustion', 'Amplify Curse',
-  'Siphon Life', 'Drain Life', 'Drain Mana', 'Drain Soul', 'Life Tap', 'Searing Pain', 'Soul Fire', 'Incinerate',
+  'Siphon Life', 'Wrack', 'Drain Life', 'Drain Mana', 'Drain Soul', 'Life Tap', 'Searing Pain', 'Soul Fire', 'Incinerate',
   'Shadowburn', 'Conflagrate', 'Rain of Fire', 'Hellfire', 'Fear', 'Howl of Terror', 'Death Coil', 'Banish',
   'Subjugate Demon', 'Health Funnel', 'Demon Skin', 'Demon Armor', 'Shadow Ward', 'Unending Breath', 'Detect Invisibility',
-  'Eye of Kilrogg', 'Sense Demons', 'Ritual of Summoning', 'Ritual of Doom', 'Inferno', 'Summon Imp', 'Summon Voidwalker',
+  'Eye of Kilrogg', 'Sense Demons', 'Ritual of Summoning', 'Portal of Summoning', 'Ritual of Doom', 'Inferno', 'Summon Imp', 'Summon Voidwalker',
   'Summon Succubus', 'Summon Incubus', 'Summon Felhunter', 'Summon Felsteed', 'Summon Dreadsteed', 'Fel Domination',
-  'Demonic Sacrifice', 'Soul Link', 'Shoot', 'Create Healthstone', 'Create Soulstone', 'Create Spellstone',
+  'Demonic Sacrifice', 'Soul Link', 'Shoot', 'Create Healthstone', 'Create Soulstone', 'Create Spellstone', 'Create Firestone',
   // demon abilities
   'Firebolt', 'Fire Shield', 'Phase Shift', 'Blood Pact', 'Torment', 'Suffering', 'Sacrifice', 'Consume Shadows',
   'Lash of Pain', 'Seduction', 'Soothing Kiss', 'Lesser Invisibility', 'Spell Lock', 'Devour Magic', 'Tainted Blood', 'Paranoia',

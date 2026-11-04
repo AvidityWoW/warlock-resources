@@ -140,13 +140,14 @@ const ex = (s: string) => highlight(s);
       <pre class="code"><code set:html={ex('#showtooltip [pet:Felhunter] Spell Lock; [pet:Succubus] Seduction')} /></pre>
       <p class="muted">It takes conditions too, for a different icon than the cast line would pick.</p>
     </article>
-    <article class="g-card">
+    <article class="g-card wide">
       <h3>Commands</h3>
       <dl>
         <dt><code>/cast</code>, <code>/use</code></dt><dd>cast a spell or use an item (either works for both); <code>/use 13</code> is your top trinket</dd>
         <dt><code>/castsequence reset=target/combat A, B, C</code></dt><dd>the next spell in the list each press; <code>reset=</code> seconds, <code>target</code>, <code>combat</code>, <code>shift</code>…</dd>
         <dt><code>/stopcasting</code></dt><dd>cancel the current cast, so the next line goes off now</dd>
         <dt><code>/stopmacro [cond]</code></dt><dd>stop reading the macro here if the conditions hold</dd>
+        <dt><code>/cqs [mod]</code></dt><dd>cancel queued spell: the next cast waits until the current one finishes instead of queuing early, so a potion or other off-GCD item in the same macro gets its turn. Only on a modifier in a filler, or every cast waits.</dd>
         <dt><code>/focus</code>, <code>/clearfocus</code></dt><dd>set or clear your focus (to your target, or <code>/focus [@mouseover]</code>)</dd>
         <dt><code>/petattack</code>, <code>/petfollow</code>, <code>/petpassive</code>, <code>/petdefensive</code></dt><dd>demon orders</dd>
         <dt><code>/targetenemy</code>, <code>/cleartarget</code>, <code>/startattack</code></dt><dd>targeting and melee</dd>

@@ -1,4 +1,4 @@
-import { SKIP } from '../lib/macro';
+import { SKIP, type CqsFrom } from '../lib/macro';
 
 // The macros page: every macro, by group. Bodies are exactly what goes in the game's macro window, except for
 // {item:<Stone>} and {create:<Stone>}, which lib/macro.ts swaps for the rank your level can make (see STONES there),
@@ -9,7 +9,22 @@ import { SKIP } from '../lib/macro';
 // and no Season of Discovery runes (Chaos Bolt, Metamorphosis, Felguard…), which are in the files but not in the game.
 /** a dropdown choice: the text itself, or [label shown in the menu, text put in the macro] */
 export type Choice = string | [string, string];
-export interface Pick { token: string; label: string; choices: Choice[] }
+/** a heading in a dropdown (an <optgroup>), e.g. a spellbook tab */
+export interface ChoiceGroup { group: string; choices: Choice[] }
+export interface Pick {
+  token: string;
+  label: string;
+  choices: (Choice | ChoiceGroup)[];
+  /** the value chosen to start with (else the first); for checkboxes, the ticked values joined by / */
+  default?: string;
+  /** a dropdown (the default), checkboxes whose ticked values join with / , or a number box */
+  type?: 'select' | 'checks' | 'number';
+}
+/** every choice in a dropdown, headings flattened away */
+export const flatChoices = (p: Pick): Choice[] => p.choices.flatMap((c) => (typeof c === 'object' && !Array.isArray(c) ? c.choices : [c]));
+/** spells under their spellbook tab, A to Z within each */
+const byTab = (tabs: Record<string, string[]>): ChoiceGroup[] =>
+  Object.entries(tabs).map(([group, spells]) => ({ group, choices: [...spells].sort((a, b) => a.localeCompare(b)) }));
 export interface Macro {
   name: string;
   body: string;
@@ -19,27 +34,170 @@ export interface Macro {
   needs?: string;
   /** dropdowns on the card, each filling {token} in the body */
   picks?: Pick[];
+  /** sets {cqs} from these cooldown dropdowns and their modifier dropdowns (see autoCqs in lib/macro.ts) */
+  cqs?: CqsFrom;
+  /** keeps spell and aim dropdowns compatible: which spell kinds each aim value accepts (null: any) */
+  validate?: Validate;
+  /** builds a castsequence's {reset} from a seconds box and reset checkboxes (see Derive in lib/macro.ts) */
+  reset?: { secs: string; on: string };
 }
 export interface MacroGroup { group: string; blurb: string; macros: Macro[] }
 
 // shared dropdown lists
-const DAMAGE: Choice[] = ['Shadow Bolt', 'Incinerate', 'Soul Fire', 'Searing Pain', 'Immolate', 'Corruption', 'Bane of Agony',
+const DAMAGE: Choice[] = ['Shadow Bolt', 'Incinerate', 'Soul Fire', 'Searing Pain', 'Immolate', 'Corruption', 'Bane of Agony', 'Wrack',
   'Drain Life', 'Shadowburn', 'Conflagrate', 'Hellfire'];
 const RACIAL_BURST: Choice[] = [['None', SKIP], ['Blood Fury (Orc)', 'Blood Fury'], ['Berserking (Troll)', 'Berserking'], ['Eureka! (Gnome)', 'Eureka!']];
+const TRINKETS: Choice[] = [['Both', '/use {tmod}13\n/use {tmod}14'], ['Trinket 1 (top)', '/use {tmod}13'], ['Trinket 2 (bottom)', '/use {tmod}14'], ['None', SKIP]];
+// the top potion of each kind in the Forever client worth pressing mid-fight, under headings (no Demonic or Dark Runes
+// there). Spellblasting, Dragonfire and Elemental Purging are new in Forever. Used by item ID (/use item:13444): it
+// doesn't depend on the exact name (the client has several potions sharing one) and keeps the macro short.
+const POTIONS: (Choice | ChoiceGroup)[] = [['None', SKIP],
+  { group: 'Damage', choices: [['Major Spellblasting Potion (spell damage)', 'item:250937'], ['Dragonfire Potion (fire cone)', 'item:250953'],
+    ['Potion of Elemental Purging (vs elementals)', 'item:250954']] },
+  { group: 'Mana and health', choices: [['Major Mana Potion', 'item:13444'], ['Major Rejuvenation Potion', 'item:18253'], ['Major Healing Potion', 'item:13446']] },
+  { group: 'Protection and utility', choices: [['Greater Shadow Protection Potion', 'item:13459'], ['Greater Fire Protection Potion', 'item:13457'],
+    ['Greater Frost Protection Potion', 'item:13456'], ['Greater Nature Protection Potion', 'item:13458'], ['Greater Arcane Protection Potion', 'item:13461'],
+    ['Living Action Potion (stuns, snares)', 'item:20008'], ['Limited Invulnerability Potion (physical)', 'item:3387'],
+    ['Purification Potion (curse, disease, poison)', 'item:13462'], ['Greater Stoneshield Potion (armor)', 'item:13455']] },
+];
+/** optional lines before the cast, as in the Death Coil interrupt: /stopattack ends melee auto-attack, /stopcasting
+ *  drops whatever you're casting so this goes off straight away */
+const STOP_ATTACK: Pick = { token: 'stop', label: 'Stop first', choices: [['Off', SKIP], ['Stop casting', '/stopcasting'], ['Stop attack', '/stopattack'],
+  ['Both', '/stopcasting\n/stopattack']] };
+/** the same, starting on Both: for crowd control, which you want out right now */
+const STOP_BOTH: Pick = { ...STOP_ATTACK, choices: [STOP_ATTACK.choices[3], ...STOP_ATTACK.choices.slice(0, 3)] };
+/** where Spell Lock and Seduction go when there's a hostile unit there (else your target) */
+const AIM: Pick = { token: 'aim', label: 'Aim at', choices: [['Mouseover', '@mouseover'], ['Focus', '@focus']] };
+/** when a cooldown goes off: a condition put in front of its line */
+const FIRES_ON: Choice[] = [['Every press', ''], ['Shift', '[mod:shift] '], ['Ctrl', '[mod:ctrl] '], ['Alt', '[mod:alt] '], ['Any modifier', '[mod] '],
+  ['No modifier', '[nomod] ']];
+/** the same list starting on Shift: the default for the cooldowns, so /cqs stays off unmodified filler presses (and a potion isn't drunk every press) */
+const FIRES_ON_SHIFT: Choice[] = [FIRES_ON[1], FIRES_ON[0], ...FIRES_ON.slice(2)];
+/** how a spell targets, from its effects in the Forever client: an enemy, a friend (or you), a spot on the ground, your
+ *  demon, or nothing (it acts on you or around you) */
+export type Kind = 'hostile' | 'friendly' | 'ground' | 'pet' | 'self';
+export interface Validate { spells: string[]; aim: string; allowed: Record<string, Kind[] | null> }
+export const KIND_SAYS: Record<Kind, string> = { hostile: 'is cast on an enemy', friendly: 'is cast on a friend or yourself',
+  ground: 'is a ground spell, aimed at the cursor', pet: 'is cast on your demon', self: 'needs no target' };
+export const SPELL_KIND: Record<string, Kind> = {
+  ...Object.fromEntries(['Bane of Agony', 'Bane of Doom', 'Bane of Havoc', 'Corruption', 'Curse of Exhaustion', 'Curse of Recklessness', 'Curse of the Elements',
+    'Curse of Tongues', 'Curse of Weakness', 'Death Coil', 'Drain Life', 'Drain Mana', 'Drain Soul', 'Fear', 'Siphon Life', 'Wrack', 'Banish', 'Subjugate Demon',
+    'Shadow Bolt', 'Immolate', 'Searing Pain', 'Incinerate', 'Soul Fire', 'Shadowburn', 'Conflagrate'].map((s) => [s, 'hostile'])),
+  'Unending Breath': 'friendly', 'Detect Invisibility': 'friendly',
+  'Rain of Fire': 'ground', Inferno: 'ground',
+  'Health Funnel': 'pet',
+  ...Object.fromEntries(['Life Tap', 'Amplify Curse', 'Demon Armor', 'Demon Skin', 'Shadow Ward', 'Fel Domination', 'Soul Link', 'Demonic Sacrifice', 'Eye of Kilrogg',
+    'Sense Demons', 'Ritual of Summoning', 'Summon Imp', 'Summon Voidwalker', 'Summon Succubus', 'Summon Incubus', 'Summon Felhunter', 'Hellfire', 'Howl of Terror']
+    .map((s) => [s, 'self'])),
+};
+
+// every warlock spell you'd put on a key, under its spellbook tab (as the client files them), for the two-spell builder
+const ALL_SPELLS = byTab({
+  Affliction: ['Bane of Agony', 'Bane of Doom', 'Corruption', 'Curse of Exhaustion', 'Curse of Recklessness', 'Curse of the Elements', 'Curse of Tongues',
+    'Curse of Weakness', 'Death Coil', 'Drain Life', 'Drain Mana', 'Drain Soul', 'Fear', 'Howl of Terror', 'Life Tap', 'Siphon Life', 'Wrack', 'Amplify Curse'],
+  Demonology: ['Banish', 'Subjugate Demon', 'Health Funnel', 'Demon Armor', 'Demon Skin', 'Shadow Ward', 'Unending Breath', 'Detect Invisibility',
+    'Fel Domination', 'Soul Link', 'Demonic Sacrifice', 'Eye of Kilrogg', 'Sense Demons', 'Ritual of Summoning', 'Inferno', 'Summon Imp', 'Summon Voidwalker',
+    'Summon Succubus', 'Summon Incubus', 'Summon Felhunter'],
+  Destruction: ['Bane of Havoc', 'Shadow Bolt', 'Immolate', 'Searing Pain', 'Incinerate', 'Soul Fire', 'Shadowburn', 'Conflagrate', 'Hellfire', 'Rain of Fire'],
+});
+/** a grouped spell list whose values get a prefix (", Corruption"), led by an empty "None": the later castsequence slots */
+const SLOT = (): (Choice | ChoiceGroup)[] => [['None', ''],
+  ...ALL_SPELLS.map((g) => ({ group: g.group, choices: g.choices.map((c) => [String(c), `, ${c}`] as [string, string]) }))];
 const STONE: Pick = { token: 'stone', label: 'Stone', choices: [['Spellstone (Shadow, haste)', 'Spellstone'], ['Firestone (Fire, crit)', 'Firestone']] };
 
 export const groups: MacroGroup[] = [
+  {
+    group: 'Cooldowns',
+    blurb: 'Trinkets, racial and a potion on one button, each on the key you choose.',
+    macros: [
+      {
+        name: 'Trinkets, racial and potion with a spell',
+        body: '#showtooltip {spell}\n{trinkets}\n/cast {rmod}{racial}\n/use {pmod}{potion}\n/cast {spell}\n/cqs{cqs}',
+        note: 'Pops your on-use trinkets, racial and a potion with the cast; they are off the global cooldown, so the spell still goes off. Choose which trinkets have a use effect (1 is the top slot, 2 the bottom). Each has its own "on": every press, only while you hold a key (save it for when it counts), or only when you don\'t. Potions start on Shift so you don\'t drink one every press; the list has the top rank of each, under Damage, Mana and health, and Protection and utility. "No spell" makes it a cooldowns-only button. /cqs (cancel queued spell) at the end stops the spell queue from locking in your next cast early, so the potion and other off-GCD items actually go off while you spam the button. It follows your choices: on the same keys as your cooldowns, or every press if any of them fires every press. Holding the next cast until the current one finishes slows a filler a little, so put the cooldowns on a key to keep unmodified presses at full speed.',
+        picks: [{ token: 'spell', label: 'Spell', choices: [...DAMAGE, ['No spell (cooldowns only)', SKIP]] },
+          { token: 'trinkets', label: 'Trinkets', choices: TRINKETS }, { token: 'tmod', label: 'on', choices: FIRES_ON_SHIFT },
+          { token: 'racial', label: 'Racial', choices: RACIAL_BURST }, { token: 'rmod', label: 'on', choices: FIRES_ON_SHIFT },
+          { token: 'potion', label: 'Potion', choices: POTIONS }, { token: 'pmod', label: 'on', choices: FIRES_ON_SHIFT }],
+        cqs: { parts: { trinkets: 'tmod', racial: 'rmod', potion: 'pmod' }, filler: 'spell' },
+      },
+    ],
+  },
+  {
+    group: 'Builders',
+    blurb: 'Pick the parts and the macro writes itself.',
+    macros: [
+      {
+        name: 'Two spells on one key',
+        body: '#showtooltip\n{on}',
+        note: 'The [mod] A; B pattern: hold the key for spell A, press without it for spell B. Pick both spells, the key, and where they land; the icon shows whichever spell the key you\'re holding will cast.',
+        // "Cast on" holds the whole /cast line; {key}, {a} and {b} inside it are filled from the other dropdowns
+        picks: [{ token: 'a', label: 'Spell A', choices: ALL_SPELLS, default: 'Searing Pain' },
+          { token: 'key', label: 'on', choices: [['Shift', 'mod:shift'], ['Ctrl', 'mod:ctrl'], ['Alt', 'mod:alt'], ['Any modifier', 'mod']] },
+          { token: 'b', label: 'Spell B', choices: ALL_SPELLS, default: 'Shadow Bolt' },
+          { token: 'on', label: 'Cast on', choices: [['Your target', '/cast [{key}] {a}; {b}'],
+            ['Mouseover, else target', '/cast [{key},@mouseover,harm,nodead][{key}] {a}; [@mouseover,harm,nodead][] {b}'],
+            ['Focus, else target', '/cast [{key},@focus,harm,nodead][{key}] {a}; [@focus,harm,nodead][] {b}']] }],
+        validate: { spells: ['a', 'b'], aim: 'on', allowed: {
+          '/cast [{key}] {a}; {b}': null,
+          '/cast [{key},@mouseover,harm,nodead][{key}] {a}; [@mouseover,harm,nodead][] {b}': ['hostile'],
+          '/cast [{key},@focus,harm,nodead][{key}] {a}; [@focus,harm,nodead][] {b}': ['hostile'] } },
+      },
+      {
+        name: 'Three spells on modifiers',
+        body: '#showtooltip\n/cast [mod:shift] {s}; [mod:ctrl] {c}; {d}',
+        note: 'Shift casts the first, Ctrl the second, and an unmodified press the third. The icon follows whichever key you hold.',
+        picks: [{ token: 'd', label: 'Unmodified', choices: ALL_SPELLS, default: 'Shadow Bolt' },
+          { token: 's', label: 'Shift', choices: ALL_SPELLS, default: 'Searing Pain' },
+          { token: 'c', label: 'Ctrl', choices: ALL_SPELLS, default: 'Death Coil' }],
+      },
+      {
+        name: 'Any spell, aimed',
+        body: '#showtooltip\n{stop}\n/cast {aim} {spell}',
+        note: 'One spell, aimed where you want it without retargeting. The chain tries each unit in turn and casts on the first that fits; "Stop first" can drop your current cast and auto-attack before it goes. Only sensible pairs can be picked: enemy spells on enemy chains, Unending Breath on friends, Rain of Fire at the cursor, Health Funnel on your demon.',
+        picks: [{ token: 'spell', label: 'Spell', choices: ALL_SPELLS, default: 'Corruption' },
+          { token: 'aim', label: 'Aim at', choices: [['Hostile mouseover, else target', '[@mouseover,harm,nodead][]'], ['Focus, else target', '[@focus,harm,nodead][]'],
+            ['Focus, then mouseover, then target', '[@focus,harm,nodead][@mouseover,harm,nodead][]'],
+            ['Friendly mouseover, then target, then you', '[@mouseover,help,nodead][@target,help,nodead][@player]'], ['Yourself', '[@player]'],
+            ['Your demon', '[@pet,exists,nodead]'], ['Cursor (ground spells)', '[@cursor]']] },
+          STOP_ATTACK],
+        validate: { spells: ['spell'], aim: 'aim', allowed: {
+          '[@mouseover,harm,nodead][]': ['hostile'], '[@focus,harm,nodead][]': ['hostile'], '[@focus,harm,nodead][@mouseover,harm,nodead][]': ['hostile'],
+          '[@mouseover,help,nodead][@target,help,nodead][@player]': ['friendly'], '[@player]': ['friendly', 'self'], '[@pet,exists,nodead]': ['pet'],
+          '[@cursor]': ['ground'] } },
+      },
+      {
+        name: 'Cast sequence',
+        body: '#showtooltip\n/castsequence {reset}{s1}{s2}{s3}{s4}',
+        note: 'Each press casts the next spell in the list, then it starts over. If a cast fails (out of range, moving, not enough mana) it stays on that step until it works, so a long sequence can get stuck: keep it short, and pick when it resets. Tick any mix: a new target, leaving combat, or pressing with a modifier key starts it over, and so does going the set number of seconds without pressing it.',
+        picks: [{ token: 's1', label: '1st', choices: ALL_SPELLS, default: 'Corruption' }, { token: 's2', label: '2nd', choices: SLOT(), default: ', Bane of Agony' },
+          { token: 's3', label: '3rd', choices: SLOT(), default: ', Immolate' }, { token: 's4', label: '4th', choices: SLOT(), default: ', Shadow Bolt' },
+          { token: 'ron', label: 'Reset on', type: 'checks', default: 'target/combat',
+            choices: [['New target', 'target'], ['Leaving combat', 'combat'], ['Shift', 'shift'], ['Ctrl', 'ctrl'], ['Alt', 'alt']] },
+          { token: 'rsecs', label: 'and after (s idle)', type: 'number', choices: [], default: '' }],
+        reset: { secs: 'rsecs', on: 'ron' },
+      },
+    ],
+  },
   {
     group: 'Casting',
     blurb: 'Everyday damage buttons.',
     macros: [
       {
         name: 'Cast on mouseover',
-        body: '#showtooltip\n/cast [@mouseover,harm,nodead][] {spell}',
-        note: 'Hover a mob to cast on it without changing target; with nothing under the cursor it goes on your target. Pick a spell, copy, and make one for each DoT, bane and curse you use.',
-        picks: [{ token: 'spell', label: 'Spell', choices: ['Corruption', 'Bane of Agony', 'Bane of Doom', 'Bane of Havoc', 'Immolate', 'Siphon Life',
-          'Curse of the Elements', 'Curse of Recklessness', 'Curse of Weakness', 'Curse of Tongues', 'Curse of Exhaustion',
-          'Shadow Bolt', 'Searing Pain', 'Incinerate', 'Drain Life', 'Drain Soul', 'Shadowburn', 'Conflagrate', 'Death Coil'] }],
+        body: '#showtooltip\n{stop}\n/cast [@mouseover,harm,nodead][] {spell}',
+        note: 'Hover a mob to cast on it without changing target; with nothing under the cursor it goes on your target. Pick a spell, copy, and make one for each DoT, bane and curse you use. Stop first adds lines before the cast, like the Death Coil interrupt: /stopattack ends melee auto-attack (from right-clicking a mob), /stopcasting drops your current cast so this one goes off now.',
+        // grouped by spellbook tab, as the client files them
+        picks: [{ token: 'spell', label: 'Spell', choices: byTab({
+          Affliction: ['Corruption', 'Bane of Agony', 'Bane of Doom', 'Siphon Life', 'Wrack', 'Curse of the Elements', 'Curse of Recklessness', 'Curse of Weakness',
+            'Curse of Tongues', 'Curse of Exhaustion', 'Drain Life', 'Drain Soul', 'Death Coil'],
+          Demonology: ['Banish', 'Subjugate Demon'],
+          Destruction: ['Shadow Bolt', 'Immolate', 'Searing Pain', 'Incinerate', 'Shadowburn', 'Conflagrate', 'Bane of Havoc'],
+        }) }, STOP_ATTACK],
+      },
+      {
+        name: 'Rain of Fire at cursor',
+        body: '#showtooltip\n/cast [mod:shift,@player][@cursor] Rain of Fire',
+        note: 'Drops Rain of Fire right where your mouse is, with no targeting circle to place. Hold Shift to drop it at your own feet instead.',
       },
       {
         name: 'Shadow Bolt + send demon',
@@ -69,14 +227,6 @@ export const groups: MacroGroup[] = [
         needs: 'Affliction talent',
       },
       {
-        name: 'Trinkets + racial + spell',
-        body: '#showtooltip {spell}\n/use {mod}13\n/use {mod}14\n/cast {mod}{racial}\n/cast {spell}',
-        note: 'Pops your on-use trinkets (13 top, 14 bottom) and your racial with the cast; they are off the global cooldown, so the spell still goes off. "Fires on" picks when: every press, only while you hold a key (save them for when it counts), or every press unless you hold one. Delete a /use line if that trinket has no use effect.',
-        picks: [{ token: 'spell', label: 'Spell', choices: DAMAGE }, { token: 'racial', label: 'Racial', choices: RACIAL_BURST },
-          { token: 'mod', label: 'Fires on', choices: [['Every press', ''], ['Shift', '[mod:shift] '], ['Ctrl', '[mod:ctrl] '], ['Alt', '[mod:alt] '],
-            ['Any modifier', '[mod] '], ['Every press, not with a modifier', '[nomod] ']] }],
-      },
-      {
         name: 'Curses on modifier keys',
         body: '#showtooltip\n/cast [mod:shift] Curse of Recklessness; [mod:ctrl] Curse of Tongues; [mod:alt] Curse of Weakness; Curse of the Elements',
         note: 'Four curses on one button: plain for Elements, Shift, Ctrl or Alt for the others. The icon changes as you hold each key. Banes are separate from curses, so one of each can sit on a target.',
@@ -100,7 +250,7 @@ export const groups: MacroGroup[] = [
       {
         name: 'Crowd control on focus',
         body: '#showtooltip\n/focus [mod:shift]\n/cast [mod:shift][@focus,harm,nodead][] {spell}',
-        note: 'Shift-click: cast on your target and make it your focus. Plain clicks: cast on your focus again without leaving your kill target, or on your target if you have no focus.',
+        note: 'Shift-click: cast on your target and make it your focus. Unmodified clicks: cast on your focus again without leaving your kill target, or on your target if you have no focus.',
         picks: [{ token: 'spell', label: 'Spell', choices: ['Banish', 'Fear', 'Subjugate Demon', 'Seduction', 'Spell Lock', 'Death Coil', 'Curse of Tongues', 'Bane of Havoc'] }],
       },
       {
@@ -110,15 +260,10 @@ export const groups: MacroGroup[] = [
         picks: [{ token: 'spell', label: 'Spell', choices: ['Fear', 'Banish'] }],
       },
       {
-        name: 'Interrupt with Death Coil',
-        body: '#showtooltip\n/stopcasting\n/cast Death Coil',
-        note: 'Drops whatever you are casting and Death Coils straight away: three seconds of horror to stop a heal or shake off a melee.',
-        needs: 'Level 42',
-      },
-      {
-        name: 'Fear on mouseover',
-        body: '#showtooltip\n/cast [@mouseover,harm,nodead][] Fear',
-        note: 'Fear the add under your cursor while your target keeps taking DoTs. Mind where it runs.',
+        name: 'Crowd control on mouseover',
+        body: '#showtooltip\n{stop}\n/cast [@mouseover,harm,nodead][] {spell}',
+        note: 'Drops whatever you are casting and stops auto-attack, then puts the spell on the mob under your cursor, or your target if there\'s none: Fear an add, Death Coil a healer mid-cast, Banish or Subjugate a demon, Tongues a caster. Make one per spell.',
+        picks: [{ token: 'spell', label: 'Spell', choices: ['Fear', 'Death Coil', 'Banish', 'Subjugate Demon', 'Curse of Tongues'] }, STOP_BOTH],
       },
       {
         name: 'Racial escape, mid-cast',
@@ -135,18 +280,24 @@ export const groups: MacroGroup[] = [
     macros: [
       {
         name: 'Demon attack / recall',
-        body: '/petfollow [mod:shift]\n/petattack [nomod,@mouseover,harm,nodead][nomod]',
-        note: 'Sends your demon at the mob under your cursor, or your target. Hold Shift to call it back instead. No #showtooltip here, so pick an icon yourself.',
+        body: '/petpassive [mod:shift]\n/petfollow [mod:shift]\n/petattack [nomod,@mouseover,harm,nodead][nomod]',
+        note: 'Sends your demon at the mob under your cursor, or your target. Hold Shift to call it back: it goes passive and follows, so it doesn\'t run straight back in (send it again with an unmodified press). No #showtooltip here, so pick an icon yourself.',
       },
       {
         name: 'Spell Lock / Seduction / Sacrifice',
-        body: '#showtooltip\n/cast [pet:Felhunter,@focus,harm,nodead][pet:Felhunter] Spell Lock; [pet:Succubus,@focus,harm,nodead][pet:Succubus] Seduction; [pet:Voidwalker] Sacrifice',
-        note: 'One key for the button you reach for in a pinch: Spell Lock, Seduction or Sacrifice, depending on the demon. Spell Lock and Seduction go on your focus if you have a hostile one, otherwise on your target.',
+        body: '#showtooltip\n/cast [pet:Voidwalker] Sacrifice\n/cast [pet:Succubus,{aim},harm,nodead][pet:Succubus] Seduction\n/cast [pet:Felhunter,{aim},harm,nodead][pet:Felhunter] Spell Lock',
+        note: 'One key for the button you reach for in a pinch, whichever demon is out: Sacrifice, Seduction or Spell Lock. Seduction and Spell Lock go on your mouseover (or focus) if it\'s hostile, otherwise on your target.',
+        picks: [AIM],
       },
       {
-        name: 'Devour Magic on mouseover',
-        body: '#showtooltip\n/cast [@mouseover,exists,nodead][] Devour Magic',
-        note: 'Hover a friend to strip a debuff off them, or an enemy to strip a buff. Felhunter only.',
+        name: 'Torment / Lash of Pain / Devour Magic',
+        body: '#showtooltip\n/cast [pet:Voidwalker] Torment\n/cast [pet:Succubus] Lash of Pain\n/cast [pet:Felhunter,@mouseover,nodead][pet:Felhunter] Devour Magic',
+        note: 'Each demon\'s everyday button: Torment to pull a mob off you, Lash of Pain for damage, Devour Magic on the unit under your cursor (a friend to strip a debuff, an enemy to strip a buff) or your target.',
+      },
+      {
+        name: 'Health Funnel',
+        body: '#showtooltip\n/cast [@pet,exists,nodead] Health Funnel',
+        note: 'Heals your demon without having to target it, and does nothing when it\'s dead or not out.',
       },
       {
         name: 'Quick demon summon',
@@ -184,9 +335,11 @@ export const groups: MacroGroup[] = [
           'Lesser Mana Oil', 'Minor Mana Oil', ['Blessed Wizard Oil (undead)', 'Blessed Wizard Oil']] }],
       },
       {
-        name: 'Ritual of Summoning + party call',
-        body: '#showtooltip\n/p Summoning %t, please click the portal!\n/cast Ritual of Summoning',
-        note: 'Target the player you are summoning first; %t becomes their name. Change /p to /raid in a raid.',
+        name: 'Summoning + party call',
+        body: '#showtooltip\n{ritual}',
+        note: 'Ritual of Summoning: target the player you are summoning first; %t becomes their name. Portal of Summoning (level 60) opens a portal that two others click to summon whoever they target, so the call-out asks for helpers. Change /p to /raid in a raid.',
+        picks: [{ token: 'ritual', label: 'Ritual', choices: [['Ritual of Summoning', '/p Summoning %t, please click the portal!\n/cast Ritual of Summoning'],
+          ['Portal of Summoning (60)', '/p Summoning portal going up: click it and stand still to help summon!\n/cast Portal of Summoning']] }],
       },
       {
         name: 'Unending Breath on friend or self',

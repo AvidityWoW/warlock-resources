@@ -22,7 +22,23 @@
 .mgroup[hidden],.macro[hidden],.mnone[hidden]{display:none}
 .mgroup h2{padding-bottom:6px;margin-bottom:14px;border-bottom:1px solid var(--line);font-size:1.3rem}
 .mgroup h2 .muted{margin-left:6px;font-size:.62em;font-weight:400}
-.mgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))}
+/* cards in rows: every card in a row is as tall as the tallest, and footers sit at the bottom, so they line up across */
+.mgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));align-items:stretch;container-type:inline-size}
+/* a card with many dropdowns (the cooldown macro) takes a whole row: dropdowns on the left, the macro on the right,
+   the note and footer across the bottom. Stacks again when the list is narrow. */
+.macro.wide{grid-column:1/-1}
+@container (min-width:720px){
+  .macro.wide{display:grid;grid-template-columns:minmax(300px,1fr) minmax(0,1.3fr);grid-template-areas:"head head" "picks code" "note note" "foot foot";gap:12px 24px;align-items:start}
+  .macro.wide>header{grid-area:head}
+  .macro.wide>.picks{grid-area:picks}
+  .macro.wide>.code{grid-area:code;align-self:stretch}
+  .macro.wide>.note{grid-area:note;max-width:none}
+  /* the /cqs warning, when showing, gets its own row right above the note (only then, so a hidden one leaves no gap) */
+  .macro.wide:has(>.cqs-warn:not([hidden])){grid-template-areas:"head head" "picks code" "warn warn" "note note" "foot foot"}
+  .macro.wide>.cqs-warn,.macro.wide>.mwarn{grid-area:warn}
+  .macro.wide:has(>.mwarn:not([hidden])){grid-template-areas:"head head" "picks code" "warn warn" "note note" "foot foot"}
+  .macro.wide>footer{grid-area:foot}
+}
 
 /* a macro card: name and Copy, the macro, what it does, then badges and length */
 .macro{display:flex;flex-direction:column;gap:10px;min-width:0;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
@@ -40,6 +56,19 @@
 
 /* a card's dropdowns (spell, version, racial…): between the name and the macro */
 .picks{display:flex;flex-wrap:wrap;gap:8px 16px}
+/* reset checkboxes: a row of ticks under a small heading */
+.pick.checks{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:0;padding:0;border:0;min-width:0}
+.pick.checks legend{float:left;margin-right:4px;padding:0}
+.pick.checks label{display:inline-flex;align-items:center;gap:5px;color:var(--text);cursor:pointer}
+.pick.checks input{width:15px;height:15px;margin:0;accent-color:var(--accent)}
+.pick input[type="number"]{width:5.5em;height:32px;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-variant-numeric:tabular-nums}
+.pick input[type="number"]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.picks.many .pick.checks{grid-column:1/-1}
+/* several dropdowns: the spell on its own row, then pairs (Trinkets + on, Racial + on, Potion + on), one pair per row */
+.picks.many{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.picks.many .pick:first-child{grid-column:1/-1}
+.picks.many .pick select{max-width:100%}
+.picks.many .pick:nth-child(even) span{min-width:4.2em}   /* Trinkets, Racial, Potion: same label width so their menus line up */
 .pick{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.85em}
 .pick select{flex:0 1 auto;min-width:0;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-size:1.05em;cursor:pointer}
 .pick select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
@@ -51,6 +80,13 @@
 .m-chat{color:var(--good)}
 .m-lua{color:var(--frost)}
 
+/* a spell / aim pair that can't work (builders) */
+.mwarn{margin:0;padding:8px 12px;border-left:3px solid var(--fire);border-radius:4px;background:color-mix(in srgb,var(--fire) 12%,transparent);font-size:.88em}
+.mwarn[hidden]{display:none}
+/* the /cqs-every-press warning on the cooldown card */
+.cqs-warn{margin:0;padding:8px 12px;border-left:3px solid var(--warn);border-radius:4px;background:color-mix(in srgb,var(--warn) 12%,transparent);font-size:.88em}
+.cqs-warn[hidden]{display:none}
+.cqs-warn strong{color:var(--warn)}
 .note{margin:0;color:var(--muted);font-size:.9em}
 .macro footer{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:auto;font-size:.8em}
 .badge{padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.92em;font-weight:600;white-space:nowrap}
@@ -110,12 +146,19 @@
 /* Guide */
 .guide{margin-top:40px}
 .g-h{margin-top:32px}
-.g-grid,.g-ref{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.g-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.g-ref{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));align-items:stretch}
+/* the long Commands card takes a whole row, its entries in two columns */
+.g-card.wide{grid-column:1/-1}
+.g-card.wide dl{columns:300px 2;column-gap:32px}
+.g-card.wide dt{break-after:avoid}
+.g-card.wide dd{break-before:avoid}
 .g-card{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
 .g-card h3{font-size:1rem;font-weight:600}
 .g-card p{margin:0;font-size:.9em}
-.g-card dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:6px 12px;margin:0;font-size:.9em}
-.g-card dt{max-width:20em;overflow-wrap:anywhere}
-.g-card dd{margin:0;color:var(--muted)}
-@container (max-width:420px){.g-card dl{grid-template-columns:1fr}.g-card dd{margin-bottom:4px}}
+/* reference entries: the macro text on its own line, what it does underneath (indented), a gap before the next */
+.g-card dl{margin:0;font-size:.9em}
+.g-card dt{overflow-wrap:anywhere}
+.g-card dd{margin:2px 0 0 14px;color:var(--muted)}
+.g-card dd+dt{margin-top:10px}
 .guide .notes a{color:var(--accent)}

@@ -1,5 +1,5 @@
 // Macros page: search, the stone level (kept in localStorage as macros:level), and the Copy buttons.
-import { LIMIT, MAX_LEVEL, fill, highlight, stonesIn, stoneRank, usesStones } from '../lib/macro';
+import { LIMIT, MAX_LEVEL, fill, highlight, stonesIn, stoneRank, usesStones, cqsSlowsFiller } from '../lib/macro';
 
 const KEY = 'macros:level';
 
@@ -47,8 +47,18 @@ document.addEventListener('astro:page-load', () => {
   const drawCard = (pre: HTMLElement) => {
     const body = pre.dataset.body!;
     const card = pre.closest<HTMLElement>('.macro')!;
-    const picked = Object.fromEntries([...card.querySelectorAll<HTMLSelectElement>('select[data-token]')].map((sel) => [sel.dataset.token!, sel.value]));
-    const text = fill(body, lvl, picked);
+    // each control's value: a dropdown's choice, a number box's text, or the ticked checkboxes joined by /
+    const picked = Object.fromEntries([...card.querySelectorAll<HTMLElement>('[data-token]')].map((el) => [el.dataset.token!,
+      el instanceof HTMLFieldSetElement ? [...el.querySelectorAll<HTMLInputElement>('input:checked')].map((i) => i.value).join('/') : (el as HTMLInputElement).value]));
+    const derive = pre.dataset.derive ? JSON.parse(pre.dataset.derive) : undefined;
+    const cqs = derive?.cqs;
+    const text = fill(body, lvl, picked, derive);
+    const warn = card.querySelector<HTMLElement>('.cqs-warn');   // /cqs every press with a filler: say it slows the filler
+    if (warn) {
+      const slowed = cqsSlowsFiller(picked, cqs);
+      warn.hidden = !slowed;
+      if (slowed) warn.querySelector('.cqs-spell')!.textContent = slowed;
+    }
     pre.querySelector('code')!.innerHTML = highlight(text);
     const rank = card.querySelector('.rank');
     if (rank) rank.textContent = stonesIn(body, picked).map((s) => {
@@ -63,10 +73,35 @@ document.addEventListener('astro:page-load', () => {
     lvl = to;
     for (const pre of document.querySelectorAll<HTMLElement>('.code[data-body]')) if (usesStones(pre.dataset.body!)) drawCard(pre);
   };
-  for (const sel of document.querySelectorAll<HTMLSelectElement>('.macro select')) {
-    const pre = sel.closest('.macro')!.querySelector<HTMLElement>('.code')!;
-    sel.addEventListener('change', () => drawCard(pre), on);
-    if (sel.selectedIndex > 0) drawCard(pre);   // the browser may have restored a choice (redraws are cheap)
+  // Spell / aim pairs that can't work (Corruption at the cursor, Rain of Fire on your target's mouseover chain): grey out the
+  // choices that don't fit the other dropdown, and explain if a bad pair is selected anyway (a restored form, say).
+  interface Validate { spells: string[]; aim: string; allowed: Record<string, string[] | null>; kinds: Record<string, string>; says: Record<string, string> }
+  const validate = (card: HTMLElement) => {
+    const warn = card.querySelector<HTMLElement>('.mwarn[data-validate]');
+    if (!warn) return;
+    const v: Validate = JSON.parse(warn.dataset.validate!);
+    const sel = (t: string) => card.querySelector<HTMLSelectElement>(`select[data-token="${t}"]`)!;
+    const aim = sel(v.aim), ok = (aimValue: string, spell: string) => {
+      const allowed = v.allowed[aimValue];
+      return !allowed || !(spell in v.kinds) || allowed.includes(v.kinds[spell]);
+    };
+    const spells = v.spells.map(sel);
+    for (const s of spells) for (const o of s.options) o.disabled = !ok(aim.value, o.value);
+    for (const o of aim.options) o.disabled = !spells.every((s) => ok(o.value, s.value));
+    const bad = spells.find((s) => !ok(aim.value, s.value));
+    warn.hidden = !bad;
+    if (bad) warn.textContent = `${bad.value} ${v.says[v.kinds[bad.value]]}, so "${aim.selectedOptions[0].text}" won't work for it. Pick another aim or spell.`;
+  };
+  for (const card of document.querySelectorAll<HTMLElement>('.macro')) if (card.querySelector('.mwarn[data-validate]')) validate(card);
+
+  // any control on a card (dropdown, checkbox, number box) redraws it; drawn once now too, as the browser may have restored choices
+  for (const card of document.querySelectorAll<HTMLElement>('.macro')) {
+    if (!card.querySelector('[data-token]')) continue;
+    const pre = card.querySelector<HTMLElement>('.code')!;
+    const redraw = () => { validate(card); drawCard(pre); };
+    card.addEventListener('change', redraw, on);
+    card.addEventListener('input', (e) => { if ((e.target as HTMLElement).matches('input[type="number"]')) redraw(); }, on);
+    drawCard(pre);
   }
   const clamp = (n: number) => Math.min(MAX_LEVEL, Math.max(1, Math.round(n)));
   let saved = MAX_LEVEL;

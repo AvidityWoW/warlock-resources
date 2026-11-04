@@ -31,15 +31,68 @@ export const SKIP = '-';
 export const usesStones = (body: string) => /\{(item|create):/.test(body);
 /** a dropdown choice's menu label and macro text */
 export const choice = (c: string | [string, string]): [string, string] => (typeof c === 'string' ? [c, c] : c);
-/** the body with each {token} replaced by its dropdown choice */
-const withPicks = (body: string, picked: Picked) => body.replace(/\{(\w+)\}/g, (m, k: string) => (k in picked ? picked[k] : m));
+/** the body with each {token} replaced by its dropdown choice; a choice may hold another token (the trinket lines
+ *  carry {mod}), so it runs until nothing changes */
+const withPicks = (body: string, picked: Picked) => {
+  for (let i = 0; i < 3; i++) {
+    const next = body.replace(/\{(\w+)\}/g, (m, k: string) => (k in picked ? picked[k] : m));
+    if (next === body) break;
+    body = next;
+  }
+  return body;
+};
 /** the stones a macro uses (after its dropdowns), in order, without repeats */
 export const stonesIn = (body: string, picked: Picked = {}) => [...new Set([...withPicks(body, picked).matchAll(TOKEN)].map((m) => m[2]))];
 
+/** how fill() sets {cqs} by itself: cooldown dropdown → the dropdown holding its modifier (e.g. potion → pmod), and the
+ *  dropdown holding the filler spell, if any */
+export interface CqsFrom { parts: Record<string, string>; filler?: string }
+
+/** {cqs} from the cooldowns in use: every press if any of them fires every press, else on their modifiers ("or"),
+ *  and left out when no cooldown is picked. Keeps the delay off unmodified presses whenever the cooldowns sit on a key. */
+function autoCqs(picked: Picked, from: CqsFrom): string {
+  const conds = Object.entries(from.parts).filter(([part]) => picked[part] !== undefined && picked[part] !== SKIP).map(([, mod]) => (picked[mod] ?? '').trim());
+  if (!conds.length) return SKIP;
+  if (conds.includes('')) return '';
+  // the shortest condition covering them all: [mod] takes in any single key, several keys merge into [mod:shift/ctrl],
+  // all three are [mod], and a modifier plus [nomod] covers every press
+  const keys = new Set<string>();
+  let anyMod = false, noMod = false;
+  for (const c of conds) {
+    if (c === '[mod]') anyMod = true;
+    else if (c === '[nomod]') noMod = true;
+    else for (const k of (c.match(/^\[mod:([a-z/]+)\]$/)?.[1] ?? '').split('/').filter(Boolean)) keys.add(k);
+  }
+  if (keys.size >= 3) anyMod = true;
+  if (noMod && (anyMod || keys.size)) return '';
+  const mod = anyMod ? '[mod]' : keys.size ? `[mod:${['shift', 'ctrl', 'alt'].filter((k) => keys.has(k)).join('/')}]` : '';
+  return ' ' + mod + (noMod ? '[nomod]' : '');
+}
+
+/** the filler spell when /cqs would run on unmodified presses (every press, or [nomod]) and slow every cast of it, for a
+ *  warning; else null */
+export function cqsSlowsFiller(picked: Picked, from?: CqsFrom): string | null {
+  if (!from?.filler) return null;
+  const spell = picked[from.filler], cqs = autoCqs(picked, from);
+  return (cqs === '' || cqs.includes('[nomod]')) && spell && spell !== SKIP ? spell : null;
+}
+
 /** the macro as it goes in the game: dropdown choices filled in, stone names for this level, and any line using a
- *  dropdown set to SKIP ("None") dropped */
-export function fill(body: string, level: number, picked: Picked = {}): string {
-  const kept = body.split('\n').filter((line) => ![...line.matchAll(/\{(\w+)\}/g)].some((m) => picked[m[1]] === SKIP)).join('\n');
+ *  dropdown set to SKIP ("None") dropped. A #showtooltip line isn't dropped but left plain, so the button still shows
+ *  whatever the macro will do first. */
+/** values worked out from other controls rather than picked: {cqs} (see autoCqs) and a castsequence's {reset}, from a
+ *  seconds box and reset checkboxes ("reset=8/target/combat ", or nothing when neither is set) */
+export interface Derive { cqs?: CqsFrom; reset?: { secs: string; on: string } }
+
+export function fill(body: string, level: number, picked: Picked = {}, derive?: Derive): string {
+  if (derive?.cqs) picked = { ...picked, cqs: autoCqs(picked, derive.cqs) };
+  if (derive?.reset) {
+    const secs = (picked[derive.reset.secs] ?? '').trim();
+    const parts = [/^\d+(\.\d+)?$/.test(secs) && +secs > 0 ? String(+secs) : '', ...(picked[derive.reset.on] ?? '').split('/')].filter(Boolean);
+    picked = { ...picked, reset: parts.length ? `reset=${parts.join('/')} ` : '' };
+  }
+  const skips = (line: string) => [...line.matchAll(/\{(\w+)\}/g)].some((m) => picked[m[1]] === SKIP);
+  const kept = body.split('\n').flatMap((line) => (!skips(line) ? [line] : line.startsWith('#showtooltip') ? ['#showtooltip'] : [])).join('\n');
   return withPicks(kept, picked).replace(TOKEN, (_, how: string, stone: string) => {
     if (!STONES[stone]) return stone;
     const [, rank] = stoneRank(stone, level);

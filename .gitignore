@@ -4,3 +4,4 @@ dist/
 
 # Wowhead tooltip cache for tools/weapons/gen.py (refetched when missing)
 tools/weapons/wowhead-cache/
+__pycache__/

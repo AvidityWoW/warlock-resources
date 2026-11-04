@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import MacroGuide from '../components/MacroGuide.astro';
-import { groups } from '../data/macros';
-import { LIMIT, MAX_LEVEL, choice, fill, highlight, usesStones, stonesIn, stoneRank, type Picked } from '../lib/macro';
+import { groups, flatChoices, SPELL_KIND, KIND_SAYS } from '../data/macros';
+import { LIMIT, MAX_LEVEL, choice, fill, highlight, usesStones, stonesIn, stoneRank, cqsSlowsFiller, type Picked } from '../lib/macro';
 import '../styles/macros.css';
 
 const total = groups.reduce((n, g) => n + g.macros.length, 0);
@@ -47,13 +47,17 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
       <h2>{g.group} <span class="muted">{g.blurb}</span></h2>
       <div class="mgrid">
         {g.macros.map((m) => {
-          const picks = (m.picks ?? []).map((p) => ({ ...p, choices: p.choices.map(choice) }));
-          const picked: Picked = Object.fromEntries(picks.map((p) => [p.token, p.choices[0][1]]));
-          const text = fill(m.body, MAX_LEVEL, picked);
+          const picks = (m.picks ?? []).map((p) => ({ ...p, choices: flatChoices(p).map(choice),
+            // what the <select> shows: options, or headed groups of them
+            menu: p.choices.map((c) => (typeof c === 'object' && !Array.isArray(c) ? { group: c.group, options: c.choices.map(choice) } : { option: choice(c) })) }));
+          const picked: Picked = Object.fromEntries(picks.map((p) => [p.token, p.default ?? p.choices[0]?.[1] ?? '']));
+          const derive = { cqs: m.cqs, reset: m.reset };
+          const text = fill(m.body, MAX_LEVEL, picked, derive);
+          const slowed = cqsSlowsFiller(picked, m.cqs);
           const stones = usesStones(m.body);
           const search = [m.name, m.note, m.needs, text, ...picks.flatMap((p) => p.choices.map((c) => c[0]))].filter(Boolean).join(' ').toLowerCase();
           return (
-            <article class="macro" data-search={search}>
+            <article class:list={['macro', { wide: picks.length > 2 }]} data-search={search}>
               <header>
                 <h3>{m.name}</h3>
                 <button type="button" class="copy" aria-label={`Copy ${m.name}`}>
@@ -62,14 +66,32 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
                 </button>
               </header>
               {picks.length > 0 && (
-                <div class="picks">{picks.map((p) => (
+                <div class:list={['picks', { many: picks.length > 2 }]}>{picks.map((p) => p.type === 'checks' ? (
+                  <fieldset class="pick checks" data-token={p.token}>
+                    <legend>{p.label}</legend>
+                    {p.choices.map(([label, value]) => <label><input type="checkbox" value={value} checked={picked[p.token].split('/').includes(value)}> {label}</label>)}
+                  </fieldset>
+                ) : p.type === 'number' ? (
                   <label class="pick">
                     <span>{p.label}</span>
-                    <select data-token={p.token}>{p.choices.map(([label, value]) => <option value={value}>{label}</option>)}</select>
+                    <input type="number" data-token={p.token} min="0" max="600" step="1" inputmode="numeric" placeholder="off" value={picked[p.token]}>
+                  </label>
+                ) : (
+                  <label class="pick">
+                    <span>{p.label}</span>
+                    <select data-token={p.token}>{p.menu.map((e) => 'group' in e
+                      ? <optgroup label={e.group}>{e.options!.map(([label, value]) => <option value={value} selected={value === picked[p.token]}>{label}</option>)}</optgroup>
+                      : <option value={e.option![1]} selected={e.option![1] === picked[p.token]}>{e.option![0]}</option>)}</select>
                   </label>
                 ))}</div>
               )}
-              <pre class="code" data-body={stones || picks.length ? m.body : undefined}><code set:html={highlight(text)} /></pre>
+              <pre class="code" data-body={stones || picks.length ? m.body : undefined} data-derive={m.cqs || m.reset ? JSON.stringify(derive) : undefined}><code set:html={highlight(text)} /></pre>
+              {m.validate && <p class="mwarn" role="status" hidden data-validate={JSON.stringify({ ...m.validate, kinds: SPELL_KIND, says: KIND_SAYS })}></p>}
+              {m.cqs && (
+                <p class="cqs-warn" role="status" hidden={!slowed}>
+                  <strong>/cqs runs on your unmodified presses.</strong> Every <span class="cqs-spell">{slowed}</span> then waits for the cast before it to finish before it starts, so your filler gets slower. Put the cooldowns on a modifier key to keep unmodified presses at full speed.
+                </p>
+              )}
               <p class="note">{m.note}</p>
               <footer>
                 {m.needs && <span class="badge">{m.needs}</span>}
