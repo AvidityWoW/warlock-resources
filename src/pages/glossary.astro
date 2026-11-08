@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CATEGORIES, type Category } from '../data/glossary';
+import { sorted, letterOf, termId, render, plain } from '../lib/glossary';
+import '../styles/glossary.css';
+
+// entries under their letter, A to Z
+const letters = [...new Set(sorted.map(letterOf))];
+const byLetter = letters.map((l) => ({ l, terms: sorted.filter((t) => letterOf(t) === l) }));
+const cats = Object.entries(CATEGORIES) as [Category, string][];
+const count = (c: Category) => sorted.filter((t) => t.cat === c).length;
+const lid = (l: string) => (l === '#' ? 'l-sym' : `l-${l.toLowerCase()}`);
+---
+<Layout title="Glossary" description="Warlock and WoW acronyms and terms, A to Z, with WoW Forever's spell names.">
+  <div class="page-head">
+    <h1>Glossary</h1>
+    <p>Acronyms and terms you'll see in warlock chat, guides and on these pages, with Forever's names where they differ from Classic. Search, or pick a topic.</p>
+  </div>
+
+  <div class="gtools">
+    <span id="gcount" class="muted" aria-live="polite">{sorted.length} terms</span>
+    <label class="search">
+      <span class="sr-only">Search terms and definitions</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="gq" type="search" placeholder="Search, e.g. CoE or shard" autocomplete="off">
+    </label>
+    <div class="gcats" role="group" aria-label="Topics">
+      <button type="button" data-cat="" aria-pressed="true">All</button>
+      {cats.map(([c, name]) => <button type="button" data-cat={c} aria-pressed="false">{name} <span class="n">{count(c)}</span></button>)}
+    </div>
+  </div>
+
+  <nav class="az" aria-label="Letters">
+    {byLetter.map(({ l }) => <a href={`#${lid(l)}`} data-letter={l}>{l}</a>)}
+  </nav>
+
+  {byLetter.map(({ l, terms }) => (
+    <section class="gletter" id={lid(l)} data-letter={l}>
+      <h2 aria-label={l === '#' ? 'Symbols and commands' : l}>{l}</h2>
+      <dl>
+        {terms.map((t) => (
+          <div class="gterm" id={termId(t)} data-cat={t.cat}
+            data-search={[t.term, t.full, ...(t.also ?? []), plain(t)].filter(Boolean).join(' ').toLowerCase()}>
+            <dt>
+              <a class="anchor" href={`#${termId(t)}`}>{t.term}</a>
+              {t.full && <span class="full">{t.full}</span>}
+              {t.also && <span class="also">({t.also.join(', ')})</span>}
+            </dt>
+            <dd>
+              <p set:html={render(t)} />
+              <p class="meta">
+                <span class={`tag c-${t.cat}`}>{CATEGORIES[t.cat]}</span>
+              </p>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  ))}
+
+  <p id="gnone" class="gnone muted" hidden>No terms match. <button type="button" class="link" id="gclear">Show everything</button></p>
+
+  <div class="notes">
+    <p>Talent and spell names are taken from the Forever client. Where Forever renamed something (Curse of Agony is Bane of Agony, Enslave Demon is Subjugate Demon), the Classic name is shown in brackets under the term, so searching for it still works. Numbers such as the hit cap are Classic's; Forever is still in testing and may change them.</p>
+  </div>
+
+  <script>import '../scripts/glossary';</script>
+</Layout>

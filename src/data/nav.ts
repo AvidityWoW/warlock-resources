@@ -21,4 +21,11 @@ export const nav: NavGroup[] = [
       { title: 'Macros', href: 'macros/', blurb: 'Copy-ready macros for casting, crowd control, demons and stones' },
     ],
   },
+  {
+    group: 'Reference',
+    pages: [
+      { title: 'Glossary', href: 'glossary/', blurb: 'Acronyms and terms, A to Z, with Forever\'s spell names' },
+      { title: 'Hit cap', href: 'hit-cap/', blurb: 'Your chance to hit by target level, and how much spell hit you need' },
+    ],
+  },
 ];

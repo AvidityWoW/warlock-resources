@@ -1,10 +1,8 @@
 ---
 // Sticky site header: brand (links home), a tab per page (from nav.ts), and the light / dark toggle.
-import { Image } from 'astro:assets';
 import { nav } from '../data/nav';
 import { SITE, GAME } from '../data/site';
 import { url } from '../lib/url';
-import logo from '../assets/brand/shadowbolt.jpg';
 
 // A link is current when it matches this page's path (trailing slash optional).
 const norm = (p: string) => p.replace(/index\.html$/, '').replace(/\/?$/, '/');
@@ -15,8 +13,40 @@ const links = nav.flatMap((g) => g.pages).map((l) => ({ ...l, href: url(l.href) 
 <header class="site-header" transition:persist="site-header">
   <div class="container">
     <a class="brand" href={url()} aria-label={`${SITE}, home`} aria-current={norm(url()) === here ? 'page' : undefined}>
-      <Image class="logo" src={logo} alt="" width={30} height={30} densities={[1, 2]} loading="eager" />
-      <span>{SITE}</span>
+      <!-- the logo: an open grimoire with a fel rune, whose smoke rises, spills off to the right and underlines the name -->
+      <span class="brand-in">
+        <svg class="sigil" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+          <path class="b-cover" d="M1.2 12.2V25.6Q8.8 24.2 16 27.4Q23.2 24.2 30.8 25.6V12.2Q23.2 11.2 16 13.6Q8.8 11.2 1.2 12.2Z"/>
+          <path class="b-edge" d="M2.6 11.4Q9.4 10 16 13V26Q9.4 23.4 2.6 24.6Z M29.4 11.4Q22.6 10 16 13V26Q22.6 23.4 29.4 24.6Z"/>
+          <path class="b-page" d="M3 9.8Q9.6 8.2 16 11.6V24.6Q9.6 21.8 3 23Z M29 9.8Q22.4 8.2 16 11.6V24.6Q22.4 21.8 29 23Z"/>
+          <path class="b-spine" d="M16 11.6V24.6"/>
+          <path class="b-ink" d="M5.6 12.6Q9.6 11.8 13.6 13.6 M5.6 15.4Q9.6 14.6 13.6 16.4 M5.6 18.2Q9.6 17.4 13.6 19.2 M5.6 21Q8.4 20.4 11 21.4"/>
+          <path class="b-rune" d="M25.6 17A3.1 3.1 0 1 1 19.4 17A3.1 3.1 0 1 1 25.6 17Z M22.5 13.9V20.1 M19.9 15.4L25.1 18.6 M25.1 15.4L19.9 18.6"/>
+        </svg>
+        <span class="name">{SITE}</span>
+        <!-- from the rune (left) to just past the name; stretched to the name's width, so it follows the font -->
+        <svg class="brand-smoke" viewBox="0 0 180 40" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="brand-smoke-fade" x1="0" x2="180" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-opacity=".95"/><stop offset=".5" stop-opacity=".6"/><stop offset="1" stop-opacity="0"/>
+            </linearGradient>
+            <!-- noise ruffles the strokes into wisps; a little blur softens them -->
+            <filter id="brand-smoke-wisp" x="-10%" y="-40%" width="120%" height="180%">
+              <feTurbulence type="fractalNoise" baseFrequency=".09 .16" numOctaves="2" seed="4" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G" result="d"/>
+              <feGaussianBlur in="d" stdDeviation=".7" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="d"/></feMerge>
+            </filter>
+          </defs>
+          <g filter="url(#brand-smoke-wisp)">
+            <path class="s-haze" d="M7.5 15.5C6.5 10 10 6.5 14 8C18 9.5 17 17 20.5 23.5C24 30 32 32.5 46 32.6C80 32.8 110 31.6 178 32.4"/>
+            <path class="s-core" d="M7.5 15.5C6.5 10 10 6.5 14 8C18 9.5 17 17 20.5 23.5C24 30 32 32.5 46 32.6C80 32.8 110 31.6 178 32.4"/>
+            <path class="s-wisp" d="M9 14C10 8 16 5 19 8.5C22 12 21 21 27 27.5C33 33.5 52 35 70 34.6C100 34 130 35.8 165 35"/>
+            <path class="s-curl" d="M8.5 13C8 6.5 12 2.5 16.5 4.5C19.5 6 19 9.5 16.5 10"/>
+            <path class="s-ripple" d="M30 30.6C50 29.2 70 31.6 90 30.5C110 29.5 130 31 150 30.3"/>
+          </g>
+        </svg>
+      </span>
     </a>
     <nav class="nav" aria-label="Pages">
       {links.map((l) => <a href={l.href} aria-current={norm(l.href) === here ? 'page' : undefined}>{l.title}</a>)}

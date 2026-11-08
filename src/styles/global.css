@@ -24,6 +24,8 @@
   font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --title-font:"Cinzel Decorative",Georgia,"Times New Roman",serif;
   --fel:.42;--smoke:.2;--fel-blend:screen;   /* strength of the fel-flame backdrop; screen makes it glow on the dark page */
+  /* the header logo: the book and its fel smoke */
+  --book-cover:#5b3d9e;--book-edge:#b9a98a;--book-page:#efe4c8;--book-ink:#8a7a9e;--fel-glow:#5ef25a;
 }
 :root[data-theme="light"]{
   color-scheme:light;
@@ -42,6 +44,7 @@
   --q1:#1f1a2b;--q2:#1a7f00;--q3:#005fbf;--q4:#7f26d6;--q5:#b85c00;
   --fire:#b85500;--shadow:#5442c8;--arcane:#a8309a;--frost:#0a7598;--nature:#2a8030;--physical:#62594a;
   --fel:.2;--smoke:.16;--fel-blend:multiply;
+  --book-cover:#6a3fd6;--book-edge:#cdbd98;--book-page:#fbf4e0;--book-ink:#9a8bb0;--fel-glow:#1f9a2a;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -78,7 +81,20 @@ html::before{content:"";position:fixed;left:0;bottom:0;z-index:-1;pointer-events
 .site-header{position:sticky;top:0;z-index:10;height:var(--header);background:var(--surface);border-bottom:1px solid var(--line)}
 .site-header .container{height:100%;display:flex;align-items:stretch;gap:clamp(12px,3vw,32px)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:650;text-decoration:none;white-space:nowrap}
-.brand span{font-family:var(--title-font);font-weight:700;font-size:1.15rem;line-height:1;letter-spacing:.02em;padding-top:.08em}   /* all-caps face: nudge so the capitals centre on the logo */
+.brand .name{font-family:var(--title-font);font-weight:700;font-size:1.15rem;line-height:1;letter-spacing:.02em;padding-top:.08em}   /* all-caps face: nudge so the capitals centre on the logo */
+/* the logo: book, then the name, with the smoke drawn over both from the book's rune to past the name */
+.brand-in{position:relative;display:flex;align-items:center;gap:10px}
+.sigil{flex:none;width:30px;height:30px;overflow:visible}
+.b-cover{fill:var(--book-cover)}.b-edge{fill:var(--book-edge)}.b-page{fill:var(--book-page)}
+.b-spine{fill:none;stroke:var(--book-cover);stroke-width:.9;opacity:.5}
+.b-ink{fill:none;stroke:var(--book-ink);stroke-width:.8;stroke-linecap:round}
+.b-rune{fill:none;stroke:var(--fel-glow);stroke-width:1;stroke-linecap:round}
+.brand-smoke{position:absolute;left:14px;top:-4px;width:calc(100% - 8px);height:40px;overflow:visible;pointer-events:none;animation:breathe 5s ease-in-out infinite alternate}
+.brand-smoke stop{stop-color:var(--fel-glow)}
+.brand-smoke path{fill:none;stroke:url(#brand-smoke-fade);stroke-linecap:round}
+.s-haze{stroke-width:5;opacity:.22}.s-core{stroke-width:1.8;opacity:.75}.s-wisp{stroke-width:1;opacity:.6}.s-curl{stroke-width:.9;opacity:.5}.s-ripple{stroke-width:.8;opacity:.35}
+@keyframes breathe{from{opacity:.75}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.brand-smoke{animation:none}}
 /* tabs and theme button sit on one 40px row along the header's bottom edge */
 .site-header .icon-btn{align-self:flex-end;margin-bottom:2px}
 /* The brand is Home's tab: full header height, its content centred on the tab row. On the home page it gets side walls
@@ -86,7 +102,6 @@ html::before{content:"";position:fixed;left:0;bottom:0;z-index:-1;pointer-events
 .site-header .brand{align-self:stretch;margin:0 0 -1px -14px;padding:16px 14px 1px;border:1px solid transparent;border-top:0;border-bottom:0;transition:background .15s,border-color .15s}
 .site-header .brand:hover{background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
 .site-header .brand[aria-current="page"]{border-color:var(--line);background:var(--bg)}
-.brand .logo{flex:none;width:30px;height:30px;border-radius:7px;box-shadow:0 0 0 1px var(--line)}
 /* folder tabs: they sit on the header's bottom edge; the current one is open at the bottom and joins the page */
 .nav{display:flex;align-items:flex-end;gap:2px;flex:1;min-width:0;margin-bottom:-1px}
 .nav a{display:flex;align-items:center;height:40px;padding:0 18px;border:1px solid transparent;border-bottom:0;border-radius:8px 8px 0 0;color:var(--muted);text-decoration:none;white-space:nowrap;font-weight:500;transition:color .15s,background .15s}
@@ -106,7 +121,7 @@ html::before{content:"";position:fixed;left:0;bottom:0;z-index:-1;pointer-events
 .nav::-webkit-scrollbar{display:none}
 @media (max-width:480px){.nav a{padding:0 11px}}
 @media (max-width:400px){.nav a{padding:0 8px;font-size:.92em}}
-@media (max-width:480px){.brand span{display:none}.site-header .brand{margin-left:-8px;padding-left:8px;padding-right:8px}}
+@media (max-width:480px){.brand .name,.brand-smoke{display:none}.site-header .brand{margin-left:-8px;padding-left:8px;padding-right:8px}}
 
 /* Page */
 main{padding-block:clamp(20px,4vw,40px) 48px}

@@ -1,0 +1,76 @@
+/* Hit cap page: the form and the result side by side (stacked on phones), then the table by target level. */
+.hc{display:grid;gap:var(--gap);grid-template-columns:minmax(0,1fr)}
+@media (min-width:820px){.hc{grid-template-columns:minmax(300px,380px) minmax(0,1fr);align-items:start}}
+
+/* form */
+.hc-in{display:grid;gap:14px}
+.hc-in fieldset{margin:0;padding:12px 16px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);display:grid;gap:10px;min-width:0}
+.hc-in legend{padding:0 6px;margin-left:-6px;color:var(--muted);font-size:.8em;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+/* a label with a note under it: "Suppression", then "Affliction (1%/point)" */
+.lbl{display:flex;flex-direction:column;line-height:1.25}
+.lbl small{color:var(--muted);font-size:.8em}
+/* number boxes: [ − 60 + ], one pill with the buttons built in and the unit inside (src/components/Stepper.astro) */
+.step{display:inline-flex;align-items:stretch;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--bg);overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.step:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.step button{display:grid;place-items:center;width:30px;padding:0;border:0;background:none;color:var(--muted);cursor:pointer;transition:color .15s,background .15s}
+.step button:hover:not(:disabled){color:var(--text);background:var(--raised)}
+.step button:active:not(:disabled){background:var(--accent-soft);color:var(--accent)}
+.step button:disabled{opacity:.35;cursor:default}
+.step svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.step-in{display:flex;align-items:center;justify-content:center;width:3.6em;border-inline:1px solid var(--line);cursor:text}
+.step input{width:100%;min-width:0;height:100%;padding:0;border:0;background:none;color:var(--text);font:inherit;font-weight:600;text-align:center;font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield}
+.step input:focus{outline:none}
+.step input::-webkit-inner-spin-button,.step input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+/* with a unit, the number sits right against it: "16%" */
+.step-in:has(.step-unit) input{flex:none;width:2.2ch;text-align:right}
+.step-unit{color:var(--muted);font-weight:600}
+.hc-in select{height:34px;padding:0 6px 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-variant-numeric:tabular-nums;cursor:pointer}
+.hc-in select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{height:30px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);font:inherit;font-size:.85em;font-weight:500;cursor:pointer;transition:color .15s,background .15s,border-color .15s}
+.chips button:hover{color:var(--text);background:var(--raised)}
+.chips button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--text)}
+/* result */
+.hc-out{padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);min-width:0}
+.big{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.big #hc-chance{font-family:var(--title-font);font-size:clamp(2.4rem,1.8rem + 2.5vw,3.4rem);line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.sub{margin:6px 0 0}
+.state{display:inline-block;margin:12px 0 0;padding:4px 12px;border-radius:999px;font-weight:600;font-size:.9em}
+.state.short{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.state.capped{color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.state.over{color:var(--fire);background:color-mix(in srgb,var(--fire) 14%,transparent)}
+
+.bar{margin:22px 0 0}
+.track{display:flex;height:16px;border-radius:999px;overflow:hidden;background:var(--bg);border:1px solid var(--line)}
+.track span{display:block;height:100%;transition:width .25s ease}
+.seg-base,.k-base{background:color-mix(in srgb,var(--accent) 45%,var(--bg))}
+.seg-bonus,.k-bonus{background:var(--accent)}
+.seg-short,.k-short{background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--warn) 55%,transparent) 0 4px,transparent 4px 8px)}
+@media (prefers-reduced-motion:reduce){.track span{transition:none}}
+.ticks{position:relative;height:18px;margin-top:4px;color:var(--muted);font-size:.75em;font-variant-numeric:tabular-nums}
+.ticks span{position:absolute;top:0;transform:translateX(-50%)}
+.ticks span:first-child{transform:none}
+.ticks span:last-child{transform:translateX(-100%)}
+.key{display:flex;flex-wrap:wrap;gap:4px 16px;margin:8px 0 0;padding:0;list-style:none;font-size:.8em}
+.key li{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid var(--line)}
+
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:20px 0 0}
+.sum div{padding:8px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
+.sum dt{color:var(--muted);font-size:.8em}
+.sum dd{margin:2px 0 0;font-size:1.15em;font-weight:650;font-variant-numeric:tabular-nums}
+
+/* table */
+.hc-table{margin-top:32px}
+.hc-table h2{padding-bottom:6px;margin-bottom:12px;border-bottom:1px solid var(--line);font-size:1.3rem}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
+.hc-table table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hc-table th,.hc-table td{padding:8px 14px;text-align:right}
+.hc-table thead th{background:var(--surface);color:var(--muted);font-size:.8em;font-weight:600}
+.hc-table tbody th{text-align:left;font-weight:500}
+.hc-table .lvl{display:inline-block;min-width:2ch;font-weight:650}
+.hc-table tbody tr:nth-child(odd){background:var(--row-odd)}
+.hc-table tbody tr:nth-child(even){background:var(--row-even)}
+.hc-table tbody tr.on{background:color-mix(in srgb,var(--accent) 16%,var(--surface));box-shadow:inset 3px 0 0 var(--accent)}   /* solid: the table has nothing behind it, so a see-through tint showed the backdrop */
+.hc-table td.you{color:var(--accent);font-weight:600}

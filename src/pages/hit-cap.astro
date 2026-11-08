@@ -1,0 +1,98 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Stepper from '../components/Stepper.astro';
+import { MAX_LEVEL } from '../lib/macro';
+import { hit, pct, SUPPRESSION_PER_POINT, SUPPRESSION_POINTS, BOSS_GAP } from '../lib/hit';
+import '../styles/hitcap.css';
+
+// starting point: a level-60 warlock against a raid boss, no hit yet (the script redraws from saved choices)
+const you = MAX_LEVEL;
+const h = hit(BOSS_GAP, 0);
+const gaps = [-2, -1, 0, 1, 2, 3, 4, 5];
+const gapText = (g: number) => (g === 0 ? 'Your level' : g > 0 ? `+${g}` : `${g}`);
+---
+<Layout title="Hit cap" description="Spell hit calculator for WoW Forever warlocks: your chance to hit by target level, and how much hit you need.">
+  <div class="page-head">
+    <h1>Hit cap</h1>
+    <p>How often your spells will land, and how much spell hit you need before more stops helping. Pick your level and your target, then add up the hit on your gear.</p>
+  </div>
+
+  <div class="hc">
+    <form class="hc-in" id="hc" autocomplete="off" onsubmit="return false">
+      <fieldset>
+        <legend>Levels</legend>
+        <div class="row"><label for="hc-you">Your level</label><Stepper id="hc-you" label="your level" min={1} max={MAX_LEVEL} value={you} /></div>
+        <div class="row"><label for="hc-them">Target level</label><Stepper id="hc-them" label="target level" min={1} max={MAX_LEVEL + 10} value={you + BOSS_GAP} /></div>
+        <div class="chips" role="group" aria-label="Quick targets">
+          <button type="button" data-gap={BOSS_GAP} title={`Raid bosses show as ?? and count as ${BOSS_GAP} levels above you`}>Raid boss (??)</button>
+          <button type="button" data-gap="2">+2</button>
+          <button type="button" data-gap="1">+1</button>
+          <button type="button" data-gap="0">Your level</button>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Your hit</legend>
+        <div class="row"><label for="hc-gear">From gear</label><Stepper id="hc-gear" label="hit from gear" min={0} max={30} value={0} unit="%" /></div>
+        <label class="row"><span class="lbl">Suppression <small>Affliction ({SUPPRESSION_PER_POINT}%/point)</small></span>
+          <select id="hc-sup">{Array.from({ length: SUPPRESSION_POINTS + 1 }, (_, i) => <option value={i}>{i ? `${i}/${SUPPRESSION_POINTS} (+${i * SUPPRESSION_PER_POINT}%)` : 'None'}</option>)}</select>
+        </label>
+        <div class="row"><label for="hc-other" class="lbl">Other <small>Buffs, items</small></label><Stepper id="hc-other" label="other hit" min={0} max={30} value={0} unit="%" /></div>
+      </fieldset>
+    </form>
+
+    <section class="hc-out" aria-live="polite">
+      <p class="big"><span id="hc-chance">{pct(h.chance)}</span> <span class="muted">chance to hit</span></p>
+      <p class="sub muted"><span id="hc-miss">{pct(100 - h.chance)}</span> of your spells miss</p>
+      <p id="hc-state" class="state short">{pct(h.short)} short of never missing</p>
+
+      <!-- the bar: where your chance starts, what your hit adds, and what's left to 100% -->
+      <div class="bar" aria-hidden="true">
+        <div class="track">
+          <span class="seg-base" id="hc-b-base"></span><span class="seg-bonus" id="hc-b-bonus"></span><span class="seg-short" id="hc-b-short"></span>
+        </div>
+        <div class="ticks" id="hc-ticks"></div>
+      </div>
+      <ul class="key muted" aria-hidden="true">
+        <li><i class="k-base"></i>Base chance</li><li><i class="k-bonus"></i>Your hit</li><li><i class="k-short"></i>Still to find</li>
+      </ul>
+
+      <dl class="sum">
+        <div><dt>Base chance</dt><dd id="hc-base">{pct(h.base)}</dd></div>
+        <div><dt>Your hit</dt><dd id="hc-bonus">+0%</dd></div>
+        <div><dt>Hit to never miss</dt><dd id="hc-need">{pct(h.needed)}</dd></div>
+      </dl>
+    </section>
+  </div>
+
+  <section class="hc-table">
+    <h2>Hit you need, by target level</h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">Target</th><th scope="col">Base chance</th><th scope="col">Hit to never miss</th><th scope="col">Your chance</th></tr>
+        </thead>
+        <tbody id="hc-rows">
+          {gaps.map((g) => {
+            const m = hit(g, 0);
+            return (
+              <tr data-gap={g} class:list={{ on: g === BOSS_GAP }}>
+                <th scope="row"><span class="lvl">{you + g}</span> <span class="muted">{g === BOSS_GAP ? '+3, raid boss' : gapText(g)}</span></th>
+                <td>{pct(m.base)}</td><td>{pct(m.needed)}</td><td class="you">{pct(m.chance)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="notes">
+    <p><strong>How it's worked out.</strong> Against a target up to two levels above you, your spells start at 96% and lose 1% a level. From three levels up the drop gets steep, 11% a level. Your spell hit is added on top until you reach 100%, and past that it does nothing. That is why a level-60 warlock needs 17% against a raid boss but only 6% against a level-62 elite. Monsters and players count the same.</p>
+    <p><strong>No 1% miss.</strong> Classic always let 1% of spells miss, however much hit you had. Forever doesn't: the game's tooltip says a player needs 4% spell hit to never miss targets of their own level, which is 96% + 4%.</p>
+    <p><strong>Misses only.</strong> Spell hit stops spells missing outright ("Resisted"). It does nothing about partial resists, the smaller hits you see against targets with resistance; Curse of the Elements and lower resistance help with those.</p>
+    <p><strong>Suppression</strong> takes up to {SUPPRESSION_POINTS} points, each giving +{SUPPRESSION_PER_POINT}% hit with every spell, not just Affliction ones, and less threat. It also raises your hit with physical attacks.</p>
+    <p>The drop for targets three or more levels up is Classic's; the game's tooltip only covers your own level. Forever is still in testing and could change any of this.</p>
+  </div>
+
+  <script>import '../scripts/hit-cap';</script>
+</Layout>

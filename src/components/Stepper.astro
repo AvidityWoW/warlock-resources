@@ -1,0 +1,19 @@
+---
+// A number box with − and + built in (the browser's spinner arrows are hidden), and an optional unit inside it: [ − 16% + ].
+// The page's script makes the buttons step the box and fire input like typing would; arrow keys still work in
+// the box, so the buttons stay out of the tab order.
+interface Props { id: string; label: string; min: number; max: number; value: number; unit?: string }
+const { id, label, min, max, value, unit } = Astro.props;
+---
+<span class="step" data-stepper>
+  <button type="button" data-step="-1" tabindex="-1" aria-label={`Lower ${label}`}>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h9" /></svg>
+  </button>
+  <span class="step-in">
+    <input type="number" id={id} min={min} max={max} step="1" value={value} inputmode="numeric">
+    {unit && <span class="step-unit" aria-hidden="true">{unit}</span>}
+  </span>
+  <button type="button" data-step="1" tabindex="-1" aria-label={`Raise ${label}`}>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h9M8 3.5v9" /></svg>
+  </button>
+</span>

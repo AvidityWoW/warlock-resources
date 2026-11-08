@@ -41,6 +41,13 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
 - Macros page: the macros are in `src/data/macros.ts`; `src/lib/macro.ts` colours them and swaps `{item:Healthstone}` /
   `{create:Healthstone}` for the stone rank of the level picked on the page (saved as `macros:level`); `src/scripts/macros.ts`
   handles search, the level and Copy.
+- Glossary page: the terms are in `src/data/glossary.ts` (each with a topic, full name, and aliases shown in brackets under the term). In a definition,
+  `[[Term]]` links to another entry by its term or an alias, `[[/macros/|Macros page]]` links to a page, and backticks
+  make code. `src/lib/glossary.ts` sorts and renders them, and the build fails on a link to no entry (or to an alias two
+  entries share). `src/scripts/glossary.ts` handles search and the topic buttons.
+- Hit cap page: the maths is in `src/lib/hit.ts` (Classic servers' level table, capped at 100% because Forever has no
+  always-miss 1%, and Suppression at 1% a point, up
+  to 5); `src/scripts/hit-cap.ts` redraws the result and keeps the form in `localStorage` (`hitcap:v2`).
 - `src/assets/backdrop/`: the fel fire and smoke behind the page, drawn by `tools/backdrop.mjs` from SVG noise filters.
   Strength is `--fel` / `--smoke` in `global.css`; `Layout.astro` keeps the animation smooth across page changes.
 
