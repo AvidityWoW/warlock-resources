@@ -10,9 +10,9 @@ import { SITE, TAGLINE } from '../data/site';
     <p>{TAGLINE}</p>
   </div>
   {nav.map((g) => (
-    <section class="group">
-      <h2 class="muted">{g.group}</h2>
-      <ul class="cards">
+    <section class="master">
+      <h2 class="card-h">{g.group}</h2>
+      <ul class="cards master-b">
         {g.pages.map((p) => (
           <li><a href={url(p.href)}><strong>{p.title}</strong><span class="muted">{p.blurb}</span></a></li>
         ))}
@@ -22,9 +22,7 @@ import { SITE, TAGLINE } from '../data/site';
 </Layout>
 
 <style>
-  .group + .group { margin-top: 32px; }
-  h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
-  .cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+  .cards { list-style: none; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
   .cards a { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); text-decoration: none; transition: border-color .15s, background .15s; }
   .cards a:hover { border-color: var(--accent); background: var(--raised); }
   .cards span { font-size: .9em; }

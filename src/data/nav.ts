@@ -25,6 +25,7 @@ export const nav: NavGroup[] = [
     group: 'Reference',
     pages: [
       { title: 'Glossary', href: 'glossary/', blurb: 'Acronyms and terms, A to Z, with Forever\'s spell names' },
+      { title: 'Coefficients', href: 'coefficients/', blurb: 'How much spell power each damage spell gets, and its damage at 60' },
       { title: 'Hit cap', href: 'hit-cap/', blurb: 'Your chance to hit by target level, and how much spell hit you need' },
     ],
   },

@@ -58,7 +58,7 @@ export const TERMS: Term[] = [
   { term: 'Wand', cat: 'stats', also: ['Wanding'],
     def: 'A ranged weapon that fires a free bolt of magic with Shoot. Wanding between spells saves mana while your [[DoT|DoTs]] tick. See the [[/wands/|Wands page]] for the best one at each level.' },
   { term: 'Coefficient', cat: 'stats', also: ['Spell coefficient'],
-    def: 'The share of your [[SP|spell power]] a spell adds. In Classic it comes from the cast time: a 3.5-second cast gets 100%, a 1.5-second one about 43%. [[DoT|DoTs]], [[AoE]] and spells with extra effects get less.' },
+    def: 'The share of your [[SP|spell power]] a spell adds. In Classic it comes from the cast time: a 3.5-second cast gets 100%, a 1.5-second one about 43%. [[DoT|DoTs]], [[AoE]] and spells with extra effects get less. The [[/coefficients/|Coefficients page]] lists the coefficient of every Forever warlock damage spell.' },
   { term: 'Consumes', full: 'Consumables', cat: 'stats', also: ['Consumables'],
     def: 'Potions, elixirs, flasks, food, oils and stones used up for a fight. Weapon oils and stones go on with a macro (see the [[/macros/|Macros page]]).' },
 

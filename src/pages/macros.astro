@@ -44,9 +44,9 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
   </div>
 
   {groups.map((g) => (
-    <section class="mgroup" id={slug(g.group)}>
-      <h2>{g.group} <span class="muted">{g.blurb}</span></h2>
-      <div class="mgrid">
+    <section class="mgroup master" id={slug(g.group)}>
+      <h2 class="card-h">{g.group} <span class="muted">{g.blurb}</span></h2>
+      <div class="mgrid master-b">
         {g.macros.map((m) => {
           const picks = (m.picks ?? []).map((p) => ({ ...p, choices: flatChoices(p).map(choice),
             // what the <select> shows: options, or headed groups of them
@@ -69,7 +69,7 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
             <article class:list={['macro', { wide: picks.length > 2 }]} data-search={search}>
               <header>
                 <h3>{m.name}</h3>
-                <button type="button" class="copy" aria-label={`Copy ${m.name}`}>
+                <button type="button" class="pill copy" aria-label={`Copy ${m.name}`}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
                   <span class="labels"><span class="a">Copy</span><span class="b" aria-hidden="true">Copied</span></span>
                 </button>
@@ -126,7 +126,7 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
     </section>
   ))}
 
-  <p id="mnone" class="mnone muted" hidden>No macros match. <button type="button" class="link" id="mclear">Clear the search</button></p>
+  <p id="mnone" class="empty muted" hidden>No macros match. <button type="button" class="link" id="mclear">Clear the search</button></p>
 
   <script>import '../scripts/macros';</script>
 

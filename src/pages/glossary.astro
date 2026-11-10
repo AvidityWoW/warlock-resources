@@ -25,8 +25,8 @@ const lid = (l: string) => (l === '#' ? 'l-sym' : `l-${l.toLowerCase()}`);
       <input id="gq" type="search" placeholder="Search, e.g. CoE or shard" autocomplete="off">
     </label>
     <div class="gcats" role="group" aria-label="Topics">
-      <button type="button" data-cat="" aria-pressed="true">All</button>
-      {cats.map(([c, name]) => <button type="button" data-cat={c} aria-pressed="false">{name} <span class="n">{count(c)}</span></button>)}
+      <button type="button" class="pill" data-cat="" aria-pressed="true">All</button>
+      {cats.map(([c, name]) => <button type="button" class="pill" data-cat={c} aria-pressed="false">{name} <span class="n">{count(c)}</span></button>)}
     </div>
   </div>
 
@@ -35,8 +35,8 @@ const lid = (l: string) => (l === '#' ? 'l-sym' : `l-${l.toLowerCase()}`);
   </nav>
 
   {byLetter.map(({ l, terms }) => (
-    <section class="gletter" id={lid(l)} data-letter={l}>
-      <h2 aria-label={l === '#' ? 'Symbols and commands' : l}>{l}</h2>
+    <section class="gletter card full" id={lid(l)} data-letter={l}>
+      <h2 class="card-h" aria-label={l === '#' ? 'Symbols and commands' : l}>{l}</h2>
       <dl>
         {terms.map((t) => (
           <div class="gterm" id={termId(t)} data-cat={t.cat}
@@ -49,7 +49,7 @@ const lid = (l: string) => (l === '#' ? 'l-sym' : `l-${l.toLowerCase()}`);
             <dd>
               <p set:html={render(t)} />
               <p class="meta">
-                <span class={`tag c-${t.cat}`}>{CATEGORIES[t.cat]}</span>
+                <span class={`badge c-${t.cat}`}>{CATEGORIES[t.cat]}</span>
               </p>
             </dd>
           </div>
@@ -58,7 +58,7 @@ const lid = (l: string) => (l === '#' ? 'l-sym' : `l-${l.toLowerCase()}`);
     </section>
   ))}
 
-  <p id="gnone" class="gnone muted" hidden>No terms match. <button type="button" class="link" id="gclear">Show everything</button></p>
+  <p id="gnone" class="empty muted" hidden>No terms match. <button type="button" class="link" id="gclear">Show everything</button></p>
 
   <div class="notes">
     <p>Talent and spell names are taken from the Forever client. Where Forever renamed something (Curse of Agony is Bane of Agony, Enslave Demon is Subjugate Demon), the Classic name is shown in brackets under the term, so searching for it still works. Numbers such as the hit cap are Classic's; Forever is still in testing and may change them.</p>

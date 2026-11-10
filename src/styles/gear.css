@@ -1,14 +1,12 @@
 /* Wand list. Rows reflow with the width of the list itself (container queries), so there is no separate phone layout. */
-.band{margin-top:28px}
-.band[hidden],.wand[hidden],.empty[hidden]{display:none}
-.band :is(h2,h3){padding:10px 0;font-size:1.05rem}
-.band :is(h2,h3) .muted{font-weight:400}
+.band{margin-top:20px}   /* a .card: its heading is the band on top, the list under it */
+.band[hidden],.wand[hidden]{display:none}
+.band .card-h{gap:0 6px;min-height:44px;font-size:1.05rem}   /* "Levels 1–10 · 13 wands": the count sits right after the levels */
+.band .card-h .muted{font-size:1em;font-weight:400}
+.master-b>.band:first-of-type{margin-top:0}
 /* a page section (e.g. Main hand / Off-hand): its own heading above its level bands */
-.section-head{margin:44px 0 0;padding-bottom:6px;border-bottom:1px solid var(--line);font-size:1.3rem}
-.section-head:first-of-type{margin-top:20px}
-.section-head .muted{font-size:.75em;font-weight:400}
 
-.wands{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;container-type:inline-size}
+.wands{list-style:none;margin:0;padding:0;container-type:inline-size}
 .wand{display:grid;grid-template-columns:1.25rem 2.25rem minmax(0,1fr) auto;grid-template-areas:"tog lvl name dps" "tog lvl src src" "tog lvl meta meta";gap:2px 14px;align-items:center;padding:10px 14px}
 .wand+.wand{border-top:1px solid var(--line)}
 .wand{background-color:var(--row-odd)}
@@ -31,7 +29,7 @@
 .dps{grid-area:dps;justify-self:end;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:.85em;color:var(--muted)}
 .dps b{font-size:1.2rem;font-weight:650;margin-right:2px;color:var(--text)}
 .meta{grid-area:meta;font-size:.8em;font-variant-numeric:tabular-nums}
-.badge{flex:none;padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.72em;font-weight:600;letter-spacing:.02em;white-space:nowrap}
+.name .badge{font-size:.72em;letter-spacing:.02em}
 
 /* picked (gold) — drawn over the upgrade-path green */
 .wand.pick,.extra .wand.pick{box-shadow:inset 3px 0 0 var(--gold);background-image:linear-gradient(var(--pick-tint),var(--pick-tint))}
@@ -75,7 +73,7 @@
   .gear .meta{white-space:normal}
 }
 
-.extra{margin-top:28px;padding:14px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}   /* a panel, same width as the lists */
+.extra{margin-top:28px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}   /* a panel, same width as the lists */
 .extra[hidden]{display:none}
 .extra .wand.up:not(.pick){box-shadow:none;background-image:none}
 
@@ -91,11 +89,7 @@
 .toolbar:not(.show-now) .now{opacity:0;visibility:hidden}
 .toolbar.show-now #count{opacity:0}
 @media (prefers-reduced-motion:reduce){.now,#count{transition:none}}
-.search{order:1;position:relative;flex:0 1 250px;min-width:120px}   /* compact: never stretches across the bar */
-.search svg{position:absolute;left:12px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--muted);pointer-events:none}
-.search input{width:100%;height:38px;padding:0 12px 0 38px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);font:inherit}
-.search input::placeholder{color:var(--muted)}
-.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.search{order:1;flex:0 1 250px;min-width:120px}   /* compact: never stretches across the bar */
 /* Reset: always there at the right end, greyed out when there's nothing to reset */
 .rbtn{order:9;margin-left:0;flex:none;display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:999px;background:var(--surface);color:var(--accent);font:inherit;font-weight:500;white-space:nowrap;cursor:pointer}
 .rbtn svg{width:16px;height:16px;flex:none}
@@ -115,8 +109,6 @@
 .check{order:6;flex:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-weight:500;white-space:nowrap}
 .check input{width:18px;height:18px;margin:0;accent-color:var(--good);cursor:pointer}
 .check .short{display:none}
-.empty{margin:28px 0;padding:24px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
-.link{padding:0;border:0;background:none;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer}
 
 /* Source: a dropdown that looks like a select box: label and value on the left, arrow at the right edge */
 .dd{position:relative;flex:none}
@@ -169,13 +161,10 @@
 .share:hover:not(:disabled){background:var(--accent-soft)}
 .share:disabled{color:var(--muted);opacity:.55;cursor:default}
 .share svg{width:15px;height:15px;flex:none}
-.share .labels{display:grid}.share .labels>span{grid-area:1/1}
-.share .b,.share.done .a{visibility:hidden}.share.done .b{visibility:visible;color:var(--good)}
+.share.done .labels>.b{color:var(--good)}
 .shared{margin:0 0 12px;padding:10px 14px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:var(--radius);background:var(--accent-soft);font-size:.9em}
 .shared[hidden]{display:none}
 .shared .link{margin-left:10px}
-.empty{margin:28px 0;padding:24px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
-.link{padding:0;border:0;background:none;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer}
 .extra summary{cursor:pointer;color:var(--muted);font-weight:500}
 .extra summary:hover{color:var(--text)}
 .extra p{margin:8px 0 12px}

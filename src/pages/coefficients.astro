@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { coefficients, COEFF_BUILD } from '../data/coefficients';
+import '../styles/coefficients.css';
+
+const sch = (s: string) => (s === 'Fire' ? 'fire' : 'shadow');
+---
+<Layout title="Coefficients" description="Spell-power coefficients and level-60 damage for every WoW Forever warlock damage spell.">
+  <div class="page-head">
+    <h1>Coefficients</h1>
+    <p>How much of your spell power each damage spell adds, and what it does at level 60 before spell power. A coefficient of 0.857 means 100 spell power adds 85.7 damage.</p>
+  </div>
+
+  <p class="cf-meta muted">WoW Forever {COEFF_BUILD} · <span class="cf-key fire">◆ Fire</span> <span class="cf-key shadow">● Shadow</span></p>
+
+  <section class="card">
+    <div class="card-h">
+      <h2>Summary</h2>
+      <div class="acts">
+        <button type="button" class="pill" id="cf-copy" title="Copy the summary as an image, to paste into Discord"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><span class="labels"><span class="a">Copy image</span><span class="b" aria-hidden="true">Copied</span></span></button>
+        <button type="button" class="pill" id="cf-save" title="Save the summary as a PNG"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v3h16v-3"/></svg><span class="labels"><span class="a">Save image</span><span class="b" aria-hidden="true">Saved</span></span></button>
+      </div>
+    </div>
+    <div class="tscroll">
+      <table class="dtable cf">
+        <thead><tr><th>Spell</th><th class="num">Dmg</th><th class="num">Per tick</th><th class="num">Ticks</th><th class="num">Coeff</th><th class="num">Per tick</th></tr></thead>
+        <tbody>
+          {coefficients.map((r) => (
+            <tr class={sch(r.school)}>
+              <th scope="row">{r.label ?? r.name}</th>
+              <td class="num dm">{r.damage}</td>
+              <td class="num sc">{r.perTick}</td>
+              <td class="num">{r.ticks}</td>
+              <td class="num tot">{r.coeff}</td>
+              <td class="num muted">{r.coeffPerTick}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><h2>Full detail</h2></div>
+    <div class="tscroll">
+      <table class="dtable cf">
+        <thead><tr><th>Spell</th><th>Part</th><th>Spell ID</th><th class="num">Lvl</th><th class="num">Cast</th><th class="num">Duration</th><th class="num">Base</th><th class="num">/lvl</th><th class="num">Var</th><th class="num">Period</th><th class="num">Ticks</th><th class="num">Per tick</th><th class="num">Dmg @60</th><th class="num">Coeff/tick</th><th class="num">Coeff</th></tr></thead>
+        <tbody>
+          {coefficients.map((r) => (
+            <>
+              <tr class={sch(r.school)}>
+                <th scope="row">{r.name}</th>
+                <td class="muted">{r.part}</td>
+                <td class="muted">{r.id}</td>
+                <td class="num">{r.level}</td>
+                <td class="num">{r.cast}</td>
+                <td class="num">{r.duration}</td>
+                <td class="num">{r.base}</td>
+                <td class="num">{r.perLevel}</td>
+                <td class="num">{r.variance}</td>
+                <td class="num">{r.period}</td>
+                <td class="num">{r.ticks}</td>
+                <td class="num sc">{r.perTick}</td>
+                <td class="num dm">{r.damage}</td>
+                <td class="num muted">{r.coeffPerTick}</td>
+                <td class="num tot">{r.coeff}</td>
+              </tr>
+              {r.stages?.map((s) => (
+                <tr class={`${sch(r.school)} stage`}>
+                  <th scope="row">ticks {s.ticks}</th>
+                  <td class="muted">{s.mult} base</td>
+                  <td></td><td></td><td></td><td></td>
+                  <td class="num">{s.perTick}</td>
+                  <td></td><td></td><td></td>
+                  <td class="num">4</td>
+                  <td class="num sc">{s.perTick}</td>
+                  <td class="num dm">{s.damage}</td>
+                  <td class="num muted">{r.coeffPerTick}</td>
+                  <td class="num tot">{s.coeff}</td>
+                </tr>
+              ))}
+            </>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="notes">
+    <p><strong>Base</strong> is the spell's base points. <strong>/lvl</strong> adds that much per level from the level it is learned up to 60, giving Per tick and Dmg @60. A per-tick value is rounded to the nearest whole number (Wrack 60.2 → 60), and Dmg is Per tick × Ticks. <strong>Var</strong> is the ± spread of direct damage around that value, before rounding: the low end is rounded to the nearest whole number and the high end up, as in-game tooltips do.</p>
+    <p><strong>Coeff/tick</strong> is the spell-power coefficient of one tick; Coeff = Coeff/tick × Ticks. An → in Spell ID means the damage comes from the spell it triggers (Hellfire's self-damage and AoE use the same numbers).</p>
+    <p><strong>Bane of Agony:</strong> only the base damage ramps ×0.5 / ×1 / ×1.5 over three stages of 4 ticks; every tick gets 0.133 × spell power.</p>
+    <p><strong>Wrack</strong> is from the 70888 hotfixes, which cut it to 70%: 0.286 → 0.2002 per tick, base 36 → 25.2 and +2.5 → +1.75 per level (60 per tick at 60, was 86). While you channel it, your Siphon Life, Corruption and Bane of Agony on the target deal their periodic damage 100% faster.</p>
+  </div>
+  <script>import '../scripts/coefficients';</script>
+</Layout>

@@ -28,11 +28,8 @@
 .hc-in select{height:34px;padding:0 6px 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-variant-numeric:tabular-nums;cursor:pointer}
 .hc-in select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{height:30px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:none;color:var(--muted);font:inherit;font-size:.85em;font-weight:500;cursor:pointer;transition:color .15s,background .15s,border-color .15s}
-.chips button:hover{color:var(--text);background:var(--raised)}
-.chips button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--text)}
 /* result */
-.hc-out{padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);min-width:0}
+.hc-out{padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);min-width:0}
 .big{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
 .big #hc-chance{font-family:var(--title-font);font-size:clamp(2.4rem,1.8rem + 2.5vw,3.4rem);line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
 .sub{margin:6px 0 0}
@@ -61,16 +58,8 @@
 .sum dt{color:var(--muted);font-size:.8em}
 .sum dd{margin:2px 0 0;font-size:1.15em;font-weight:650;font-variant-numeric:tabular-nums}
 
-/* table */
-.hc-table{margin-top:32px}
-.hc-table h2{padding-bottom:6px;margin-bottom:12px;border-bottom:1px solid var(--line);font-size:1.3rem}
-.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
-.hc-table table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;white-space:nowrap}
-.hc-table th,.hc-table td{padding:8px 14px;text-align:right}
-.hc-table thead th{background:var(--surface);color:var(--muted);font-size:.8em;font-weight:600}
-.hc-table tbody th{text-align:left;font-weight:500}
+/* table (a .card with a .dtable, from global.css): the level, then how far above you it is */
+.hc-table tbody th{font-weight:500}
 .hc-table .lvl{display:inline-block;min-width:2ch;font-weight:650}
-.hc-table tbody tr:nth-child(odd){background:var(--row-odd)}
-.hc-table tbody tr:nth-child(even){background:var(--row-even)}
 .hc-table tbody tr.on{background:color-mix(in srgb,var(--accent) 16%,var(--surface));box-shadow:inset 3px 0 0 var(--accent)}   /* solid: the table has nothing behind it, so a see-through tint showed the backdrop */
 .hc-table td.you{color:var(--accent);font-weight:600}

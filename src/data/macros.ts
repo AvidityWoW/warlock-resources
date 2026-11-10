@@ -309,8 +309,8 @@ export const groups: MacroGroup[] = [
       },
       {
         name: 'Demon that knows when to return',
-        body: '/petfollow [noharm][dead]\n/petattack [@mouseover,harm,nodead][harm,nodead]',
-        note: 'One key, no modifiers: with a live enemy targeted (or under your cursor) the demon attacks it; with no target, a friendly one or a dead one, it comes back to you. Follow comes first so an attack on the same press wins. No #showtooltip here, so pick an icon yourself.',
+        body: '/petfollow [@pettarget,harm,nodead]\n/stopmacro [@pettarget,harm,nodead]\n/petattack [@mouseover,harm,nodead][]',
+        note: 'One key that toggles: the first press sends your demon at the enemy under your cursor (or your target), the next press calls it back. It goes by what the demon is doing: if it\'s on a live enemy, the press recalls it; if not (following, or its target died), the press sends it in. No #showtooltip here, so pick an icon yourself.',
       },
       {
         name: 'Keep your imp casting',

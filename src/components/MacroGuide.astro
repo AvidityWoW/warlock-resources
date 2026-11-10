@@ -5,8 +5,9 @@ import { highlight } from '../lib/macro';
 import { SPELLS, PRESETS } from '../data/macro-guide';
 const ex = (s: string) => highlight(s);
 ---
-<section class="builder" id="builder" aria-labelledby="builder-h">
-  <h2 id="builder-h">Macro builder</h2>
+<section class="builder master" id="builder" aria-labelledby="builder-h">
+  <h2 class="card-h" id="builder-h">Macro builder</h2>
+  <div class="master-b">
   <p class="muted">Build a <code>/cast</code> line one clause at a time. The game tries the clauses left to right and casts the first one whose conditions all hold.</p>
 
   <div class="b-top">
@@ -31,7 +32,7 @@ const ex = (s: string) => highlight(s);
     <div class="b-outhead">
       <strong>Your macro</strong>
       <span class="chars muted" id="b-chars"></span>
-      <button type="button" class="copy" id="b-copy" aria-label="Copy the macro">
+      <button type="button" class="pill copy" id="b-copy" aria-label="Copy the macro">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
         <span class="labels"><span class="a">Copy</span><span class="b" aria-hidden="true">Copied</span></span>
       </button>
@@ -58,12 +59,14 @@ const ex = (s: string) => highlight(s);
       <button type="button" class="b-or" data-act="add-set">+ or try another condition set (<code>][</code>)</button>
     </li>
   </template>
+  </div>
 </section>
 
-<section class="guide" aria-labelledby="guide-h">
-  <h2 id="guide-h">How macros read</h2>
+<div class="guide">
+<section class="master" aria-labelledby="guide-h">
+  <h2 class="card-h" id="guide-h">How macros read</h2>
 
-  <div class="g-grid">
+  <div class="g-grid master-b">
     <article class="g-card">
       <h3>Conditions in one <code>[ ]</code>: all must hold (AND)</h3>
       <pre class="code"><code set:html={ex('/cast [@mouseover,harm,nodead] Corruption')} /></pre>
@@ -85,9 +88,11 @@ const ex = (s: string) => highlight(s);
       <p>An <code>@</code> inside a set aims that set's spell, and the other conditions in the set are checked against that unit, not your target.</p>
     </article>
   </div>
+</section>
 
-  <h2 class="g-h">Reference</h2>
-  <div class="g-ref">
+<section class="master" aria-labelledby="ref-h">
+  <h2 class="card-h" id="ref-h">Reference</h2>
+  <div class="g-ref master-b">
     <article class="g-card">
       <h3>Modifier keys</h3>
       <dl>
@@ -155,10 +160,11 @@ const ex = (s: string) => highlight(s);
       </dl>
     </article>
   </div>
+</section>
 
   <div class="notes">
     <p>Only one spell on the global cooldown can go off per press, so a macro with two GCD spells casts the first one that works. Spells off the global cooldown (Amplify Curse, Fel Domination, trinkets) can share a press with one that's on it.</p>
     <p>A set with only an <code>@unit</code> and no other check always holds, even if nobody is there; add <code>harm</code>, <code>help</code> or <code>exists</code> to make it fall through. Macros can be up to 255 characters. Spell names are case-insensitive but must be spelled exactly; add <code>(Rank 1)</code> for a specific rank.</p>
     <p>Further reading: <a href="https://warcraft.wiki.gg/wiki/Macro_conditionals">Macro conditionals</a> on the Warcraft Wiki, and the <a href="https://us.forums.blizzard.com/en/wow/t/useful-macro-templates/42937">useful macro templates</a> forum thread. Both cover retail too, so some things there (forms, arena frames, spells like Metamorphosis, Singe Magic or Shadow Bite) don't apply to Forever.</p>
   </div>
-</section>
+</div>

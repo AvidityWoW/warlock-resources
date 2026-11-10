@@ -15,12 +15,16 @@ const paths = kind === 'wand' ? upgradePaths(items as Wand[], (w) => w.dps) : up
 const H = group ? 'h3' : 'h2';
 const id = (top: number) => `${group ? group + '-' : ''}lv${top}`;
 ---
-{title && <h2 class="section-head" id={group}>{title}{blurb && <span class="muted">{` ${blurb}`}</span>}</h2>}
+<div class:list={[{ master: title }]} id={group}>
+{title && <h2 class="card-h">{title}{blurb && <span class="muted">{` ${blurb}`}</span>}</h2>}
+<div class:list={[{ 'master-b': title }]}>
 {levelBands(items as { req: number | null }[]).map(([top, list]) => (
-  <section class="band" aria-labelledby={id(top)} data-group={group} data-label={short ? `${short} ${top - 9}–${top}` : `Levels ${top - 9}–${top}`}>
-    <H id={id(top)}>{`Levels ${top - 9}–${top} `}<span class="muted">{'· '}<span class="n">{list.length}</span>{` ${noun}`}</span></H>
+  <section class="band card full" aria-labelledby={id(top)} data-group={group} data-label={short ? `${short} ${top - 9}–${top}` : `Levels ${top - 9}–${top}`}>
+    <H class="card-h" id={id(top)}>{`Levels ${top - 9}–${top} `}<span class="muted">{'· '}<span class="n">{list.length}</span>{` ${noun}`}</span></H>
     <ul class="wands">{kind === 'wand'
       ? (list as Wand[]).map((w) => <WandItem w={w} path={paths.get(w.id)} />)
       : (list as Weapon[]).map((w) => <GearItem w={w} path={paths.get(w.id)} />)}</ul>
   </section>
 ))}
+</div>
+</div>

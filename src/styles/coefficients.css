@@ -1,0 +1,18 @@
+/* Coefficients page: two table cards (.card, .dtable in global.css), a summary and the full detail. Only what's
+   particular to these tables is here: the build line, school colours and Bane of Agony's stage rows. */
+.cf-meta{margin:0 0 20px;font-size:.85em}
+.cf-key{margin-left:6px;white-space:nowrap}
+.cf-key.fire{color:var(--fire)}.cf-key.shadow{color:var(--shadow)}
+
+.cf .tot{font-weight:700}
+/* school colour on the damage columns, with its marker before the damage */
+.cf tr.fire .dm,.cf tr.fire .sc{color:var(--fire)}
+.cf tr.shadow .dm,.cf tr.shadow .sc{color:var(--shadow)}
+.cf tr.fire .dm::before{content:'◆';margin-right:7px;font-size:.8em}
+.cf tr.shadow .dm::before{content:'●';margin-right:7px;font-size:.8em}
+
+/* Bane of Agony's stages, tucked under it */
+.cf tr.stage th{padding-left:28px;font-weight:400;color:var(--muted)}
+.cf tr.stage td{color:var(--muted)}
+.cf tr.stage .dm,.cf tr.stage .sc,.cf tr.stage .tot{opacity:.8}
+.cf tr.stage .dm::before{content:none}

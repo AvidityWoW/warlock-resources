@@ -17,17 +17,19 @@ const gapText = (g: number) => (g === 0 ? 'Your level' : g > 0 ? `+${g}` : `${g}
     <p>How often your spells will land, and how much spell hit you need before more stops helping. Pick your level and your target, then add up the hit on your gear.</p>
   </div>
 
-  <div class="hc">
+  <section class="master" aria-labelledby="hc-h">
+  <h2 class="card-h" id="hc-h">Calculator</h2>
+  <div class="hc master-b">
     <form class="hc-in" id="hc" autocomplete="off" onsubmit="return false">
       <fieldset>
         <legend>Levels</legend>
         <div class="row"><label for="hc-you">Your level</label><Stepper id="hc-you" label="your level" min={1} max={MAX_LEVEL} value={you} /></div>
         <div class="row"><label for="hc-them">Target level</label><Stepper id="hc-them" label="target level" min={1} max={MAX_LEVEL + 10} value={you + BOSS_GAP} /></div>
         <div class="chips" role="group" aria-label="Quick targets">
-          <button type="button" data-gap={BOSS_GAP} title={`Raid bosses show as ?? and count as ${BOSS_GAP} levels above you`}>Raid boss (??)</button>
-          <button type="button" data-gap="2">+2</button>
-          <button type="button" data-gap="1">+1</button>
-          <button type="button" data-gap="0">Your level</button>
+          <button type="button" class="pill" data-gap={BOSS_GAP} title={`Raid bosses show as ?? and count as ${BOSS_GAP} levels above you`}>Raid boss (??)</button>
+          <button type="button" class="pill" data-gap="2">+2</button>
+          <button type="button" class="pill" data-gap="1">+1</button>
+          <button type="button" class="pill" data-gap="0">Your level</button>
         </div>
       </fieldset>
       <fieldset>
@@ -63,13 +65,14 @@ const gapText = (g: number) => (g === 0 ? 'Your level' : g > 0 ? `+${g}` : `${g}
       </dl>
     </section>
   </div>
+  </section>
 
-  <section class="hc-table">
-    <h2>Hit you need, by target level</h2>
-    <div class="scroll">
-      <table>
+  <section class="card full hc-table">
+    <div class="card-h"><h2>Hit you need, by target level</h2></div>
+    <div class="tscroll">
+      <table class="dtable">
         <thead>
-          <tr><th scope="col">Target</th><th scope="col">Base chance</th><th scope="col">Hit to never miss</th><th scope="col">Your chance</th></tr>
+          <tr><th scope="col">Target</th><th scope="col" class="num">Base chance</th><th scope="col" class="num">Hit to never miss</th><th scope="col" class="num">Your chance</th></tr>
         </thead>
         <tbody id="hc-rows">
           {gaps.map((g) => {
@@ -77,7 +80,7 @@ const gapText = (g: number) => (g === 0 ? 'Your level' : g > 0 ? `+${g}` : `${g}
             return (
               <tr data-gap={g} class:list={{ on: g === BOSS_GAP }}>
                 <th scope="row"><span class="lvl">{you + g}</span> <span class="muted">{g === BOSS_GAP ? '+3, raid boss' : gapText(g)}</span></th>
-                <td>{pct(m.base)}</td><td>{pct(m.needed)}</td><td class="you">{pct(m.chance)}</td>
+                <td class="num">{pct(m.base)}</td><td class="num">{pct(m.needed)}</td><td class="num you">{pct(m.chance)}</td>
               </tr>
             );
           })}
