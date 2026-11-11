@@ -10,8 +10,7 @@
 /* a label with a note under it: "Suppression", then "Affliction (1%/point)" */
 .lbl{display:flex;flex-direction:column;line-height:1.25}
 .lbl small{color:var(--muted);font-size:.8em}
-.hc-in select{height:34px;padding:0 6px 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-variant-numeric:tabular-nums;cursor:pointer}
-.hc-in select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.hc-in select{height:34px;font-variant-numeric:tabular-nums}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 /* result */
 .hc-out{padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);min-width:0}

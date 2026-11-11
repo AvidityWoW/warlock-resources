@@ -175,17 +175,7 @@ document.addEventListener('astro:page-load', () => {
   lvlN.addEventListener('input', () => { if (lvlN.value !== '') setLevel(+lvlN.value); }, on);
   sp.addEventListener('input', () => setSp(+sp.value), on);
   spN.addEventListener('input', () => { if (spN.value !== '') setSp(+spN.value); }, on);
-  // − and + on the number boxes (the Hit cap page's stepper): step, then tell the box as if typed
-  const card = $<HTMLElement>('cf-detail')!;
-  card.addEventListener('click', (e) => {
-    const b = (e.target as Element).closest<HTMLButtonElement>('[data-step]');
-    const el = b?.closest('[data-stepper]')?.querySelector('input');
-    if (!b || !el) return;
-    if (b.dataset.step === '1') el.stepUp(); else el.stepDown();
-    el.dispatchEvent(new Event('input', { bubbles: true }));
-  }, on);
-  // clicking anywhere in a box's middle focuses it
-  for (const m of card.querySelectorAll<HTMLElement>('.step-in')) m.addEventListener('mousedown', (e) => { if (e.target === m) { e.preventDefault(); m.querySelector('input')!.focus(); } }, on);
+  // − and + on the number boxes are wired by the Stepper component, and fire input like typing
   // an emptied box goes back to the value shown
   for (const n of [lvlN, spN]) n.addEventListener('change', render, on);
   cmp.addEventListener('click', () => { v.classic = !v.classic; render(); }, on);

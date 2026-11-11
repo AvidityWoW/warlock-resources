@@ -5,10 +5,7 @@
 .mtools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
 #mcount{flex:none;min-width:7.5em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .mtools .search{position:relative;flex:0 1 250px;min-width:150px}
-.mlevel input{height:38px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);font:inherit}
 .mlevel{display:inline-flex;align-items:center;gap:8px;color:var(--muted);white-space:nowrap}
-.mlevel input{width:4.5em;padding:0 8px 0 14px;font-variant-numeric:tabular-nums}
-.mlevel input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .jump{display:flex;flex-wrap:wrap;gap:4px 14px;margin-left:auto;font-size:.9em}
 .jump a{text-decoration:none}
 .jump a:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
@@ -48,9 +45,7 @@
 .pick{display:grid;grid-template-columns:5.6em minmax(0,1fr);align-items:center;column-gap:8px;min-width:0;margin:0}
 .pick.full,.pick.pair{grid-column:1/-1}   /* a modifier pair always takes a full row, so its menus line up with the full-width rows around it */
 .pl{color:var(--muted);font-size:.8em;font-weight:600;line-height:1.2}
-.pick select,.pick input[type="number"]{width:100%;min-width:0;height:30px;padding:0 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--text);font:inherit;font-size:.9em;text-overflow:ellipsis;cursor:pointer}
-.pick select:focus,.pick input[type="number"]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.pick.num input{width:6em;font-variant-numeric:tabular-nums;cursor:text}
+.pick select{width:100%;min-width:0;height:30px;padding-left:12px;font-size:.9em}
 .pair-in{display:flex;align-items:center;gap:6px;min-width:0}
 .pair-in select{flex:1 1 auto}
 .pair-in select.mod{flex:0 0 6.8em}
@@ -105,8 +100,9 @@ details.note p{margin:6px 0 0}
 .b-field,.b-cond{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.9em}
 .b-check{display:inline-flex;align-items:center;gap:6px;font-size:.9em;cursor:pointer}
 .b-check input{width:16px;height:16px;margin:0;accent-color:var(--accent)}
-.builder select,.b-spell input{height:34px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:.95em}
-.builder select:focus,.b-spell input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.builder select{height:34px;font-size:.95em}
+.b-spell input{height:34px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;font-size:.95em}
+.b-spell input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .b-clauses{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .b-clause{padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
 .b-clausehead{display:flex;align-items:center;gap:10px}
@@ -120,7 +116,7 @@ details.note p{margin:6px 0 0}
 .b-set{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:8px 10px;border-radius:8px;background:var(--bg)}
 .b-set .b-x{width:26px;height:26px;font-size:1rem}
 .b-ortag{flex-basis:100%;color:var(--warn);font-size:.8em;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-.b-cond select{height:30px;padding:0 6px;font-size:.92em;background:var(--surface)}
+.b-cond select{height:30px;padding-left:12px;font-size:.92em}
 .b-cond select.set{border-color:var(--warn);color:var(--warn)}   /* a condition that's switched on */
 .b-or,.b-add{margin-top:10px;padding:6px 12px;border:1px dashed var(--line);border-radius:8px;background:none;color:var(--muted);font:inherit;font-size:.88em;cursor:pointer}
 .b-or:hover,.b-add:hover{color:var(--text);border-color:var(--accent)}

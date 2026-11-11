@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import MacroGuide from '../components/MacroGuide.astro';
 import PickSelect from '../components/PickSelect.astro';
+import Stepper from '../components/Stepper.astro';
 import { groups, flatChoices, SPELL_KIND, KIND_SAYS } from '../data/macros';
 import { LIMIT, MAX_LEVEL, choice, fill, highlight, usesStones, stonesIn, stoneRank, cqsSlowsFiller, type Picked } from '../lib/macro';
 import '../styles/macros.css';
@@ -34,10 +35,10 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
       <input id="mq" type="search" placeholder="Search" autocomplete="off">
     </label>
-    <label class="mlevel" title="The stone macros use the best Healthstone, Soulstone and Spellstone you can make at this level">
-      <span>Stones for level</span>
-      <input id="mlevel" type="number" inputmode="numeric" min="1" max={MAX_LEVEL} value={MAX_LEVEL}>
-    </label>
+    <div class="mlevel" title="The stone macros use the best Healthstone, Soulstone and Spellstone you can make at this level">
+      <label for="mlevel">Stones for level</label>
+      <Stepper id="mlevel" label="stone level" min={1} max={MAX_LEVEL} value={MAX_LEVEL} size="lg" />
+    </div>
     <nav class="jump muted" aria-label="Groups">
       {groups.map((g) => <a href={`#${slug(g.group)}`}>{g.group}</a>)}
     </nav>
@@ -90,10 +91,10 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
                     <div class="checks-in">{p.choices.map(([label, value]) => <label><input type="checkbox" value={value} checked={picked[p.token].split('/').includes(value)}> {label}</label>)}</div>
                   </fieldset>
                 ) : p.type === 'number' ? (
-                  <label class:list={['pick', 'num', { full: p.wide }]}>
-                    <span class="pl">{p.label}</span>
-                    <input type="number" data-token={p.token} min="0" max="600" step="1" inputmode="numeric" placeholder="off" value={picked[p.token]}>
-                  </label>
+                  <div class:list={['pick', 'num', { full: p.wide }]}>
+                    <span class="pl" aria-hidden="true">{p.label}</span>
+                    <Stepper data-token={p.token} aria-label={p.label} label={p.label.toLowerCase()} min={1} max={600} placeholder="off" value={picked[p.token]} size="sm" wide />
+                  </div>
                 ) : (
                   <label class:list={['pick', { full: p.wide }]}>
                     <span class="pl">{p.label}</span>

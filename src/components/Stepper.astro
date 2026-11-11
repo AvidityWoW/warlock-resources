@@ -1,19 +1,61 @@
 ---
 // A number box with − and + built in (the browser's spinner arrows are hidden), and an optional unit inside it: [ − 16% + ].
-// The page's script makes the buttons step the box and fire input like typing would; arrow keys still work in
-// the box, so the buttons stay out of the tab order.
-interface Props { id: string; label: string; min: number; max: number; value: number; unit?: string }
-const { id, label, min, max, value, unit } = Astro.props;
+// Used for every number on the site. The script below wires every box on a page: the buttons step the box and fire input
+// like typing would, and grey out at the ends of its range. Arrow keys still work in the box, so the buttons stay out of
+// the tab order. A box with a placeholder ("off") goes blank when stepped down past its min.
+// size: 'sm' in tight spots (macro cards), 'lg' beside the 38px pills of a toolbar; wide fills its cell. Other attributes
+// (id, data-token, placeholder, title) go on the input.
+import type { HTMLAttributes } from 'astro/types';
+interface Props extends Omit<HTMLAttributes<'input'>, 'size' | 'value'> {
+  label: string; min: number; max: number; value?: number | string; unit?: string; size?: 'sm' | 'lg'; wide?: boolean;
+}
+const { label, min, max, value, unit, size, wide, ...rest } = Astro.props;
 ---
-<span class="step" data-stepper>
+<span class:list={['step', size && `step-${size}`, { 'step-wide': wide }]} data-stepper>
   <button type="button" data-step="-1" tabindex="-1" aria-label={`Lower ${label}`}>
     <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h9" /></svg>
   </button>
   <span class="step-in">
-    <input type="number" id={id} min={min} max={max} step="1" value={value} inputmode="numeric">
+    <input type="number" min={min} max={max} step="1" value={value} inputmode="numeric" {...rest}>
     {unit && <span class="step-unit" aria-hidden="true">{unit}</span>}
   </span>
   <button type="button" data-step="1" tabindex="-1" aria-label={`Raise ${label}`}>
     <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h9M8 3.5v9" /></svg>
   </button>
 </span>
+
+<script>
+  // one set of listeners for the whole site (a module runs once); pages listen for the box's input event as for typing
+
+  /** greys − and + out at the ends of each box's range (a blank box is at its bottom) */
+  function sync(root: ParentNode = document) {
+    for (const st of root.querySelectorAll<HTMLElement>('[data-stepper]')) {
+      const el = st.querySelector('input')!, blank = el.value === '', v = +el.value;
+      st.querySelector<HTMLButtonElement>('[data-step="-1"]')!.disabled = blank || v <= +el.min && !el.placeholder;
+      st.querySelector<HTMLButtonElement>('[data-step="1"]')!.disabled = !blank && v >= +el.max;
+    }
+  }
+
+  document.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLButtonElement>('[data-stepper] [data-step]');
+    const el = b?.closest('[data-stepper]')?.querySelector('input');
+    if (!b || !el) return;
+    const up = b.dataset.step === '1';
+    if (!up && el.placeholder && el.value !== '' && +el.value <= +el.min) el.value = '';   // past the bottom: "off"
+    else {
+      if (el.value === '') el.value = el.min;   // a blank box steps from its min
+      if (up) el.stepUp(); else el.stepDown();
+    }
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  // clicking anywhere in the box's middle (beside the %) focuses it
+  document.addEventListener('mousedown', (e) => {
+    const m = e.target;
+    if (m instanceof HTMLElement && m.classList.contains('step-in')) { e.preventDefault(); m.querySelector('input')!.focus(); }
+  });
+  // after the page's own handlers, so a value they clamp or set is the one checked
+  document.addEventListener('input', (e) => { if ((e.target as Element).closest?.('[data-stepper]')) setTimeout(sync); });
+  document.addEventListener('change', () => setTimeout(sync));
+  // after the page's own load handlers, which may restore saved values
+  document.addEventListener('astro:page-load', () => setTimeout(sync));
+</script>

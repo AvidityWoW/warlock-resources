@@ -199,6 +199,15 @@ main{padding-block:clamp(20px,4vw,40px) 48px}
 /* with a unit, the number sits right against it: "16%" */
 .step-in:has(.step-unit) input{flex:none;width:2.2ch;text-align:right}
 .step-unit{color:var(--muted);font-weight:600}
+/* sizes: sm in tight spots (macro cards, 30px like their dropdowns), lg beside a toolbar's 38px pills; wide fills its cell */
+.step-sm{height:30px;font-size:.9em}
+.step-sm button{width:26px}
+.step-sm .step-in{width:3em}
+.step-lg{height:38px;background:var(--surface)}
+.step-lg button{width:34px}
+.step-wide{display:flex;width:100%}
+.step-wide .step-in{flex:1}
+.step input::placeholder{color:var(--muted);font-weight:400}
 
 /* sliders, blocky like the number boxes: the track is an outlined bar, tinted up to the thumb (--p, set by the page's script),
    and the thumb is a small box with a grip line, lit like a focused box */
@@ -216,3 +225,44 @@ main{padding-block:clamp(20px,4vw,40px) 48px}
 .slider:focus{outline:none}
 .slider:focus-visible::-webkit-slider-thumb{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .slider:focus-visible::-moz-range-thumb{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+/* a dropdown list's scrollbar: thin, a soft accent thumb on no track (the open <select> list and the gear pages' menus) */
+:root{--dd-thumb:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.dd .menu{scrollbar-width:thin;scrollbar-color:var(--dd-thumb) transparent}
+
+/* dropdowns: every <select> looks like the gear pages' Source menu (.dd in gear.css): a bordered pill with the same chevron,
+   and where the browser allows a styled list (Chromium's base-select), the open list matches its menu too. Pages only set
+   the height and font size. */
+select{appearance:none;-webkit-appearance:none;height:38px;max-width:100%;padding:0 34px 0 14px;border:1px solid var(--line);border-radius:999px;
+  background-color:var(--surface);color:var(--text);font:inherit;font-weight:500;text-overflow:ellipsis;cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+  /* the chevron, two halves of a square so it takes the theme colour */
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%,var(--muted) calc(50% + 1.5px),transparent calc(50% + 1.5px)),
+    linear-gradient(-45deg,transparent 50%,var(--muted) 50%,var(--muted) calc(50% + 1.5px),transparent calc(50% + 1.5px));
+  background-size:6px 6px;background-repeat:no-repeat;background-position:right 19px center,right 13px center}
+select:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+select:focus{outline:none}
+select:focus-visible,select:open{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+select:disabled{opacity:.5;cursor:default}
+optgroup{color:var(--muted);font-weight:600}
+option{color:var(--text);font-weight:400}
+@supports (appearance:base-select){
+  select,::picker(select){appearance:base-select}
+  select{display:inline-flex;align-items:center;gap:8px;padding-right:12px;background-image:none}
+  select>button{display:contents}
+  select::picker-icon{content:"";flex:none;width:7px;height:7px;margin:-3px 2px 0 auto;border:solid var(--muted);border-width:0 1.5px 1.5px 0;
+    transform:rotate(45deg);transition:transform .15s}
+  select:open::picker-icon{transform:translateY(3px) rotate(225deg)}
+  select selectedcontent{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  ::picker(select){min-width:anchor-size(width);max-height:min(60vh,420px);margin-top:6px;padding:6px;border:1px solid var(--line);
+    border-radius:var(--radius);background:var(--surface);color:var(--text);box-shadow:0 8px 24px rgb(0 0 0 / .3);overflow-y:auto;
+    scrollbar-width:thin;scrollbar-color:var(--dd-thumb) transparent}
+  option{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;font-size:.95em;cursor:pointer;white-space:nowrap}
+  option:hover,option:focus-visible{outline:none;background:var(--raised)}
+  option:checked{color:var(--accent);font-weight:600}
+  option::checkmark{content:"";order:1;margin-left:auto;width:8px;height:4px;margin-top:-3px;border:solid var(--accent);border-width:0 0 2px 2px;transform:rotate(-45deg)}
+  option:disabled{opacity:.45;cursor:default}
+  optgroup{display:block;padding:4px 0}
+  optgroup+optgroup{margin-top:4px;border-top:1px solid var(--line)}
+  optgroup legend{padding:6px 10px 2px;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+}

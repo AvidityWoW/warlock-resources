@@ -83,18 +83,7 @@ document.addEventListener('astro:page-load', () => {
     save({ you: lv, them: tl, gear: num(gear), sup: Number(sup.value), other: num(other) });
   };
 
-  // − and + on the number boxes: step, then tell the form as if typed
-  form.addEventListener('click', (e) => {
-    const b = (e.target as Element).closest<HTMLButtonElement>('[data-step]');
-    const el = b?.closest('[data-stepper]')?.querySelector('input');
-    if (!b || !el) return;
-    el.value = String(num(el));   // a blank box steps from its min
-    if (b.dataset.step === '1') el.stepUp(); else el.stepDown();
-    el.dispatchEvent(new Event('input', { bubbles: true }));
-  }, on);
-  // clicking anywhere in the box's middle (beside the %) focuses it
-  for (const m of form.querySelectorAll<HTMLElement>('.step-in')) m.addEventListener('mousedown', (e) => { if (e.target === m) { e.preventDefault(); m.querySelector('input')!.focus(); } }, on);
-
+  // − and + on the number boxes are wired by the Stepper component, and fire input like typing
   form.addEventListener('input', draw, on);
   // quick targets set the level relative to yours
   for (const c of chips) c.addEventListener('click', () => { them.value = String(Math.min(MAX_LEVEL + 10, num(you) + Number(c.dataset.gap))); draw(); }, on);
