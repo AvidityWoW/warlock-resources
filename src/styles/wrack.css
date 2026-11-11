@@ -1,0 +1,91 @@
+/* Wrack page: the timeline (an SVG drawn by lib/wrack.ts, coloured here so it follows the theme), its legend and the table */
+.wr-body{padding:16px 16px 8px}
+.wr-chart{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}   /* on a phone the timeline scrolls sideways */
+.wr-svg{display:block;width:100%;min-width:560px;height:auto;font-family:inherit}
+/* each Wrack's shade (--wc): the site's purple, then a pinker and a bluer one; its window, handle, bar and the ticks it speeds up */
+.wr-w0{--wc:var(--accent)}
+.wr-w1{--wc:color-mix(in srgb,var(--accent) 50%,var(--arcane))}
+.wr-w2{--wc:color-mix(in srgb,var(--accent) 50%,var(--frost))}
+.wr-window{fill:color-mix(in srgb,var(--wc) 14%,transparent);cursor:grab;touch-action:none}
+.wr-handle{cursor:grab;touch-action:none}
+.wr-handle rect{fill:var(--raised);stroke:color-mix(in srgb,var(--wc) 50%,var(--line));stroke-width:1}
+.wr-handle line{stroke:var(--wc);stroke-width:1.6;stroke-linecap:round}
+.wr-handle:hover rect,.dragging .wr-handle rect{stroke:var(--wc)}
+.wr-chart.dragging,.wr-chart.dragging *{cursor:grabbing!important}
+.wr-chart.dragging{user-select:none}
+.wr-grid{stroke:var(--line);stroke-width:1}
+.wr-name{fill:var(--text);font-size:14px;font-weight:600}
+.wr-axis{fill:var(--muted);font-size:12px}
+.wr-num{fill:var(--muted);font-size:9.5px;font-variant-numeric:tabular-nums}
+.wr-num.on{fill:var(--wc,var(--accent));font-weight:600}
+.wr-chan{fill:color-mix(in srgb,var(--wc) 30%,transparent);stroke:var(--wc);stroke-width:1}
+.wr-run{stroke:color-mix(in srgb,var(--shadow) 55%,transparent);stroke-width:3;stroke-linecap:round}
+.wr-endmark{stroke:var(--shadow);stroke-width:2;stroke-linecap:round}
+.wr-tick{fill:var(--surface);stroke:var(--shadow);stroke-width:2}
+.wr-own{fill:var(--wc);stroke:var(--wc);filter:drop-shadow(0 0 3px color-mix(in srgb,var(--wc) 60%,transparent))}
+.wr-hit{fill:transparent;cursor:default}
+.wr-hit:hover{fill:color-mix(in srgb,var(--accent) 14%,transparent)}
+.wr-fast{fill:var(--wc);stroke:var(--wc);filter:drop-shadow(0 0 3px color-mix(in srgb,var(--wc) 60%,transparent))}
+
+.wr-legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 0;padding:0;list-style:none;font-size:.85em}
+.wr-legend li{display:inline-flex;align-items:center;gap:7px}
+.k{display:inline-block;flex:none}
+.k-chan{width:22px;height:10px;border-radius:5px;background:color-mix(in srgb,var(--shadow) 30%,transparent);border:1px solid var(--shadow)}
+.k-tick{width:10px;height:10px;border-radius:50%;border:2px solid var(--shadow);background:var(--surface)}
+.k-fast{width:11px;height:11px;border-radius:50%;background:var(--accent)}
+.k-s0,.k-s1,.k-s2{width:10px;height:10px;border:2px solid var(--shadow);background:var(--surface)}
+.k-s0{border-radius:50%}
+.k-s1{border-radius:1px}
+.k-s2{width:9px;height:9px;transform:rotate(45deg);margin:0 1px}
+.wr-take{margin:12px 0 4px;font-weight:500}
+
+.wr-table td b{color:var(--accent)}
+.wr-table .gain{color:var(--good);font-weight:650}
+.wr-table tr.own th{font-weight:500}
+.wr-table tr.tot th,.wr-table tr.tot td{border-top:1px solid var(--line);font-weight:650}
+.wr-patch td.chg{color:var(--accent);font-weight:600}
+.wr-patch td{white-space:normal;max-width:340px}
+
+/* the mouseover label on a tick */
+.wr-chartbox{position:relative}
+.wr-tip{position:absolute;z-index:2;transform:translate(-50%,calc(-100% - 8px));padding:5px 9px;border:1px solid var(--line);border-radius:6px;
+  background:var(--raised);color:var(--text);font-size:.8em;font-weight:500;white-space:nowrap;pointer-events:none;box-shadow:0 4px 12px rgb(0 0 0 / .3)}
+.wr-tip[hidden]{display:none}
+/* the start time's box fits a half second ("3.5s") */
+.slide .step-in:has(.step-unit) input{width:3.2ch}
+/* the drawing's lines, ticks and numbers let the pointer through to the draggable window behind (only the tick targets keep it) */
+.wr-run,.wr-sub,.wr-grid,.wr-tick,.wr-num,.wr-chan,.wr-endmark,.wr-name,.wr-axis,.wr-grip,.wr-order{pointer-events:none}
+/* how many Wracks: a row of small pills */
+.wr-count{display:inline-flex;gap:4px}
+.wr-count .pill{width:34px;justify-content:center;padding:0}
+.wr-at[hidden]{display:none}
+/* a DoT going on, and a Wrack's number on its handle when there are several */
+.wr-cast{fill:var(--shadow)}
+.wr-handle text{fill:var(--wc);font-size:11px;font-weight:700;pointer-events:none}
+
+/* the controls, a line each: level and spell power; the number of Wracks; then each Wrack's start and duration */
+.wr-ctl{flex-direction:column;align-items:stretch;gap:10px}
+.ctl-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
+.ctl-row[hidden]{display:none}
+.wr-hint{flex:1 1 auto;width:auto}
+.wr-at{gap:10px 18px}
+.wr-swatch{width:12px;height:12px;border-radius:3px;background:var(--wc);margin-right:-10px}
+.wr-lbl{min-width:4.6em;font-size:.9rem;color:var(--text)}
+/* a DoT's row label: grip, cast number and name; drag it to reorder */
+.wr-row{cursor:grab;outline:none}
+.wr-rowhit{fill:transparent;stroke:transparent}
+.wr-row:hover .wr-rowhit,.wr-row:focus-visible .wr-rowhit{fill:var(--raised);stroke:var(--line)}
+.wr-row:focus-visible .wr-rowhit{stroke:var(--accent)}
+.wr-grip{fill:var(--muted)}
+.wr-order{fill:var(--accent);font-size:13px;font-weight:700}
+.wr-chart.sorting,.wr-chart.sorting *{cursor:grabbing!important}
+.wr-chart.sorting{user-select:none}
+/* a sub-tick no Wrack covers: a faint notch on the DoT's line, where a channel would add a tick */
+.wr-sub{stroke:color-mix(in srgb,var(--shadow) 70%,transparent);stroke-width:2;stroke-linecap:round;stroke-dasharray:2 2}
+.k-sub{width:2px;height:10px;background:repeating-linear-gradient(var(--shadow) 0 2px,transparent 2px 4px)}
+.wr-pct{font-weight:600;fill:var(--text)}
+/* a Wrack window's sides: drag in or out to change how long it channels */
+.wr-edge{fill:transparent;cursor:ew-resize;touch-action:none}
+.wr-edge:hover,.resizing .wr-edge{fill:color-mix(in srgb,var(--wc) 35%,transparent)}
+.wr-chart.resizing,.wr-chart.resizing *{cursor:ew-resize!important}
+.wr-chart.resizing{user-select:none}

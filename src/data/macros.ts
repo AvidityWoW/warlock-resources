@@ -132,6 +132,10 @@ const HEALTHSTONE_RANK = stoneRankPick('Healthstone', [['Minor', 10], ['Lesser',
   (create, item) => `/use [mod:shift] ${create}; ${item}`);
 const SOULSTONE_RANK = stoneRankPick('Soulstone', [['Minor', 18], ['Lesser', 30], ['', 40], ['Greater', 50], ['Major', 60]],
   (create, item) => `/use [mod:shift] ${create}; [@mouseover,help,nodead][@target,help,nodead][@player] ${item}`);
+// the Voidwalker's Sacrifice ranks in the Forever client (spells 7812, 19438, 19440–19443) and the level each is learned at.
+// Naming a rank works around the game no longer casting plain "Sacrifice" after the Voidwalker learns rank 3.
+const SACRIFICE_RANK: Pick = { token: 'sac', label: 'Sacrifice', choices: [['Best rank (plain name)', 'Sacrifice'],
+  ...[16, 24, 32, 40, 48, 56].map((level, i) => [`Rank ${i + 1} (level ${level})`, `Sacrifice(Rank ${i + 1})`] as [string, string]).reverse()] };
 const STONE: Pick = { token: 'stone', label: 'Stone', choices: [['Spellstone (Shadow, haste)', 'Spellstone'], ['Firestone (Fire, crit)', 'Firestone']] };
 
 export const groups: MacroGroup[] = [
@@ -320,9 +324,9 @@ export const groups: MacroGroup[] = [
       },
       {
         name: 'Demon panic button',
-        body: '#showtooltip\n/cast [pet:Voidwalker] Sacrifice\n/cast [pet:Succubus,{aim},harm,nodead][pet:Succubus] Seduction\n/cast [pet:Felhunter,{aim},harm,nodead][pet:Felhunter] Spell Lock',
-        note: 'One key for the button you reach for in a pinch, whichever demon is out: Sacrifice, Seduction or Spell Lock. Seduction and Spell Lock go on your mouseover (or focus) if it\'s hostile, otherwise on your target.',
-        picks: [AIM],
+        body: '#showtooltip\n/cast [pet:Voidwalker] {sac}\n/cast [pet:Succubus,{aim},harm,nodead][pet:Succubus] Seduction\n/cast [pet:Felhunter,{aim},harm,nodead][pet:Felhunter] Spell Lock',
+        note: 'One key for the button you reach for in a pinch, whichever demon is out: Sacrifice, Seduction or Spell Lock. Seduction and Spell Lock go on your mouseover (or focus) if it\'s hostile, otherwise on your target. Sacrifice: if the button stops working once your Voidwalker learns rank 3, pick the highest rank it knows here, which names the rank in the macro.',
+        picks: [SACRIFICE_RANK, AIM],
       },
       {
         name: 'Your demon\'s everyday move',

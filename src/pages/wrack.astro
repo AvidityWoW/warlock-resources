@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Stepper from '../components/Stepper.astro';
+import { wrackView, CHANNEL, CAP, DEFAULT_STARTS, MAX_WRACKS, LAST_START, GCD, DOT_KEYS, MIN_DUR, FIRST_START, STEP } from '../lib/wrack';
+import { COEFF_BUILD } from '../data/coefficients';
+import '../styles/wrack.css';
+
+const SP_MAX = 1000;
+const view = wrackView({ starts: DEFAULT_STARTS.slice(0, 1), durs: [CHANNEL], level: CAP, sp: 0, order: [...DOT_KEYS] });
+// the 70888 hotfix (server push 113766, 2026-11-10): every number cut to 70%
+const BEFORE = '1.60.1.70862', AFTER = '1.60.1.70888 hotfix (push 113766, 2026-11-10)';
+const patch = [
+  ['Base per tick', '36', '25.2'],
+  ['Per level', '+2.5', '+1.75'],
+  ['Per tick at 60', '86', '60'],
+  ['Total at 60 (6 ticks)', '516', '360'],
+  ['Coefficient per tick', '0.286', '0.2002'],
+  ['Total coefficient', '1.716', '1.201'],
+  ['While channeling', 'the target takes 10% more damage from your other Shadow DoTs', 'Siphon Life, Corruption and Bane of Agony tick 100% faster'],
+  ['Cast, ticks, learned', 'instant channel, 6 ticks over 6 s, level 40', 'unchanged'],
+];
+---
+<Layout title="Wrack" hidden description="How Wrack works in WoW Forever: a 6-second channel that makes your Corruption, Siphon Life and Bane of Agony tick twice as fast, on a timeline.">
+  <div class="page-head">
+    <h1>Wrack</h1>
+    <p>Forever's new Affliction channel, learned at 40: six seconds of Shadow ticks, and while it channels your Corruption, Siphon Life and Bane of Agony on the target tick twice as fast. They still last as long as ever, so those faster ticks are extra ones: more damage from DoTs you already have up.</p>
+  </div>
+
+  <section class="card full" id="wr">
+    <div class="card-h"><h2>On a timeline</h2></div>
+    <div class="ctlbar wr-ctl" data-stick>
+      <div class="ctl-row">
+        <div class="slide"><label for="wr-level">Level</label><input type="range" class="slider" id="wr-level" min="1" max={CAP} value={CAP} style="--p:100%"><Stepper id="wr-level-n" label="level" min={1} max={CAP} value={CAP} /></div>
+        <div class="slide"><label for="wr-sp">Spell power</label><input type="range" class="slider" id="wr-sp" min="0" max={SP_MAX} value="0" style="--p:0%"><Stepper id="wr-sp-n" label="spell power" min={0} max={9999} value={0} /></div>
+      </div>
+      <div class="ctl-row">
+        <div class="slide"><span id="wr-count-l">Wracks</span><span class="wr-count" role="group" aria-labelledby="wr-count-l">{Array.from({ length: MAX_WRACKS }, (_, i) => <button type="button" class="pill" data-count={i + 1} aria-pressed={i === 0 ? 'true' : 'false'}>{i + 1}</button>)}</span></div>
+        <span class="ctlbar-note muted wr-hint">Drag a DoT's name on the timeline to change the cast order (top first), a Wrack's window to move it, and its sides to change how long it channels.</span>
+      </div>
+      {DEFAULT_STARTS.map((t, i) => (
+        <div class={`ctl-row wr-at wr-w${i}`} data-i={i} hidden={i > 0}>
+          <span class="wr-swatch" aria-hidden="true"></span><strong class="wr-lbl">Wrack {i + 1}</strong>
+          <div class="slide"><label for={`wr-at-${i}`}>starts at</label><Stepper id={`wr-at-${i}`} label={`Wrack ${i + 1}'s start`} min={FIRST_START} max={LAST_START} step={STEP} value={t} unit="s" /></div>
+          <div class="slide"><label for={`wr-for-${i}`}>channels for</label><Stepper id={`wr-for-${i}`} label={`Wrack ${i + 1}'s duration`} min={MIN_DUR} max={CHANNEL} step={STEP} value={CHANNEL} unit="s" /></div>
+        </div>
+      ))}
+    </div>
+    <div class="wr-body">
+      <div class="wr-chartbox"><div class="wr-chart" id="wr-chart" set:html={view.svg}></div><div class="wr-tip" id="wr-tip" role="tooltip" hidden></div></div>
+      <ul class="wr-legend muted" aria-hidden="true">
+        <li><span class="k k-chan"></span>A Wrack channel (up to {CHANNEL} s)</li>
+        <li><span class="k k-tick"></span>A tick</li>
+        <li><span class="k k-fast"></span>A sub-tick switched on by Wrack, halfway between two of the DoT's own (in that Wrack's shade)</li>
+        <li><span class="k k-sub"></span>A dormant sub-tick, which a channel over it would switch on</li>
+        <li>Bane of Agony's ramp: <span class="k k-s0"></span>×0.5 <span class="k k-s1"></span>×1 <span class="k k-s2"></span>×1.5 base</li>
+      </ul>
+      <p class="wr-take" id="wr-take" aria-live="polite">{view.takeaway}</p>
+    </div>
+    <div class="tscroll">
+      <table class="dtable wr-table">
+        <thead><tr><th>Spell</th><th class="num">Ticks in the channel</th><th class="num">Damage in the channel</th><th class="num">Ticks in all</th><th class="num">Damage in all</th><th class="num">Extra</th></tr></thead>
+        <tbody id="wr-rows" set:html={view.rows}></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-h"><h2>The 70888 hotfix</h2></div>
+    <div class="tscroll">
+      <table class="dtable wr-patch">
+        <thead><tr><th></th><th>Before: {BEFORE}</th><th>After: {AFTER}</th></tr></thead>
+        <tbody>{patch.map(([what, a, b]) => <tr><th scope="row">{what}</th><td>{a}</td><td class:list={{ chg: a !== b && b !== 'unchanged' }}>{b}</td></tr>)}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="notes">
+    <p><strong>Extra ticks.</strong> A DoT's own ticks never move: one every period from when it went on, Wrack or not, so the last one still lands as it runs out. While Wrack channels, the DoT also ticks halfway between them, which is the "100% faster". The timeline marks every halfway point as a sub-tick: a faint notch while it's dormant, and a filled tick in the Wrack's shade once a channel covers it. A full 6-second channel covers two halfway points of Corruption or Siphon Life (3-second ticks) and three of Bane of Agony (2-second ticks), so it adds two or three ticks, depending on where it starts. Every tick hits as hard as a normal one, spell power included. This comes from two combat logs, fifteen fights: all 195 of the DoTs' own ticks landed where they always would, and 103 of the 107 halfway points inside a channel ticked. The 4 that didn't were within 0.2 s of a channel starting or ending, where the server's timing blurs it.</p>
+    <p><strong>The timeline</strong> casts the three DoTs one global cooldown ({GCD} s) apart, top row first (drag a name up or down to change the order; Corruption is taken as instant, as with Improved Corruption), then channels each Wrack from the time you pick for as long as you pick, up to its full 6 seconds and up to three of them, one after another. Each cast respects the global cooldown: the first Wrack can't start until one GCD after the last DoT, and each next one not until the one before has ended and one GCD after it was cast. A Wrack cut short ticks once for each full second it ran. Drag a Wrack's window or its handle to move it, and its left or right side to change how long it channels. Each Wrack has its own shade. A DoT that runs out during the channel only speeds up until then, and a channel after it has run out does nothing for it. Bane of Agony's ramp (×0.5, ×1, ×1.5 base) is taken to go by time, 8 seconds to a stage, so an extra tick is worth whatever stage it lands in; that part isn't confirmed.</p>
+    <p><strong>Damage</strong> is per tick at your level and spell power, as the Coefficients page works it out, before crits, talents, curses and the target's resistance. Each DoT uses the highest rank you have at that level. Wrack is from {COEFF_BUILD}.</p>
+  </div>
+  <script>import '../scripts/wrack';</script>
+</Layout>

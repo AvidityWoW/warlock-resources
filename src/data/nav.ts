@@ -26,6 +26,8 @@ export const nav: NavGroup[] = [
     pages: [
       { title: 'Glossary', href: 'glossary/', blurb: 'Acronyms and terms, A to Z, with Forever\'s spell names' },
       { title: 'Coefficients', href: 'coefficients/', blurb: 'How much spell power each damage spell gets, and its damage at 60' },
+      // Wrack (wrack/) is left out for now: it's live but only reachable by its link, and its page tells search engines
+      // to skip it. To list it, add: { title: 'Wrack', href: 'wrack/', blurb: 'How Wrack gives your DoTs extra ticks, on a timeline, with its damage' },
       { title: 'Hit cap', href: 'hit-cap/', blurb: 'Your chance to hit by target level, and how much spell hit you need' },
     ],
   },

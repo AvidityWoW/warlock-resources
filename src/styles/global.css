@@ -209,6 +209,13 @@ main{padding-block:clamp(20px,4vw,40px) 48px}
 .step-wide .step-in{flex:1}
 .step input::placeholder{color:var(--muted);font-weight:400}
 
+/* a card's control bar: labelled sliders, each with its number box, and an optional note under them (Coefficients' Full
+   detail, Wrack). Mark it data-stick to keep it in view with the card's title. */
+.ctlbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 28px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.slide{display:inline-flex;align-items:center;gap:10px;font-size:.9rem;color:var(--muted)}
+.slide .slider{width:clamp(120px,20vw,220px)}
+.ctlbar-note{flex:1 1 100%;margin:0;font-size:.85em}
+
 /* sliders, blocky like the number boxes: the track is an outlined bar, tinted up to the thumb (--p, set by the page's script),
    and the thumb is a small box with a grip line, lit like a focused box */
 .slider{--p:50%;-webkit-appearance:none;appearance:none;height:28px;margin:0;background:none;cursor:pointer}

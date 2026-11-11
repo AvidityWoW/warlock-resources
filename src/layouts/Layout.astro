@@ -12,8 +12,10 @@ interface Props {
   /** page name, shown before the site name in the tab ("Wands · The Grimoire"); leave out on the home page */
   title?: string;
   description?: string;
+  /** keep search engines out: for a page left out of the nav and shared only by its link */
+  hidden?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, hidden } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE}` : SITE;
 const favicon = await getImage({ src: logo, width: 32, height: 32, format: 'png' });
 const touchIcon = await getImage({ src: logo, width: 56, height: 56, format: 'png' });
@@ -28,6 +30,7 @@ const touchIcon = await getImage({ src: logo, width: 56, height: 56, format: 'pn
   <link rel="icon" type="image/png" href={favicon.src}>
   <link rel="apple-touch-icon" href={touchIcon.src}>
   {description && <meta name="description" content={description}>}
+  {hidden && <meta name="robots" content="noindex, nofollow">}
   <script is:inline>
     // Apply a saved light theme before first paint, and again whenever in-site navigation swaps in a new <html>.
     (function () {

@@ -8,15 +8,17 @@
 import type { HTMLAttributes } from 'astro/types';
 interface Props extends Omit<HTMLAttributes<'input'>, 'size' | 'value'> {
   label: string; min: number; max: number; value?: number | string; unit?: string; size?: 'sm' | 'lg'; wide?: boolean;
+  /** how much − and + move it (1 unless given; Wrack's start time goes in quarter seconds) */
+  step?: number;
 }
-const { label, min, max, value, unit, size, wide, ...rest } = Astro.props;
+const { label, min, max, value, unit, size, wide, step = 1, ...rest } = Astro.props;
 ---
 <span class:list={['step', size && `step-${size}`, { 'step-wide': wide }]} data-stepper>
   <button type="button" data-step="-1" tabindex="-1" aria-label={`Lower ${label}`}>
     <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h9" /></svg>
   </button>
   <span class="step-in">
-    <input type="number" min={min} max={max} step="1" value={value} inputmode="numeric" {...rest}>
+    <input type="number" min={min} max={max} step={step} value={value} inputmode="numeric" {...rest}>
     {unit && <span class="step-unit" aria-hidden="true">{unit}</span>}
   </span>
   <button type="button" data-step="1" tabindex="-1" aria-label={`Raise ${label}`}>
