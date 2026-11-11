@@ -10,21 +10,6 @@
 /* a label with a note under it: "Suppression", then "Affliction (1%/point)" */
 .lbl{display:flex;flex-direction:column;line-height:1.25}
 .lbl small{color:var(--muted);font-size:.8em}
-/* number boxes: [ − 60 + ], one pill with the buttons built in and the unit inside (src/components/Stepper.astro) */
-.step{display:inline-flex;align-items:stretch;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--bg);overflow:hidden;transition:border-color .15s,box-shadow .15s}
-.step:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.step button{display:grid;place-items:center;width:30px;padding:0;border:0;background:none;color:var(--muted);cursor:pointer;transition:color .15s,background .15s}
-.step button:hover:not(:disabled){color:var(--text);background:var(--raised)}
-.step button:active:not(:disabled){background:var(--accent-soft);color:var(--accent)}
-.step button:disabled{opacity:.35;cursor:default}
-.step svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
-.step-in{display:flex;align-items:center;justify-content:center;width:3.6em;border-inline:1px solid var(--line);cursor:text}
-.step input{width:100%;min-width:0;height:100%;padding:0;border:0;background:none;color:var(--text);font:inherit;font-weight:600;text-align:center;font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield}
-.step input:focus{outline:none}
-.step input::-webkit-inner-spin-button,.step input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-/* with a unit, the number sits right against it: "16%" */
-.step-in:has(.step-unit) input{flex:none;width:2.2ch;text-align:right}
-.step-unit{color:var(--muted);font-weight:600}
 .hc-in select{height:34px;padding:0 6px 0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text);font:inherit;font-variant-numeric:tabular-nums;cursor:pointer}
 .hc-in select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}

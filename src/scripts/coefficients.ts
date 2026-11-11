@@ -2,6 +2,8 @@
 // page title, build and site link, so it can be pasted into Discord or saved as a PNG.
 import { coefficients, COEFF_BUILD } from '../data/coefficients';
 import { SITE } from '../data/site';
+import { ranked } from '../data/coefficient-ranks';
+import { detailBody, CAP, SP_MAX, type View } from './coefficient-detail';
 
 const SCALE = 2;   // draw at twice the size, so it stays sharp on high-DPI screens and when zoomed in Discord
 const PAD = 28, ROW = 34, HEAD = 30, GAP = 28;
@@ -135,4 +137,100 @@ document.addEventListener('astro:page-load', () => {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     flash(save);
   }, { signal: ctl.signal });
+});
+
+// Full detail: the level and spell-power sliders (each with a number box), rank chips and Classic toggle redraw the table body
+document.addEventListener('astro:page-load', () => {
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const lvl = $<HTMLInputElement>('cf-level'), body = $<HTMLElement>('cf-rows');
+  if (!lvl || !body) return;   // not the coefficients page
+  const lvlN = $<HTMLInputElement>('cf-level-n')!, sp = $<HTMLInputElement>('cf-sp')!, spN = $<HTMLInputElement>('cf-sp-n')!;
+  const at = $<HTMLElement>('cf-at')!, cmp = $<HTMLButtonElement>('cf-classic')!, note = $<HTMLElement>('cf-note')!;
+  const hint = note.textContent;
+  const ctl = new AbortController(), on = { signal: ctl.signal };
+  document.addEventListener('astro:before-swap', () => ctl.abort(), { once: true });
+  const clamp = (x: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, Math.round(x) || 0));
+  // the browser may keep the sliders' values when coming back to the page: start from them
+  const v: View = { level: clamp(+lvl.value, 1, CAP), sp: clamp(+sp.value, 0, 9999), classic: false, pins: {} };
+
+  const render = () => {
+    lvl.value = lvlN.value = String(v.level);
+    spN.value = String(v.sp); sp.value = String(Math.min(v.sp, SP_MAX));   // the box can go past the slider's end
+    at.textContent = `at level ${v.level}, ${v.sp} SP`;
+    for (const r of [lvl, sp]) r.style.setProperty('--p', `${((+r.value - +r.min) / (+r.max - +r.min)) * 100}%`);   // the slider's filled part
+    // − and + grey out at the ends of their box's range
+    for (const st of document.querySelectorAll<HTMLElement>('#cf-detail [data-stepper]')) {
+      const el = st.querySelector('input')!;
+      st.querySelector<HTMLButtonElement>('[data-step="-1"]')!.disabled = +el.value <= +el.min;
+      st.querySelector<HTMLButtonElement>('[data-step="1"]')!.disabled = +el.value >= +el.max;
+    }
+    cmp.setAttribute('aria-pressed', String(v.classic));
+    const d = detailBody(v);
+    body.innerHTML = d.html;
+    note.textContent = [Object.keys(v.pins).length ? 'Showing the ranks you picked; moving the level resets them.' : hint, d.note].filter(Boolean).join(' · ');
+  };
+  const setLevel = (x: number) => { v.level = clamp(x, 1, CAP); v.pins = {}; render(); };
+  const setSp = (x: number) => { v.sp = clamp(x, 0, 9999); render(); };
+  lvl.addEventListener('input', () => setLevel(+lvl.value), on);
+  lvlN.addEventListener('input', () => { if (lvlN.value !== '') setLevel(+lvlN.value); }, on);
+  sp.addEventListener('input', () => setSp(+sp.value), on);
+  spN.addEventListener('input', () => { if (spN.value !== '') setSp(+spN.value); }, on);
+  // − and + on the number boxes (the Hit cap page's stepper): step, then tell the box as if typed
+  const card = $<HTMLElement>('cf-detail')!;
+  card.addEventListener('click', (e) => {
+    const b = (e.target as Element).closest<HTMLButtonElement>('[data-step]');
+    const el = b?.closest('[data-stepper]')?.querySelector('input');
+    if (!b || !el) return;
+    if (b.dataset.step === '1') el.stepUp(); else el.stepDown();
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  }, on);
+  // clicking anywhere in a box's middle focuses it
+  for (const m of card.querySelectorAll<HTMLElement>('.step-in')) m.addEventListener('mousedown', (e) => { if (e.target === m) { e.preventDefault(); m.querySelector('input')!.focus(); } }, on);
+  // an emptied box goes back to the value shown
+  for (const n of [lvlN, spN]) n.addEventListener('change', render, on);
+  cmp.addEventListener('click', () => { v.classic = !v.classic; render(); }, on);
+  // rank locks: drag across one either way to roll through its ranks (drag left for higher, like turning a gear), or click
+  // an arrow or a faded neighbour. A rank is shown at the current level; one learned later stays at its base damage. The table
+  // is redrawn on every step, so the lock is found again by its spell each time.
+  const STEP = 16;   // px of drag per rank
+  const lock = (key: string) => body.querySelector<HTMLElement>(`.lock[data-k="${CSS.escape(key)}"]`);
+  const pick = (key: string, i: number) => {
+    const n = ranked.find((x) => x.key === key)!.forever.length;
+    i = Math.min(n - 1, Math.max(0, i));
+    if (v.pins[key] !== i) { v.pins[key] = i; render(); }
+    lock(key)?.focus({ preventScroll: true });
+  };
+  let drag: { key: string; x: number; from: number; moved: boolean; to: number | null } | null = null;
+  body.addEventListener('pointerdown', (e) => {
+    const l = (e.target as Element).closest<HTMLElement>('.lock');
+    if (!l || e.button !== 0) return;
+    e.preventDefault();
+    const hit = (e.target as Element).closest<HTMLElement>('[data-to]');
+    drag = { key: l.dataset.k!, x: e.clientX, from: +l.getAttribute('aria-valuenow')! - 1, moved: false, to: hit && !hit.hasAttribute('data-off') ? +hit.dataset.to! : null };
+    document.documentElement.classList.add('cf-dragging');
+    lock(drag.key)?.focus({ preventScroll: true });
+  }, on);
+  document.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const dx = drag.x - e.clientX;
+    if (Math.abs(dx) >= 4) drag.moved = true;
+    if (drag.moved) pick(drag.key, drag.from + Math.round(dx / STEP));
+  }, on);
+  const stop = () => {
+    if (drag && !drag.moved && drag.to !== null) pick(drag.key, drag.to);   // a click on an arrow or a neighbour
+    drag = null;
+    document.documentElement.classList.remove('cf-dragging');
+  };
+  document.addEventListener('pointerup', stop, on);
+  document.addEventListener('pointercancel', () => { if (drag) drag.to = null; stop(); }, on);
+  body.addEventListener('keydown', (e) => {
+    const l = (e.target as Element).closest<HTMLElement>('.lock');
+    if (!l) return;
+    const now = +l.getAttribute('aria-valuenow')! - 1, n = +l.getAttribute('aria-valuemax')!;
+    const to = { ArrowLeft: now - 1, ArrowDown: now - 1, ArrowRight: now + 1, ArrowUp: now + 1, Home: 0, End: n - 1 }[e.key];
+    if (to === undefined) return;
+    e.preventDefault();
+    pick(l.dataset.k!, to);
+  }, on);
+  if (v.level !== CAP || v.sp !== 0) render();
 });

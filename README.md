@@ -26,7 +26,10 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   `.link`, `.empty` (nothing matches), and `.card` + `.card-h` (a table or list in a card, with a heading band; `.dtable` for its table). Use these
   rather than restyling them; a page's own file (one per page beside it) only holds what is particular to that page.
 - Coefficients page: `src/data/coefficients.ts` holds the numbers (copied from spelldb's `warlock-coefficients.html`),
-  and `src/scripts/coefficients.ts` draws the summary as a PNG for Copy image / Save image.
+  and `src/scripts/coefficients.ts` draws the summary as a PNG for Copy image / Save image. The full detail is built from
+  every rank in `src/data/coefficient-ranks.ts` (generated from spelldb, Forever with hotfixes and Classic 1.15.9) by
+  `src/scripts/coefficient-detail.ts`, at level 60 on the server and again in the browser for the level slider, rank
+  chips and Classic comparison.
 - Gear pages (`wands`, `one-hand`, `staves`) share their parts. One-hand and Staves are not released yet: their pages are
   `src/pages/_one-hand.astro` and `_staves.astro` (Astro skips files starting with `_`) and their nav entries are commented out.
   Rename them and uncomment the entries to publish them.

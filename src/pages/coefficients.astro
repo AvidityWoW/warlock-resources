@@ -1,9 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Stepper from '../components/Stepper.astro';
 import { coefficients, COEFF_BUILD } from '../data/coefficients';
+import { detailBody, cls, GROUPS, CAP, SP_MAX, CLASSIC_BUILD } from '../scripts/coefficient-detail';
 import '../styles/coefficients.css';
 
 const sch = (s: string) => (s === 'Fire' ? 'fire' : 'shadow');
+const detail = detailBody({ level: CAP, sp: 0, classic: false, pins: {} });
 ---
 <Layout title="Coefficients" description="Spell-power coefficients and level-60 damage for every WoW Forever warlock damage spell.">
   <div class="page-head">
@@ -40,54 +43,34 @@ const sch = (s: string) => (s === 'Fire' ? 'fire' : 'shadow');
     </div>
   </section>
 
-  <section class="card">
-    <div class="card-h"><h2>Full detail</h2></div>
+  <section class="card" id="cf-detail">
+    <div class="card-h">
+      <h2>Full detail</h2>
+      <div class="acts">
+        <button type="button" class="pill" id="cf-classic" aria-pressed="false" title={`Show Classic Era ${CLASSIC_BUILD} under each spell, at the same level and spell power`}>Compare with Classic</button>
+      </div>
+    </div>
+    <div class="cf-ctl">
+      <div class="cf-slide"><label for="cf-level">Level</label><input type="range" class="slider" id="cf-level" min="1" max={CAP} value={CAP} style="--p:100%"><Stepper id="cf-level-n" label="level" min={1} max={CAP} value={CAP} /></div>
+      <div class="cf-slide"><label for="cf-sp">Spell power</label><input type="range" class="slider" id="cf-sp" min="0" max={SP_MAX} value="0" style="--p:0%"><Stepper id="cf-sp-n" label="spell power" min={0} max={9999} value={0} /></div>
+      <p class="cf-note muted" id="cf-note" aria-live="polite">Highest rank learned at each level; drag a rank left or right to see another. Moving the level resets the picks.</p>
+    </div>
     <div class="tscroll">
-      <table class="dtable cf">
-        <thead><tr><th>Spell</th><th>Part</th><th>Spell ID</th><th class="num">Lvl</th><th class="num">Cast</th><th class="num">Duration</th><th class="num">Base</th><th class="num">/lvl</th><th class="num">Var</th><th class="num">Period</th><th class="num">Ticks</th><th class="num">Per tick</th><th class="num">Dmg @60</th><th class="num">Coeff/tick</th><th class="num">Coeff</th></tr></thead>
-        <tbody>
-          {coefficients.map((r) => (
-            <>
-              <tr class={sch(r.school)}>
-                <th scope="row">{r.name}</th>
-                <td class="muted">{r.part}</td>
-                <td class="muted">{r.id}</td>
-                <td class="num">{r.level}</td>
-                <td class="num">{r.cast}</td>
-                <td class="num">{r.duration}</td>
-                <td class="num">{r.base}</td>
-                <td class="num">{r.perLevel}</td>
-                <td class="num">{r.variance}</td>
-                <td class="num">{r.period}</td>
-                <td class="num">{r.ticks}</td>
-                <td class="num sc">{r.perTick}</td>
-                <td class="num dm">{r.damage}</td>
-                <td class="num muted">{r.coeffPerTick}</td>
-                <td class="num tot">{r.coeff}</td>
-              </tr>
-              {r.stages?.map((s) => (
-                <tr class={`${sch(r.school)} stage`}>
-                  <th scope="row">ticks {s.ticks}</th>
-                  <td class="muted">{s.mult} base</td>
-                  <td></td><td></td><td></td><td></td>
-                  <td class="num">{s.perTick}</td>
-                  <td></td><td></td><td></td>
-                  <td class="num">4</td>
-                  <td class="num sc">{s.perTick}</td>
-                  <td class="num dm">{s.damage}</td>
-                  <td class="num muted">{r.coeffPerTick}</td>
-                  <td class="num tot">{s.coeff}</td>
-                </tr>
-              ))}
-            </>
-          ))}
-        </tbody>
+      <table class="dtable cf full">
+        <thead>
+          <tr class="grp">{GROUPS.map((g, i) => <th colspan={g.cols.length + (i ? 0 : 3)} class:list={[{ g: i > 0 }]}>{g.label === 'Result' ? <>Result <span class="cf-at" id="cf-at">at level 60, 0 SP</span></> : g.label}</th>)}</tr>
+          <tr><th>Spell</th><th>Part</th><th>Rank</th>{GROUPS.flatMap((g) => g.cols.map(([k, label]) => <th class={cls(k).replace(/muted|sc|dm|tot/g, '').trim() || undefined}>{label}</th>))}</tr>
+        </thead>
+        <tbody id="cf-rows" set:html={detail.html}></tbody>
       </table>
     </div>
   </section>
 
   <div class="notes">
-    <p><strong>Base</strong> is the spell's base points. <strong>/lvl</strong> adds that much per level from the level it is learned up to 60, giving Per tick and Dmg @60. A per-tick value is rounded to the nearest whole number (Wrack 60.2 → 60), and Dmg is Per tick × Ticks. <strong>Var</strong> is the ± spread of direct damage around that value, before rounding: the low end is rounded to the nearest whole number and the high end up, as in-game tooltips do.</p>
+    <p><strong>Level</strong> picks, for every spell, the highest rank learned by then and scales it: each spell's rank lock shows the rank in the middle (dimmed and slanted if not learned yet at this level; the lock is outlined when you picked it), with the ranks either side faded. Drag across it either way to roll through the ranks, click an arrow or a faded rank, or use the arrow keys, to see another rank at the current level (Shadow Bolt 9 and 10 are both learned at 60). A rank picked before the level it is learned at stays at its base damage, plus spell power: Wrack at 35 is 25 a tick before spell power.</p>
+    <p><strong>Spell power</strong> adds Coeff/tick × spell power to every hit or tick (Damage and Per tick). A tick rounds its scaled base to a whole number first, then adds the spell power and rounds again: Wrack at 35 with 113 spell power is 25 + 22.6 → 48, as in game. Direct damage adds it to both ends of the range. Bane of Agony's stages are shown unrounded.</p>
+    <p><strong>Compare with Classic</strong> adds Classic Era {CLASSIC_BUILD} under each spell at the same level and spell power, from its own tables, with what differs highlighted. Classic rolls dice for direct damage, shown here as their middle (Base) and spread (Var); the same rounding is used for both.</p>
+    <p><strong>Base</strong> is the spell's base points. <strong>/lvl</strong> adds that much per level from the level it is learned, up to 60 or the rank's own cap, giving Per tick and Damage. A per-tick value is rounded to the nearest whole number (Wrack 60.2 → 60), and Damage is Per tick × Ticks. <strong>Var</strong> is the ± spread of direct damage around that value, before rounding: the low end is rounded to the nearest whole number and the high end up, as in-game tooltips do.</p>
     <p><strong>Coeff/tick</strong> is the spell-power coefficient of one tick; Coeff = Coeff/tick × Ticks. An → in Spell ID means the damage comes from the spell it triggers (Hellfire's self-damage and AoE use the same numbers).</p>
     <p><strong>Bane of Agony:</strong> only the base damage ramps ×0.5 / ×1 / ×1.5 over three stages of 4 ticks; every tick gets 0.133 × spell power.</p>
     <p><strong>Wrack</strong> is from the 70888 hotfixes, which cut it to 70%: 0.286 → 0.2002 per tick, base 36 → 25.2 and +2.5 → +1.75 per level (60 per tick at 60, was 86). While you channel it, your Siphon Life, Corruption and Bane of Agony on the target deal their periodic damage 100% faster.</p>

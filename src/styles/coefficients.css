@@ -16,3 +16,41 @@
 .cf tr.stage td{color:var(--muted)}
 .cf tr.stage .dm,.cf tr.stage .sc,.cf tr.stage .tot{opacity:.8}
 .cf tr.stage .dm::before{content:none}
+
+/* Full detail: level slider and Classic toggle in the heading, rank chips, Classic rows under each spell */
+.cf-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 28px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.cf-slide{display:inline-flex;align-items:center;gap:10px;font-size:.9rem;color:var(--muted)}
+.cf-slide .slider{width:clamp(120px,20vw,220px)}
+.cf-note{flex:1 1 100%;margin:0;font-size:.85em}
+/* the group band over the column headings, and a stronger rule where each group starts */
+.cf thead tr.grp th{padding-top:6px;padding-bottom:0;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);border-bottom:0}
+.cf thead tr.grp .cf-at{text-transform:none;letter-spacing:0;color:var(--muted);font-weight:500}
+.cf .g{border-left:2px solid var(--line)}
+.cf .rks{white-space:nowrap}
+/* rank lock: [ ‹ | previous · shown · next | › ], the number boxes' look (.step in global.css), dragged sideways like a gear lock */
+.cf .lock{display:inline-flex;align-items:stretch;vertical-align:middle;height:28px;border:1px solid var(--line);border-radius:8px;
+  background:var(--bg);overflow:hidden;cursor:ew-resize;touch-action:none;user-select:none;-webkit-user-select:none;
+  font-variant-numeric:tabular-nums;transition:border-color .15s,box-shadow .15s}
+.cf .lock:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.cf .lk-a{display:grid;place-items:center;flex:none;width:24px;color:var(--muted);cursor:pointer;transition:color .15s,background .15s}
+.cf .lk-a:first-child{border-right:1px solid var(--line)}
+.cf .lk-a:last-child{border-left:1px solid var(--line)}
+.cf .lk-a svg{width:13px;height:13px}
+.cf .lk-a:hover:not([data-off]){color:var(--text);background:var(--raised)}
+.cf .lk-a:active:not([data-off]){background:var(--accent-soft);color:var(--accent)}
+.cf .lk-a[data-off]{opacity:.35;cursor:default}
+.cf .lk-n{display:grid;place-items:center;width:20px}
+.cf .lk-n.side{font-size:.75em;color:var(--muted);opacity:.5;cursor:pointer}
+.cf .lk-n.side:hover{opacity:.95}
+.cf .lk-n.cur{width:24px;font-weight:700;color:var(--accent)}
+/* a rank you picked yourself: the box is outlined in the accent */
+.cf .lock.picked{border-color:var(--accent)}
+.cf .lk-n.later{font-style:italic}
+.cf .lk-n.cur.later{color:var(--muted)}
+.cf .lock.none .lk-n.cur{opacity:.4}
+.cf-dragging,.cf-dragging *{cursor:ew-resize!important}
+.cf tr.none td{color:var(--muted);font-style:italic}
+.cf tr.cmp th{padding-left:28px;font-weight:400;color:var(--muted)}
+.cf tr.cmp td{opacity:.75}
+.cf tr.cmp td.chg{opacity:1;color:var(--warn);font-weight:600}
+.cf tr.cmp .dm::before{content:none}
