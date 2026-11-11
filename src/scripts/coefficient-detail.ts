@@ -18,22 +18,22 @@ export function rankAt(ranks: Rank[], level: number) {
   return i;
 }
 
-/** the columns after Spell, Part and Rank, in table order: what the spell is, its timing, the formula, then the result */
+/** the columns after Spell, Part and Rank, in table order: what the spell is, the result, the formula behind it, then its timing */
 export const GROUPS = [
-  { label: 'Spell', cols: [['id', 'Spell ID'], ['level', 'Learned']] },
-  { label: 'Timing', cols: [['cast', 'Cast'], ['duration', 'Duration'], ['period', 'Period'], ['ticks', 'Ticks']] },
-  { label: 'Formula', cols: [['base', 'Base'], ['perLevel', '/lvl'], ['variance', 'Var'], ['coeffPerTick', 'Coeff/tick'], ['coeff', 'Coeff']] },
+  { label: 'Spell', cols: [] },
   { label: 'Result', cols: [['perTick', 'Per tick'], ['damage', 'Damage']] },
+  { label: 'Formula', cols: [['base', 'Base'], ['perLevel', '/lvl'], ['variance', 'Var'], ['coeffPerTick', 'Coeff/tick'], ['coeff', 'Coeff']] },
+  { label: 'Timing', cols: [['cast', 'Cast'], ['ticks', 'Ticks']] },
 ] as const;
 type Key = (typeof GROUPS)[number]['cols'][number][0];
 const ORDER = GROUPS.flatMap((g) => g.cols.map((c) => c[0])) as Key[];
 /** first column of each group after the first, for the rule between groups */
-const STARTS = new Set<Key>(GROUPS.slice(1).map((g) => g.cols[0][0]));
-const CLS: Partial<Record<Key, string>> = { id: 'muted', perTick: 'num sc', damage: 'num dm', coeffPerTick: 'num muted', coeff: 'num tot' };
+const STARTS = new Set<Key>(GROUPS.slice(1).flatMap((g) => g.cols.slice(0, 1).map((c) => c[0])));
+const CLS: Partial<Record<Key, string>> = { perTick: 'num sc', damage: 'num dm', coeffPerTick: 'num muted', coeff: 'num tot' };
 export const cls = (k: Key) => `${CLS[k] ?? 'num'}${STARTS.has(k) ? ' g' : ''}`;
-const COLS = ORDER.length + 3;   // spell, part, rank chips and the cells
+const COLS = ORDER.length + 2;   // spell, rank and the cells
 
-type Cells = Record<Key, string> & { stages?: (Partial<Record<Key, string>> & { name: string; part: string })[] };
+type Cells = Record<Key, string> & { id: string; level: string; duration: string; period: string; stages?: (Partial<Record<Key, string>> & { name: string; part: string })[] };
 
 /** one rank at a level and spell power, as the table prints it (the rounding is the one in-game tooltips use, see the notes) */
 export function cells(r: Rank, level: number, sp: number, agony = false): Cells {
@@ -41,7 +41,7 @@ export function cells(r: Rank, level: number, sp: number, agony = false): Cells 
   const add = (r.per ?? 0) * n, bonus = sp * (r.coef ?? 0);
   const out: Cells = {
     id: r.dmgId ? `${r.id} → ${r.dmgId}` : String(r.id), level: String(r.learn), cast: r.cast ? secs(r.cast) : 'instant',
-    duration: r.ticks ? secs(r.dur) : '', period: r.ticks ? secs(r.period) : '', ticks: r.ticks ? String(r.ticks) : '',
+    duration: r.ticks ? secs(r.dur) : '', period: r.ticks ? secs(r.period) : '', ticks: r.ticks ? `${r.ticks} × ${secs(r.period)}` : '',   // ticks × period; duration is their product
     base: f(r.base, 2), perLevel: r.per ? `+${f(r.per, 2)}` : '', variance: r.var && !r.ticks ? `±${f(r.var * 50, 1)}%` : '',
     coeffPerTick: r.ticks ? f(r.coef ?? 0, 4) : '', coeff: f((r.coef ?? 0) * (r.ticks || 1)), perTick: '', damage: '',
   };
@@ -54,7 +54,7 @@ export function cells(r: Rank, level: number, sp: number, agony = false): Cells 
       out.perTick = s.map((x) => f(x, 1)).join('/');
       out.damage = f(s.reduce((a, b) => a + b, 0) * k, 0);
       out.stages = mults.map((m, j) => ({ name: `ticks ${j * k + 1}–${(j + 1) * k}`, part: `×${m} base`, base: f(r.base * m, 2),
-        ticks: String(k), coeffPerTick: out.coeffPerTick, coeff: f((r.coef ?? 0) * k), perTick: f(s[j], 1), damage: f(s[j] * k, 0) }));
+        ticks: `${k} × ${secs(r.period)}`, coeffPerTick: out.coeffPerTick, coeff: f((r.coef ?? 0) * k), perTick: f(s[j], 1), damage: f(s[j] * k, 0) }));
     } else {
       const t = Math.round(tick + bonus + 1e-9);
       out.perTick = String(t);
@@ -73,6 +73,8 @@ export function cells(r: Rank, level: number, sp: number, agony = false): Cells 
 const sch = (s: RankedSpell) => (s.school === 'Fire' ? 'fire' : 'shadow');
 const tds = (c: Partial<Record<Key, string>>, mark?: (k: Key) => boolean) =>
   ORDER.map((k) => `<td class="${cls(k)}${mark?.(k) ? ' chg' : ''}">${esc(c[k] ?? '')}</td>`).join('');
+/** the spell column: the name, with what it is and the rank's spell ID under it ("Channel · 11678 → 1282385" when another spell deals the damage) */
+const name = (t: string, id?: string) => `<th scope="row">${t}${id ? `<span class="sid">${esc(id)}</span>` : ''}</th>`;
 
 /** the rank picker, like a gear lock: ‹ previous · shown · next ›, the neighbours faded. Drag across it either way to roll
  *  through the ranks, or click an arrow or a neighbour, or use the arrow keys. A rank not learned yet at this level is dimmed. */
@@ -98,14 +100,17 @@ export function detailBody(v: View) {
   let html = '', changed = 0, missing = 0;
   for (const s of ranked) {
     const shown = v.pins[s.key] ?? rankAt(s.forever, v.level);
-    const head = `<th scope="row">${esc(s.name)}</th><td class="muted">${esc(s.part)}</td><td class="rks">${chips(s, shown, v.level, v.pins[s.key] !== undefined)}</td>`;
+    // the level the shown rank is learned at, then its rank lock
+    const learned = shown < 0 ? s.forever[0].learn : s.forever[shown].learn;
+    const rest = `<td class="rks"><span class="lv">${learned}</span>${chips(s, shown, v.level, v.pins[s.key] !== undefined)}</td>`;
     if (shown < 0) {
-      html += `<tr class="${sch(s)} none">${head}<td class="muted g" colspan="${COLS - 3}">not learned yet (rank 1 at ${s.forever[0].learn})</td></tr>`;
+      const head = name(esc(s.name), s.part) + rest;
+      html += `<tr class="${sch(s)} none">${head}<td class="muted g" colspan="${COLS - 2}">not learned yet (rank 1 at ${s.forever[0].learn})</td></tr>`;
       continue;
     }
     const c = cells(s.forever[shown], v.level, v.sp, s.agony);
-    html += `<tr class="${sch(s)}">${head}${tds(c)}</tr>`;
-    for (const st of c.stages ?? []) html += `<tr class="${sch(s)} stage"><th scope="row">${st.name}</th><td class="muted">${st.part}</td><td></td>${tds(st)}</tr>`;
+    html += `<tr class="${sch(s)}">${name(esc(s.name), `${s.part} · ${c.id}`)}${rest}${tds(c)}</tr>`;
+    for (const st of c.stages ?? []) html += `<tr class="${sch(s)} stage">${name(st.name, `${st.part}`)}<td></td>${tds(st)}</tr>`;
     if (!v.classic) continue;
     const cr = s.classic, label = `Classic${cr && cr.name !== s.name ? ` · ${esc(cr.name)}` : ''}`;
     // the same rank when Classic has it (a picked Shadow Bolt 9), else Classic's own highest at this level
@@ -117,9 +122,9 @@ export function detailBody(v: View) {
       continue;
     }
     const k = cells(cr.ranks[j], v.level, v.sp, s.agony);
-    const differs = (key: Key) => key !== 'id' && key !== 'level' && k[key] !== c[key];
+    const differs = (key: Key) => k[key] !== c[key];
     if (ORDER.some(differs)) changed++;
-    html += `<tr class="${sch(s)} cmp"><th scope="row">↳ ${label}</th><td></td><td class="muted">rank ${j + 1}</td>${tds(k, differs)}</tr>`;
+    html += `<tr class="${sch(s)} cmp">${name(`↳ ${label}`, k.id)}<td class="rks muted"><span class="lv">${cr.ranks[j].learn}</span>rank ${j + 1}</td>${tds(k, differs)}</tr>`;
   }
   const note = !v.classic ? '' : [changed ? `${changed} spells differ in Classic (changes highlighted)` : 'no differences', missing ? `${missing} not in Classic` : '']
     .filter(Boolean).join(' · ');

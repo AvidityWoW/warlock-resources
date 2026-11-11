@@ -89,7 +89,7 @@ export const ranked: RankedSpell[] = [
       {"id":25311,"learn":60,"bl":60,"ml":65,"base":137.0,"coef":0.167,"ticks":6,"period":3000,"dur":18000,"cast":2000},
     ] },
   },
-  { key: "Death Coil", name: "Death Coil", school: 'Shadow', part: "Direct (leech)",
+  { key: "Death Coil", name: "Death Coil", school: 'Shadow', part: "Direct",
     forever: [
       {"id":6789,"learn":42,"bl":42,"ml":48,"base":272.0,"per":2.2,"coef":0.214,"ticks":0,"dur":3000,"cast":0},
       {"id":17925,"learn":50,"bl":50,"ml":56,"base":359.0,"per":2.6,"coef":0.214,"ticks":0,"dur":3000,"cast":0},
@@ -101,7 +101,7 @@ export const ranked: RankedSpell[] = [
       {"id":17926,"learn":58,"bl":58,"ml":64,"base":470.0,"per":3.0,"coef":0.214,"ticks":0,"dur":3000,"cast":0},
     ] },
   },
-  { key: "Drain Life", name: "Drain Life", school: 'Shadow', part: "Channel (leech)",
+  { key: "Drain Life", name: "Drain Life", school: 'Shadow', part: "Channel",
     forever: [
       {"id":689,"learn":14,"bl":14,"ml":19,"base":10.0,"coef":0.1,"ticks":5,"period":1000,"dur":5000,"cast":0},
       {"id":699,"learn":22,"bl":22,"ml":27,"base":14.0,"coef":0.1,"ticks":5,"period":1000,"dur":5000,"cast":0},
@@ -133,7 +133,7 @@ export const ranked: RankedSpell[] = [
       {"id":11675,"learn":52,"bl":52,"base":91.0,"coef":0.1,"ticks":5,"period":3000,"dur":15000,"cast":0},
     ] },
   },
-  { key: "Hellfire", name: "Hellfire", school: 'Fire', part: "Channel (self + aoe)",
+  { key: "Hellfire", name: "Hellfire", school: 'Fire', part: "Channel",
     forever: [
       {"id":1949,"dmgId":5857,"learn":30,"bl":30,"ml":40,"base":82.0,"per":0.4,"coef":0.022,"ticks":15,"period":1000,"dur":15000,"cast":0},
       {"id":11683,"dmgId":11681,"learn":42,"bl":42,"ml":52,"base":137.0,"per":0.5,"coef":0.022,"ticks":15,"period":1000,"dur":15000,"cast":0},
@@ -197,7 +197,7 @@ export const ranked: RankedSpell[] = [
     ],
     classic: null,
   },
-  { key: "Rain of Fire", name: "Rain of Fire", school: 'Fire', part: "Channel (aoe)",
+  { key: "Rain of Fire", name: "Rain of Fire", school: 'Fire', part: "Channel",
     forever: [
       {"id":5740,"dmgId":1282380,"learn":20,"bl":20,"ml":25,"base":40.0,"per":0.3,"coef":0.083,"ticks":4,"period":2000,"dur":8000,"cast":0},
       {"id":6219,"dmgId":1282383,"learn":34,"bl":34,"ml":39,"base":91.0,"per":0.4,"coef":0.083,"ticks":4,"period":2000,"dur":8000,"cast":0},
@@ -273,7 +273,7 @@ export const ranked: RankedSpell[] = [
       {"dice":[450,502],"id":18871,"learn":56,"bl":56,"ml":62,"base":476.0,"per":3.0,"var":0.109244,"coef":0.429,"ticks":0,"dur":5000,"cast":0},
     ] },
   },
-  { key: "Siphon Life", name: "Siphon Life", school: 'Shadow', part: "DoT (leech)",
+  { key: "Siphon Life", name: "Siphon Life", school: 'Shadow', part: "DoT",
     forever: [
       {"id":18265,"learn":30,"bl":30,"ml":38,"base":11.0,"coef":0.05,"ticks":10,"period":3000,"dur":30000,"cast":0},
       {"id":18879,"learn":38,"bl":38,"ml":48,"base":19.0,"coef":0.05,"ticks":10,"period":3000,"dur":30000,"cast":0},

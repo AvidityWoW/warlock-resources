@@ -67,5 +67,7 @@ const touchIcon = await getImage({ src: logo, width: 56, height: 56, format: 'pn
   <Header />
   <!-- only the page content slides; the header stays put (it persists between pages) -->
   <main class="container" transition:animate={slide({ duration: '0.28s' })}><slot /></main>
+  <!-- card titles stay in view while you scroll through their card, on every page -->
+  <script>import '../scripts/stick';</script>
 </body>
 </html>

@@ -135,7 +135,7 @@ main{padding-block:clamp(20px,4vw,40px) 48px}
 /* Shared parts. Pages use these rather than styling their own, so the same thing looks the same everywhere. */
 /* master card: a section that holds other cards (a macro group, the home page's groups). Heading band on top, then a
    solid body, a shade darker than the cards in it, so the backdrop never shows through and the cards stand out. */
-.master{margin-top:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);overflow:hidden}
+.master{margin-top:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);overflow:clip}
 .master>.card-h{background:var(--surface)}
 .master-b{padding:14px}
 /* pill buttons: Copy, Save image, topic and quick-target chips. aria-pressed marks a chosen chip, .done a finished action. */
@@ -166,7 +166,7 @@ main{padding-block:clamp(20px,4vw,40px) 48px}
 /* a card: a heading band on top (with any buttons on its right), then a table or a list. A table's card is as wide as
    the table (only the table scrolls sideways on a narrow screen; the heading stays put); .full stretches it to the page.
    .card-h can wrap the heading and its buttons, or be the heading itself. */
-.card{width:fit-content;max-width:100%;margin-top:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+.card{width:fit-content;max-width:100%;margin-top:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:clip}
 .card.full{width:auto}
 .card-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;min-height:52px;margin:0;padding:8px 10px 8px 16px;border-bottom:1px solid var(--line);font-size:1.3rem;font-weight:650}
 .card-h :is(h2,h3){margin:0 auto 0 0;font-size:inherit}
@@ -226,15 +226,17 @@ main{padding-block:clamp(20px,4vw,40px) 48px}
 .slider:focus-visible::-webkit-slider-thumb{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .slider:focus-visible::-moz-range-thumb{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 
-/* a dropdown list's scrollbar: thin, a soft accent thumb on no track (the open <select> list and the gear pages' menus) */
-:root{--dd-thumb:color-mix(in srgb,var(--accent) 40%,var(--line))}
-.dd .menu{scrollbar-width:thin;scrollbar-color:var(--dd-thumb) transparent}
+/* scrollbars: thin, a soft accent thumb on no track, wherever something scrolls inside the page (card tables, dropdown lists,
+   the gear pages' menus); the page's own scrollbar keeps its width but takes the same colours */
+:root{--scroll-thumb:color-mix(in srgb,var(--accent) 40%,var(--line))}
+html{scrollbar-color:var(--scroll-thumb) var(--bg)}
+.tscroll,.dd .menu{scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}
 
 /* dropdowns: every <select> looks like the gear pages' Source menu (.dd in gear.css): a bordered pill with the same chevron,
    and where the browser allows a styled list (Chromium's base-select), the open list matches its menu too. Pages only set
    the height and font size. */
 select{appearance:none;-webkit-appearance:none;height:38px;max-width:100%;padding:0 34px 0 14px;border:1px solid var(--line);border-radius:999px;
-  background-color:var(--surface);color:var(--text);font:inherit;font-weight:500;text-overflow:ellipsis;cursor:pointer;
+  background-color:var(--surface);color:var(--text);font:inherit;font-weight:500;white-space:nowrap;text-overflow:ellipsis;cursor:pointer;
   transition:border-color .15s,box-shadow .15s;
   /* the chevron, two halves of a square so it takes the theme colour */
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%,var(--muted) calc(50% + 1.5px),transparent calc(50% + 1.5px)),
@@ -248,15 +250,16 @@ optgroup{color:var(--muted);font-weight:600}
 option{color:var(--text);font-weight:400}
 @supports (appearance:base-select){
   select,::picker(select){appearance:base-select}
-  select{display:inline-flex;align-items:center;gap:8px;padding-right:12px;background-image:none}
+  select{display:inline-flex;align-items:center;gap:8px;min-width:0;padding-right:12px;background-image:none}
   select>button{display:contents}
   select::picker-icon{content:"";flex:none;width:7px;height:7px;margin:-3px 2px 0 auto;border:solid var(--muted);border-width:0 1.5px 1.5px 0;
     transform:rotate(45deg);transition:transform .15s}
   select:open::picker-icon{transform:translateY(3px) rotate(225deg)}
-  select selectedcontent{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* a select that carries <button><selectedcontent> shows its choice there, so a long one ends in … in a narrow box */
+  select selectedcontent{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   ::picker(select){min-width:anchor-size(width);max-height:min(60vh,420px);margin-top:6px;padding:6px;border:1px solid var(--line);
     border-radius:var(--radius);background:var(--surface);color:var(--text);box-shadow:0 8px 24px rgb(0 0 0 / .3);overflow-y:auto;
-    scrollbar-width:thin;scrollbar-color:var(--dd-thumb) transparent}
+    scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}
   option{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:6px;font-size:.95em;cursor:pointer;white-space:nowrap}
   option:hover,option:focus-visible{outline:none;background:var(--raised)}
   option:checked{color:var(--accent);font-weight:600}
@@ -266,3 +269,15 @@ option{color:var(--text);font-weight:400}
   optgroup+optgroup{margin-top:4px;border-top:1px solid var(--line)}
   optgroup legend{padding:6px 10px 2px;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 }
+
+/* frozen titles: a card's title band (and any controls marked data-stick) stays in view while you scroll through the card,
+   stacked under the site header, the page's own sticky bar and the titles of the cards around it (scripts/stick.ts sets
+   each one's top). Cards clip rather than hide their overflow, so they don't become scroll boxes that stop sticky. */
+.card>.card-h,.master>.card-h,[data-stick]{position:sticky;top:var(--header);z-index:4}
+.card>.card-h,[data-stick]{background:var(--surface)}
+/* a data table's heading row stays in view too, under its card's frozen title, until the table's last row. When the table
+   fits its card (.fits) the browser keeps it there; when it scrolls sideways, its box stops sticky from seeing the page,
+   so scripts/stick.ts moves the heading instead */
+.dtable thead{position:relative;z-index:3}
+.tscroll.fits{overflow:visible}
+.tscroll.fits>.dtable thead{position:sticky;top:var(--below,var(--header))}

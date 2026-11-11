@@ -223,4 +223,5 @@ document.addEventListener('astro:page-load', () => {
     pick(l.dataset.k!, to);
   }, on);
   if (v.level !== CAP || v.sp !== 0) render();
+
 });

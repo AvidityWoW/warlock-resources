@@ -27,6 +27,8 @@
 .cf thead tr.grp .cf-at{text-transform:none;letter-spacing:0;color:var(--muted);font-weight:500}
 .cf .g{border-left:2px solid var(--line)}
 .cf .rks{white-space:nowrap}
+/* Learned · Rank: the level the shown rank is learned at, right-aligned so the locks line up, then the lock */
+.cf .rks .lv{display:inline-block;min-width:2ch;margin-right:10px;text-align:right;font-variant-numeric:tabular-nums;vertical-align:middle}
 /* rank lock: [ ‹ | previous · shown · next | › ], the number boxes' look (.step in global.css), dragged sideways like a gear lock */
 .cf .lock{display:inline-flex;align-items:stretch;vertical-align:middle;height:28px;border:1px solid var(--line);border-radius:8px;
   background:var(--bg);overflow:hidden;cursor:ew-resize;touch-action:none;user-select:none;-webkit-user-select:none;
@@ -54,3 +56,14 @@
 .cf tr.cmp td{opacity:.75}
 .cf tr.cmp td.chg{opacity:1;color:var(--warn);font-weight:600}
 .cf tr.cmp .dm::before{content:none}
+
+/* Full detail: the Spell column stays put while the rest scrolls sideways (solid backgrounds so nothing shows through) */
+.cf.full tbody tr>:first-child,.cf.full thead tr>:first-child{position:sticky;left:0;z-index:1;box-shadow:inset -1px 0 var(--line)}
+.cf.full tbody tr:nth-child(odd)>:first-child{background:var(--row-odd)}
+.cf.full tbody tr:nth-child(even)>:first-child{background:var(--row-even)}
+.cf.full thead tr>:first-child{background:var(--surface)}
+.cf.full tbody tr>:first-child+*,.cf.full thead tr>:first-child+*{border-left:0}
+.cf.full thead tr.grp>:first-child{box-shadow:none}
+.cf th .sid{display:block;margin-top:1px;font-size:.75em;font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums}
+/* a little tighter than other tables, so the whole of it fits a wide screen */
+.cf.full :is(th,td){padding-left:11px;padding-right:11px}

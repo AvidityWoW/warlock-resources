@@ -12,13 +12,13 @@ const ex = (s: string) => highlight(s);
 
   <div class="b-top">
     <label class="b-field"><span>Start from</span>
-      <select id="b-preset">
+      <select id="b-preset"><button><selectedcontent></selectedcontent></button>
         <option value="">Blank</option>
         {PRESETS.map((p, i) => <option value={i}>{p.name}</option>)}
       </select>
     </label>
     <label class="b-field"><span>Command</span>
-      <select id="b-cmd"><option>/cast</option><option>/use</option></select>
+      <select id="b-cmd"><button><selectedcontent></selectedcontent></button><option>/cast</option><option>/use</option></select>
     </label>
     <label class="b-check"><input type="checkbox" id="b-tip" checked> <code>#showtooltip</code></label>
     <label class="b-check"><input type="checkbox" id="b-stop"> <code>/stopcasting</code> first</label>

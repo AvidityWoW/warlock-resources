@@ -38,6 +38,8 @@
 .key i{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid var(--line)}
 
 .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:20px 0 0}
+/* on a phone the three tiles sit in one row rather than breaking two and one */
+@media (max-width:480px){.sum{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.sum div{padding:8px}}
 .sum div{padding:8px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line)}
 .sum dt{color:var(--muted);font-size:.8em}
 .sum dd{margin:2px 0 0;font-size:1.15em;font-weight:650;font-variant-numeric:tabular-nums}

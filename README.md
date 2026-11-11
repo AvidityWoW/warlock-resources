@@ -25,6 +25,9 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   `.master` + `.master-b` (a section holding other cards, with a heading band), `.pill` (Copy, chips), `.labels` (a button's two labels, Copy/Copied), `.search`, `.badge`,
   `.link`, `.empty` (nothing matches), and `.card` + `.card-h` (a table or list in a card, with a heading band; `.dtable` for its table). Use these
   rather than restyling them; a page's own file (one per page beside it) only holds what is particular to that page.
+- Frozen card titles: a card's title band (and controls marked `data-stick`) stays in view while you scroll through
+  the card, stacked under the site header, a page's sticky bar and outer cards' titles; `src/scripts/stick.ts` works out
+  where each stops. Cards use `overflow: clip`, not `hidden`, so they don't stop `position: sticky`.
 - Coefficients page: `src/data/coefficients.ts` holds the numbers (copied from spelldb's `warlock-coefficients.html`),
   and `src/scripts/coefficients.ts` draws the summary as a PNG for Copy image / Save image. The full detail is built from
   every rank in `src/data/coefficient-ranks.ts` (generated from spelldb, Forever with hotfixes and Classic 1.15.9) by
