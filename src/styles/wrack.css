@@ -44,7 +44,8 @@
 .wr-table tr.own th{font-weight:500}
 .wr-table tr.tot th,.wr-table tr.tot td{border-top:1px solid var(--line);font-weight:650}
 .wr-patch td.chg{color:var(--accent);font-weight:600}
-.wr-patch td{white-space:normal;max-width:340px}
+.wr-patch{width:100%}
+.wr-patch td{white-space:normal}
 
 /* the mouseover label on a tick */
 .wr-chartbox{position:relative}
