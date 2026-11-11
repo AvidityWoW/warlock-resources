@@ -23,7 +23,11 @@ export const DEFAULT_STARTS = Array.from({ length: MAX_WRACKS }, (_, i) => DOT_K
 
 /** a channel, from and to (seconds); the page keeps them in order and apart */
 export type Win = readonly [number, number];
-export const windowsOf = (starts: number[], durs: number[]): Win[] => starts.map((a, i) => [a, a + (durs[i] ?? CHANNEL)] as const);
+/** the channels as they run: each for its length, unless the next Wrack is recast before it ends, which cuts it off there */
+export const windowsOf = (starts: number[], durs: number[]): Win[] =>
+  starts.map((a, i) => [a, Math.min(a + (durs[i] ?? CHANNEL), starts[i + 1] ?? Infinity)] as const);
+/** how long Wrack i actually channels, after any recast cuts it short */
+export const ranFor = (starts: number[], durs: number[], i: number) => { const [a, b] = windowsOf(starts, durs)[i]; return +(b - a).toFixed(2); };
 /** which channel a moment falls in (its place in the list), or -1 */
 const channelOf = (t: number, wins: Win[]) => wins.findIndex(([a, b]) => t >= a - 1e-9 && t < b - 1e-9);   // from its start, up to its end
 const inChannel = (t: number, wins: Win[]) => channelOf(t, wins) >= 0;
@@ -89,42 +93,38 @@ export function dotLine(key: string, level: number, sp: number, wins: Win[], on:
   };
 }
 
-/** Wrack's start and length move in quarter seconds */
-export const STEP = 0.25;
-const snap = (x: number) => Math.round(x / STEP) * STEP;
-/** move one Wrack's start, in 0.25 s steps, between the end of the one before and the start of the one after (it stops
- *  there rather than pushing them) */
+/** Wrack's start and length move in twentieths of a second */
+export const STEP = 0.05;
+const snap = (x: number) => Math.round(x / STEP) / (1 / STEP);
 /** the earliest the first Wrack can go: one GCD after the last DoT is cast */
 export const FIRST_START = DOT_KEYS.length * GCD;
-/** the earliest Wrack i can start: after the one before has ended, and one GCD after it was cast */
-export const earliest = (starts: number[], durs: number[], i: number) =>
-  i ? Math.max(starts[i - 1] + durs[i - 1], starts[i - 1] + GCD) : FIRST_START;
-/** the latest Wrack i can start: leaving room for it to channel before the next, and one GCD before the next is cast */
-export const latest = (starts: number[], durs: number[], i: number) =>
-  i < starts.length - 1 ? Math.min(starts[i + 1] - durs[i], starts[i + 1] - GCD) : LAST_START;
+/** the earliest Wrack i can be cast: one GCD after the one before. Recast during that one's channel, it cuts it off. */
+export const earliest = (starts: number[], _durs: number[], i: number) => +(i ? starts[i - 1] + GCD : FIRST_START).toFixed(2);
+/** the latest Wrack i can be cast: one GCD before the next (which cuts its channel off if it comes first) */
+export const latest = (starts: number[], _durs: number[], i: number) => +(i < starts.length - 1 ? starts[i + 1] - GCD : LAST_START).toFixed(2);
 
+/** move one Wrack's cast, in 0.05 s steps, at least a GCD after the one before and before the one after (it stops there
+ *  rather than pushing them). Its own length is kept: a channel the next Wrack cuts off grows back if it moves away. */
 export function settle(starts: number[], durs: number[], moved: number, to: number) {
   const out = [...starts];
   const lo = earliest(out, durs, moved), hi = latest(out, durs, moved);
   out[moved] = Math.min(hi, Math.max(lo, snap(to)));
   return out;
 }
-/** change one Wrack's duration, 0.5 to 6 s in 0.25 s steps, no longer than the gap before the next one */
+/** change one Wrack's duration, 0.5 to 6 s in 0.05 s steps, no longer than the gap before the next is cast */
 export function lengthen(starts: number[], durs: number[], i: number, to: number) {
   const out = [...durs], room = i < starts.length - 1 ? starts[i + 1] - starts[i] : CHANNEL;
-  out[i] = Math.min(CHANNEL, room, Math.max(MIN_DUR, snap(to)));
+  out[i] = +Math.min(CHANNEL, room, Math.max(MIN_DUR, snap(to))).toFixed(2);
   return out;
 }
 export const MIN_DUR = 0.5;
-/** drag a Wrack's left side: its start moves, its end stays put (so it channels longer or shorter), between the end of
- *  the one before and 0.5 s before its end, and no more than 6 s before it */
+/** drag a Wrack's left side: its cast moves, the end of its channel stays put (so it channels longer or shorter), from a
+ *  GCD after the one before (cutting that one off) to 0.5 s before its end, and no more than 6 s before it */
 export function resizeStart(starts: number[], durs: number[], i: number, to: number) {
-  const end = starts[i] + durs[i], lo = Math.max(earliest(starts, durs, i), end - CHANNEL);
-  // (and keeping one GCD before the next Wrack is cast)
-  const capEnd = i < starts.length - 1 ? starts[i + 1] - GCD : Infinity;
-  const start = Math.min(end - MIN_DUR, capEnd, Math.max(lo, snap(to)));
+  const end = windowsOf(starts, durs)[i][1], lo = Math.max(earliest(starts, durs, i), end - CHANNEL);
+  const start = Math.min(end - MIN_DUR, latest(starts, durs, i), Math.max(lo, snap(to)));
   const s2 = [...starts], d2 = [...durs];
-  s2[i] = start; d2[i] = end - start;
+  s2[i] = +start.toFixed(2); d2[i] = +(end - start).toFixed(2);
   return { starts: s2, durs: d2 };
 }
 
@@ -183,6 +183,8 @@ export function timeline(wins: Win[], dots: DotLine[], wrackTick: number) {
   starts.forEach((start, w) => {
     const n = Math.floor(wins[w][1] - start + 1e-9);   // a tick each full second of the channel
     g += `<rect class="wr-chan wr-w${w}" x="${f(x(start))}" y="${y(0) - 7}" width="${f(x(wins[w][1]) - x(start))}" height="14" rx="7"/>`;
+    // how long it channels, over its tick dots
+    g += `<text class="wr-dur wr-w${w}" x="${f((x(start) + x(wins[w][1])) / 2)}" y="${y(0) - 12}" text-anchor="middle">${+(wins[w][1] - start).toFixed(2)} s</text>`;
     for (let k = 1; k <= n; k++) {
       g += `<circle class="wr-tick wr-own wr-w${w}" cx="${f(x(start + k))}" cy="${y(0)}" r="4"/>` + label(x(start + k), y(0), k, -1);
       hit(x(start + k), y(0), `Wrack${many ? ` ${w + 1}` : ''} · tick ${k} of ${n} · ${secs(start + k)} · ${wrackTick} damage`);
@@ -257,10 +259,13 @@ export function wrackView(v: View) {
     + `<td class="num">${n0(wTotal + sum((d) => d.inNormal))} → <b>${n0(wTotal + sum((d) => d.inWrack))}</b></td><td class="num"></td>`
     + `<td class="num">${n0(wTotal + sum((d) => d.totalNormal))} → <b>${n0(wTotal + sum((d) => d.totalWrack))}</b></td>`
     + `<td class="num gain">+${n0(extraAll)}</td></tr>`;
-  const when = `Channelled ${nW > 1 ? `${nW} times, from ` : 'from '}${list(wins.map(([p, q]) => `${p} s${q - p < CHANNEL ? ` for ${q - p} s` : ''}`))}`;
-  const takeaway = extraTicks
-    ? `${when}, Wrack does its own ${n0(wTotal)} and gives your DoTs ${extraTicks} extra ticks, ${n0(extraAll)} more damage, `
-      + 'without making them any shorter.'
-    : `${when}, after your DoTs have run out, Wrack only does its own ${n0(wTotal)}.`;
+  // two lines, so the times changing as you drag (on the first) don't rewrap the result (on the second); every time to two
+  // decimals, so the line keeps its length
+  const t2 = (x: number) => `${x.toFixed(2)} s`;
+  const when = `Channelled ${nW > 1 ? `${nW} times: ` : ''}${list(wins.map(([p, q]) => `${t2(p)} to ${t2(q)}`))}.`;
+  const result = extraTicks
+    ? `Wrack does its own ${n0(wTotal)} and gives your DoTs ${extraTicks} extra ticks, ${n0(extraAll)} more damage, without making them any shorter.`
+    : `Your DoTs have run out by then, so Wrack only does its own ${n0(wTotal)}.`;
+  const takeaway = `<span class="wr-when">${when}</span><span>${result}</span>`;
   return { svg: timeline(wins, dots, w.perTick), rows: rows + wrackRow + totalRow, takeaway };
 }

@@ -19,6 +19,7 @@
 .wr-num{fill:var(--muted);font-size:9.5px;font-variant-numeric:tabular-nums}
 .wr-num.on{fill:var(--wc,var(--accent));font-weight:600}
 .wr-chan{fill:color-mix(in srgb,var(--wc) 30%,transparent);stroke:var(--wc);stroke-width:1}
+.wr-dur{fill:var(--wc);font-size:11px;font-weight:600;font-variant-numeric:tabular-nums}
 .wr-run{stroke:color-mix(in srgb,var(--shadow) 55%,transparent);stroke-width:3;stroke-linecap:round}
 .wr-endmark{stroke:var(--shadow);stroke-width:2;stroke-linecap:round}
 .wr-tick{fill:var(--surface);stroke:var(--shadow);stroke-width:2}
@@ -37,7 +38,8 @@
 .k-s0{border-radius:50%}
 .k-s1{border-radius:1px}
 .k-s2{width:9px;height:9px;transform:rotate(45deg);margin:0 1px}
-.wr-take{margin:12px 0 4px;font-weight:500}
+.wr-take{margin:12px 0 4px;font-weight:500;display:grid;gap:2px;font-variant-numeric:tabular-nums}
+.wr-when{color:var(--muted);font-weight:500}
 
 .wr-table td b{color:var(--accent)}
 .wr-table .gain{color:var(--good);font-weight:650}
@@ -55,7 +57,7 @@
 /* the start time's box fits a half second ("3.5s") */
 .slide .step-in:has(.step-unit) input{width:3.2ch}
 /* the drawing's lines, ticks and numbers let the pointer through to the draggable window behind (only the tick targets keep it) */
-.wr-run,.wr-sub,.wr-grid,.wr-tick,.wr-num,.wr-chan,.wr-endmark,.wr-name,.wr-axis,.wr-grip,.wr-order{pointer-events:none}
+.wr-run,.wr-sub,.wr-dur,.wr-grid,.wr-tick,.wr-num,.wr-chan,.wr-endmark,.wr-name,.wr-axis,.wr-grip,.wr-order{pointer-events:none}
 /* how many Wracks: a row of small pills */
 .wr-count{display:inline-flex;gap:4px}
 .wr-count .pill{width:34px;justify-content:center;padding:0}
@@ -70,6 +72,9 @@
 .ctl-row[hidden]{display:none}
 .wr-hint{flex:1 1 auto;width:auto}
 .wr-at{gap:10px 18px}
+/* times to a twentieth of a second ("12.35 s") need a wider box */
+.wr-at .step-in{width:5.2em}
+.wr-at .step-in:has(.step-unit) input{width:5ch}
 .wr-swatch{width:12px;height:12px;border-radius:3px;background:var(--wc);margin-right:-10px}
 .wr-lbl{min-width:4.6em;font-size:.9rem;color:var(--text)}
 /* a DoT's row label: grip, cast number and name; drag it to reorder */

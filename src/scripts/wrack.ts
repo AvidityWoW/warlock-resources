@@ -1,6 +1,6 @@
 // Wrack page: the number of Wracks and their start times (boxes, or drag their windows on the timeline), the level and
 // spell power redraw the timeline and the table.
-import { wrackView, settle, lengthen, resizeStart, earliest, latest, GCD, CAP, GEOM, CHANNEL, DEFAULT_STARTS, LAST_START, MIN_DUR, DOT_KEYS, type View } from '../lib/wrack';
+import { wrackView, ranFor, settle, lengthen, resizeStart, earliest, latest, GCD, CAP, GEOM, CHANNEL, DEFAULT_STARTS, LAST_START, MIN_DUR, DOT_KEYS, type View } from '../lib/wrack';
 
 document.addEventListener('astro:page-load', () => {
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
@@ -28,14 +28,14 @@ document.addEventListener('astro:page-load', () => {
     ats.forEach(({ el, n, d }, i) => {
       el.hidden = i >= v.starts.length;
       if (i >= v.starts.length) return;
-      // the start's range: after the Wrack before it ends, leaving room for this one before the next; the duration's: up
-      // to 6 s or the gap before the next
+      // the cast's range: a GCD after the Wrack before it (cutting that one off if it's still channeling) to a GCD before
+      // the next; the duration's: up to 6 s or the gap before the next is cast
       n.min = String(earliest(v.starts, v.durs, i));
       n.max = String(latest(v.starts, v.durs, i));
       n.value = String(v.starts[i]);
       d.min = String(MIN_DUR);
-      d.max = String(Math.min(CHANNEL, i < v.starts.length - 1 ? v.starts[i + 1] - v.starts[i] : CHANNEL));
-      d.value = String(v.durs[i]);
+      d.max = String(+Math.min(CHANNEL, i < v.starts.length - 1 ? v.starts[i + 1] - v.starts[i] : CHANNEL).toFixed(2));
+      d.value = String(ranFor(v.starts, v.durs, i));   // as it runs, after any recast cuts it short
     });
     for (const k of Object.keys(pairs) as K[]) {
       const p = pairs[k];
@@ -47,7 +47,7 @@ document.addEventListener('astro:page-load', () => {
     const focused = (document.activeElement as Element | null)?.closest?.('[data-row]')?.getAttribute('data-row');
     chart.innerHTML = d.svg;
     rows.innerHTML = d.rows;
-    take.textContent = d.takeaway;
+    take.innerHTML = d.takeaway;
     if (focused != null) chart.querySelector<SVGElement>(`[data-row="${moved ?? focused}"]`)?.focus();   // keep a moved row focused
     moved = null;
     // the number boxes' − and + grey out at their new ends
@@ -120,7 +120,7 @@ document.addEventListener('astro:page-load', () => {
   }, on);
 
   // drag a Wrack's window (its handle on top, or the shaded channel) along the timeline, or one of its sides in or out to
-  // change how long it channels; all in quarter seconds. what: 'move', or the side being dragged ('l' or 'r').
+  // change how long it channels; all in 0.05 s steps. what: 'move', or the side being dragged ('l' or 'r').
   let drag: { i: number; what: 'move' | 'l' | 'r'; x: number; from: number; scale: number } | null = null;
   chart.addEventListener('pointerdown', (e) => {
     const edge = (e.target as Element).closest('[data-edge]'), el = edge ?? (e.target as Element).closest('[data-drag]');
@@ -129,7 +129,7 @@ document.addEventListener('astro:page-load', () => {
     const i = +(edge ? edge.getAttribute('data-edge')! : el.getAttribute('data-drag')!);
     const what = edge ? (edge.getAttribute('data-side') as 'l' | 'r') : 'move';
     // seconds per screen pixel: the drawing's time span over the width it's drawn at
-    drag = { i, what, x: e.clientX, from: what === 'r' ? v.starts[i] + v.durs[i] : v.starts[i],
+    drag = { i, what, x: e.clientX, from: what === 'r' ? v.starts[i] + ranFor(v.starts, v.durs, i) : v.starts[i],
       scale: (GEOM.SPAN / (GEOM.W - GEOM.LABEL - GEOM.RIGHT)) * (GEOM.W / r.width) };
     chart.classList.add(what === 'move' ? 'dragging' : 'resizing');
     tip.hidden = true;
