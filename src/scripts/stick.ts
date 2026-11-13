@@ -4,16 +4,21 @@
 //   in, outermost first (the wand list's level band under its group), then pieces above it in its own card (Full
 //   detail's title, then its sliders). Small cards inside a card, like the macros, scroll normally.
 // Each card also gets --below, the line under its last frozen piece, where a data table's heading row sticks (below).
+// On a phone (global.css) nothing stays but the table headings, which stick to the top of the screen: the header and a
+// card's title and controls would take half of it.
 const PIECE = '.card>.card-h, .master>.card-h, [data-stick]';
 const CARD = '.card, .master';
 const BARS = '.site-header, .toolbar, .az';
 
 /** the frozen pieces that belong to a card itself, in order (not those of cards inside it) */
 const piecesOf = (card: Element) => [...card.querySelectorAll<HTMLElement>(PIECE)].filter((p) => p.parentElement!.closest(CARD) === card);
+const sticks = (el: Element) => getComputedStyle(el).position === 'sticky';
+/** the line under the page's sticky bars, where a table outside any card sticks */
+let base = 0;
 
 function stack() {
   // the page's sticky bars sit one under another from the top
-  let base = 0;
+  base = 0;
   for (const b of document.querySelectorAll<HTMLElement>(BARS)) {
     const cs = getComputedStyle(b);
     if (cs.position === 'sticky' && cs.display !== 'none') base = Math.max(base, (parseFloat(cs.top) || 0) + b.offsetHeight);
@@ -26,6 +31,7 @@ function stack() {
     let depth = 0;
     for (let a = card.parentElement?.closest(CARD); a; a = a.parentElement?.closest(CARD)) depth++;
     for (const p of piecesOf(card)) {
+      if (!sticks(p)) continue;   // not frozen: on a phone, or in a card that doesn't open with a table
       p.style.top = `${top}px`;
       p.style.zIndex = String(Math.max(1, 4 - depth));
       top += p.offsetHeight;
@@ -53,8 +59,8 @@ function follow() {
   for (const t of tables()) {
     const head = t.tHead!;
     if (t.parentElement!.classList.contains('fits')) { head.style.transform = ''; continue; }
-    const top = parseFloat(getComputedStyle(t.closest(CARD) ?? document.documentElement).getPropertyValue('--below'))
-      || document.querySelector('.site-header')?.getBoundingClientRect().bottom || 0;
+    const card = t.closest(CARD), below = card && getComputedStyle(card).getPropertyValue('--below').trim();
+    const top = below ? parseFloat(below) : base;
     const r = t.getBoundingClientRect(), rows = t.tBodies[0]?.rows, last = rows?.[rows.length - 1]?.offsetHeight ?? 0;
     const off = Math.round(Math.min(Math.max(0, top - r.top), r.height - head.offsetHeight - last));
     head.style.transform = off > 0 ? `translateY(${off}px)` : '';
@@ -73,3 +79,5 @@ document.addEventListener('astro:page-load', () => {
   stack();
   fit();
 });
+// crossing into or out of the phone layout (turning the phone) changes what sticks
+matchMedia('(max-width:640px),(max-height:500px)').addEventListener('change', () => { stack(); fit(); });

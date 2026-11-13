@@ -1,0 +1,112 @@
+---
+// The Wrack page, drawn by src/pages/wrack.astro and, with the 10 ms batch option, by src/pages/wrack/batched.astro.
+import Layout from '../layouts/Layout.astro';
+import Stepper from './Stepper.astro';
+import { wrackView, CHANNEL, CAP, DEFAULT_STARTS, LAST_START, DOT_KEYS, MIN_DUR, FIRST_START, STEP, MAX_HASTE } from '../lib/wrack';
+import '../styles/wrack.css';
+
+interface Props {
+  /** show the 10 ms batch switches (only at /wrack/batched/, which is unlisted and noindex) */
+  batched?: boolean;
+}
+const { batched = false } = Astro.props;
+const SP_MAX = 1000;
+const view = wrackView({ starts: DEFAULT_STARTS.slice(0, 1), durs: [CHANNEL], level: CAP, sp: 0, haste: 0, order: [...DOT_KEYS] });
+// the 70888 hotfix (server push 113766, 2026-11-10): every number cut to 70%
+const BEFORE = '1.60.1.70862', AFTER = '1.60.1.70888 hotfix (push 113766, 2026-11-10)';
+const patch = [
+  ['Base per tick', '36', '25.2'],
+  ['Per level', '+2.5', '+1.75'],
+  ['Per tick at 60', '86', '60'],
+  ['Total at 60 (6 ticks)', '516', '360'],
+  ['Coefficient per tick', '0.286', '0.2002'],
+  ['Total coefficient', '1.716', '1.201'],
+  ['While channeling', 'the target takes 10% more damage from your other Shadow DoTs', 'Siphon Life, Corruption and Bane of Agony tick 100% faster'],
+  ['Cast, ticks, learned', 'instant channel, 6 ticks over 6 s, level 40', 'unchanged'],
+];
+---
+<Layout title="Wrack" hidden={batched} description="How Wrack works in WoW Forever: a 6-second channel that makes your Corruption, Siphon Life and Bane of Agony tick twice as fast, on a timeline.">
+  <div class="page-head">
+    <h1>Wrack</h1>
+    <p>Forever's new Affliction channel, learned at 40: six seconds of Shadow ticks, and while it channels your Corruption, Siphon Life and Bane of Agony on the target tick twice as fast. They still last as long as ever, so those faster ticks are extra ones: more damage from DoTs you already have up.</p>
+  </div>
+
+  <section class="card full" id="wr">
+    <div class="card-h"><h2>On a timeline</h2></div>
+    <div class="ctlbar wr-ctl" data-stick>
+      <div class="wr-panels">
+        <div class="wr-panel">
+          <div class="wr-stats">
+            <div class="wr-ph">You</div>
+            {[
+              { id: 'wr-level', name: 'Level', min: 1, max: CAP, slide: CAP, value: CAP },
+              { id: 'wr-sp', name: 'Spell power', min: 0, max: 9999, slide: SP_MAX, value: 0 },
+              { id: 'wr-haste', name: 'Haste', min: 0, max: MAX_HASTE, slide: MAX_HASTE, value: 0, unit: '%' },
+            ].map((x) => (
+              <div class="wr-stat">
+                <label for={x.id}>{x.name}</label>
+                <input type="range" class="slider" id={x.id} min={x.min} max={x.slide} value={x.value} style={`--p:${((x.value - x.min) / (x.slide - x.min)) * 100}%`}>
+                <Stepper id={`${x.id}-n`} label={x.name.toLowerCase()} min={x.min} max={x.max} value={x.value} unit={x.unit} />
+              </div>
+            ))}
+            {batched && <div class="wr-stat">
+              <span class="wr-stat-name" id="wr-batch-l">10 ms batch</span>
+              <span class="wr-batch" role="group" aria-labelledby="wr-batch-l">
+                {[['start', 'Start', "A channel's first 10 ms"], ['end', 'End', "A channel's last 10 ms"], ['between', 'Between', 'The 10 ms around a back-to-back recast']].map(([k, name, tip]) => (
+                  <button type="button" class="wr-bt" id={`wr-batch-${k}`} aria-pressed="false" title={tip}>{name}</button>
+                ))}
+              </span>
+            </div>}
+          </div>
+        </div>
+        <div class="wr-panel">
+          <div class="wr-casts">
+            <div class="wr-ph">Wracks</div><span class="wr-ph wr-col" aria-hidden="true">Starts at</span><span class="wr-ph wr-col" aria-hidden="true">Channels for</span>
+            {DEFAULT_STARTS.map((t, i) => (
+              <div class:list={['wr-at', `wr-w${i}`, { off: i > 0 }]} data-i={i}>
+                <button type="button" class="wr-pick" data-count={i + 1} aria-pressed={i === 0 ? 'true' : 'false'} aria-label={`Wrack ${i + 1}`} title={i ? `Turn Wrack ${i + 1} on or off` : 'Wrack 1 is always on'}>{i + 1}</button>
+                <Stepper id={`wr-at-${i}`} aria-label={`Wrack ${i + 1} starts at`} label={`Wrack ${i + 1}'s start`} min={FIRST_START} max={LAST_START} step={STEP} value={t} unit="s" />
+                <Stepper id={`wr-for-${i}`} aria-label={`Wrack ${i + 1} channels for`} label={`Wrack ${i + 1}'s duration`} min={MIN_DUR} max={CHANNEL} step={STEP} value={CHANNEL} unit="s" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p class="ctlbar-note muted wr-hint">Drag a DoT's name on the timeline to change the cast order (top first), a Wrack's <span class="wr-mouse">window</span><span class="wr-touch">handle</span> to move it, and its sides to change how long it channels.<span class="wr-touch"> Swipe across the chart to scroll it, and tap a tick for its numbers.</span></p>
+    </div>
+    <div class="wr-body">
+      <div class="wr-chartbox"><div class="wr-chart" id="wr-chart" set:html={view.svg}></div><div class="wr-tip" id="wr-tip" role="tooltip" hidden></div></div>
+      <ul class="wr-legend muted" aria-hidden="true">
+        <li><span class="k k-chan"></span>Channel</li>
+        <li><span class="k k-tick"></span>Tick</li>
+        <li><span class="k k-fast"></span>Extra tick</li>
+        <li><span class="k k-sub"></span>Halfway point, no channel</li>
+        {batched && <li class="wr-lg-miss" hidden><span class="k k-miss"></span>Missed tick (batch)</li>}
+        <li>Agony <span class="k k-s0"></span>×0.5 <span class="k k-s1"></span>×1 <span class="k k-s2"></span>×1.5</li>
+      </ul>
+      <div class="wr-take" id="wr-take" aria-live="polite" set:html={view.takeaway} />
+      <p class="wr-cap">Each DoT, without Wrack → <b>with it</b></p>
+      <div class="tscroll wr-take wr-take2">
+        <table class="dtable wr-table wr-boxed">
+          <thead>
+            <tr><th rowspan="2">Spell</th><th colspan="2" class="wr-grp">In the channels</th><th colspan="2" class="wr-grp">In all</th><th rowspan="2" class="num">Extra</th></tr>
+            <tr><th class="num">Ticks</th><th class="num">Damage</th><th class="num">Ticks</th><th class="num">Damage</th></tr>
+          </thead>
+          <tbody id="wr-rows" set:html={view.rows}></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="card full">
+    <div class="card-h"><h2>The 70888 hotfix</h2></div>
+    <div class="tscroll">
+      <table class="dtable wr-patch">
+        <thead><tr><th></th><th>Before: {BEFORE}</th><th>After: {AFTER}</th></tr></thead>
+        <tbody>{patch.map(([what, a, b]) => <tr><th scope="row">{what}</th><td>{a}</td><td class:list={{ chg: a !== b && b !== 'unchanged' }}>{b}</td></tr>)}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>import '../scripts/wrack';</script>
+</Layout>

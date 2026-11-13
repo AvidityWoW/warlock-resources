@@ -122,6 +122,36 @@ html::before{content:"";position:fixed;left:0;bottom:0;z-index:-1;pointer-events
 @media (max-width:480px){.nav a{padding:0 11px}}
 @media (max-width:400px){.nav a{padding:0 8px;font-size:.92em}}
 @media (max-width:480px){.brand .name,.brand-smoke{display:none}.site-header .brand{margin-left:-8px;padding-left:8px;padding-right:8px}}
+/* phones: the tabs give way to the page's name and a menu button; the menu drops down under the header with every page,
+   in its group, with its blurb */
+.site-header .here,.menu-btn{display:none}
+.menu-btn .x{display:none}
+.menu-btn[aria-expanded="true"] .bars{display:none}
+.menu-btn[aria-expanded="true"] .x{display:block}
+.mnav[hidden]{display:none}
+@media (max-width:640px){
+  .site-header .container{align-items:center;gap:12px}
+  .nav,.game,.brand .name,.brand-smoke{display:none}
+  .site-header .brand{margin-left:-8px;padding:0 8px;align-self:stretch}
+  .site-header .brand[aria-current="page"]{border-color:transparent;background:none}   /* no tab to join on a phone */
+  /* the page's name, in the site's title face like the page heading */
+  .site-header .here{display:block;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-family:var(--title-font);font-weight:700;font-size:1.1rem;letter-spacing:.02em;padding-top:.08em}
+  .site-header .icon-btn{align-self:center;margin:0}
+  .menu-btn{display:grid}
+  .menu-btn[aria-expanded="true"]{color:var(--text);border-color:var(--accent);background:var(--accent-soft)}
+  .mnav{position:absolute;top:100%;left:0;right:0;z-index:20;max-height:calc(100dvh - var(--header));overflow-y:auto;
+    padding:6px 0 14px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgb(0 0 0 / .35)}
+  .site-header .mnav>.container{display:block;height:auto}   /* not the header's row of brand, tabs and buttons */
+  .mnav-g{display:grid;gap:2px;padding-top:10px}
+  .mnav-h{padding:0 10px 4px;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .mnav a{display:grid;gap:2px;padding:9px 10px;border-left:3px solid transparent;border-radius:6px;text-decoration:none;color:var(--text)}
+  .mnav a:hover,.mnav a:focus-visible{background:var(--raised);outline:none}
+  .mnav a[aria-current="page"]{border-left-color:var(--accent);background:var(--accent-soft)}
+  .mnav-t{font-weight:600}
+  .mnav-b{color:var(--muted);font-size:.85em}
+}
+
 
 /* Page */
 main{padding-block:clamp(20px,4vw,40px) 48px}
@@ -197,7 +227,9 @@ main{padding-block:clamp(20px,4vw,40px) 48px}
 .step input:focus{outline:none}
 .step input::-webkit-inner-spin-button,.step input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 /* with a unit, the number sits right against it: "16%" */
-.step-in:has(.step-unit) input{flex:none;width:2.2ch;text-align:right}
+.step-in:has(.step-unit) input{flex:none;width:2.2ch;height:auto;text-align:right}
+/* the number and its unit sit on one baseline, the pair centred in the box */
+.step-in:has(.step-unit){flex-wrap:wrap;align-items:baseline;align-content:center}
 .step-unit{color:var(--muted);font-weight:600}
 /* sizes: sm in tight spots (macro cards, 30px like their dropdowns), lg beside a toolbar's 38px pills; wide fills its cell */
 .step-sm{height:30px;font-size:.9em}
@@ -281,6 +313,9 @@ option{color:var(--text);font-weight:400}
    stacked under the site header, the page's own sticky bar and the titles of the cards around it (scripts/stick.ts sets
    each one's top). Cards clip rather than hide their overflow, so they don't become scroll boxes that stop sticky. */
 .card>.card-h,.master>.card-h,[data-stick]{position:sticky;top:var(--header);z-index:4}
+/* ...but only in a card that opens with a data table (its title, maybe its controls, then the table), where the title and
+   the table's heading row stay together. Any other card's title scrolls away with it. */
+:is(.card,.master):not(:has(>.card-h+.tscroll>.dtable,>.card-h+[data-stick]+.tscroll>.dtable))>:is(.card-h,[data-stick]){position:static}
 .card>.card-h,[data-stick]{background:var(--surface)}
 /* a data table's heading row stays in view too, under its card's frozen title, until the table's last row. When the table
    fits its card (.fits) the browser keeps it there; when it scrolls sideways, its box stops sticky from seeing the page,
@@ -288,3 +323,11 @@ option{color:var(--text);font-weight:400}
 .dtable thead{position:relative;z-index:3}
 .tscroll.fits{overflow:visible}
 .tscroll.fits>.dtable thead{position:sticky;top:var(--below,var(--header))}
+/* phones (narrow, or turned on their side): nothing stays in view but a table's heading row, at the top of the screen. The
+   header, a card's title and its controls would take half the screen and leave little to scroll through. (The breakpoint
+   is also in scripts/stick.ts.) */
+@media (max-width:640px),(max-height:500px){
+  :root :is(.toolbar,.az,.card>.card-h,.master>.card-h,[data-stick]){position:static}   /* over the pages' own sticky bars */
+  :root .site-header{position:relative}   /* scrolls away, but holds the phone menu under it */
+  .tscroll.fits>.dtable thead{top:var(--below,0px)}
+}

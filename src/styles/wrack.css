@@ -1,12 +1,13 @@
 /* Wrack page: the timeline (an SVG drawn by lib/wrack.ts, coloured here so it follows the theme), its legend and the table */
-.wr-body{padding:16px 16px 8px}
+.wr-body{padding:16px}
 .wr-chart{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}   /* on a phone the timeline scrolls sideways */
 .wr-svg{display:block;width:100%;min-width:560px;height:auto;font-family:inherit}
-/* each Wrack's shade (--wc): the site's purple, then a pinker and a bluer one; its window, handle, bar and the ticks it speeds up */
+/* each Wrack's shade (--wc): the site's purple, then a pinker, a bluer and a greener one; its window, handle, bar and the ticks it speeds up */
 .wr-w0{--wc:var(--accent)}
 .wr-w1{--wc:color-mix(in srgb,var(--accent) 50%,var(--arcane))}
 .wr-w2{--wc:color-mix(in srgb,var(--accent) 50%,var(--frost))}
-.wr-window{fill:color-mix(in srgb,var(--wc) 14%,transparent);cursor:grab;touch-action:none}
+.wr-w3{--wc:color-mix(in srgb,var(--accent) 25%,var(--nature))}
+.wr-window{fill:color-mix(in srgb,var(--wc) 14%,transparent);cursor:grab}   /* a finger swiping across it scrolls the chart */
 .wr-handle{cursor:grab;touch-action:none}
 .wr-handle rect{fill:var(--raised);stroke:color-mix(in srgb,var(--wc) 50%,var(--line));stroke-width:1}
 .wr-handle line{stroke:var(--wc);stroke-width:1.6;stroke-linecap:round}
@@ -38,13 +39,34 @@
 .k-s0{border-radius:50%}
 .k-s1{border-radius:1px}
 .k-s2{width:9px;height:9px;transform:rotate(45deg);margin:0 1px}
-.wr-take{margin:12px 0 4px;font-weight:500;display:grid;gap:2px;font-variant-numeric:tabular-nums}
-.wr-when{color:var(--muted);font-weight:500}
-
-.wr-table td b{color:var(--accent)}
-.wr-table .gain{color:var(--good);font-weight:650}
+/* what each Wrack adds: a small table under the legend */
+.wr-take{margin:14px 0 4px;overflow-x:auto;scrollbar-width:thin}
+/* the two tables under the timeline, boxed alike: what each Wrack adds, then each DoT */
+.wr-boxed{width:auto;min-width:min(100%,640px);border:1px solid var(--line);border-radius:8px;border-collapse:separate;border-spacing:0}
+/* rounded by its corner cells, not by clipping: overflow on the table would make it a scroll box, and its heading row
+   would stick inside it rather than to the page */
+.wr-boxed thead tr:first-child>:first-child{border-top-left-radius:7px}
+.wr-boxed thead tr:first-child>:last-child{border-top-right-radius:7px}
+.wr-boxed tbody tr:last-child>:first-child{border-bottom-left-radius:7px}
+.wr-boxed tbody tr:last-child>:last-child{border-bottom-right-radius:7px}
+.wr-boxed th,.wr-boxed td{padding:7px 12px}
+.wr-boxed .gain{color:var(--good);font-weight:650}
+.wr-boxed tr.tot :is(th,td){border-top:1px solid var(--line);font-weight:650}
+.wr-boxed td b{color:var(--accent)}
+.wr-cap{margin:18px 0 6px;color:var(--muted);font-size:.8em}
+.wr-cap b{color:var(--accent)}
+.wr-take2{margin-top:0}
+.wr-sum .wr-when{display:none}   /* a channel's times under its number, on a phone only */
+/* the DoT table's two heading rows: In the channels / In all over their Ticks and Damage */
+.wr-table thead tr:first-child th{vertical-align:bottom}
+.wr-table thead tr+tr th{border-top:1px solid var(--line)}
+.wr-table .wr-grp{text-align:center}
+.wr-table tbody th{white-space:nowrap}
 .wr-table tr.own th{font-weight:500}
-.wr-table tr.tot th,.wr-table tr.tot td{border-top:1px solid var(--line);font-weight:650}
+.wr-rk{display:block;color:var(--muted);font-size:.78em;font-weight:500}
+.wr-dot{display:inline-block;width:10px;height:10px;margin-right:8px;border-radius:3px;background:var(--wc);vertical-align:-1px}
+.wr-none{margin:6px 0 0;font-size:.85em}
+
 .wr-patch td.chg{color:var(--accent);font-weight:600}
 .wr-patch{width:100%}
 .wr-patch td{white-space:normal}
@@ -52,31 +74,17 @@
 /* the mouseover label on a tick */
 .wr-chartbox{position:relative}
 .wr-tip{position:absolute;z-index:2;transform:translate(-50%,calc(-100% - 8px));padding:5px 9px;border:1px solid var(--line);border-radius:6px;
-  background:var(--raised);color:var(--text);font-size:.8em;font-weight:500;white-space:nowrap;pointer-events:none;box-shadow:0 4px 12px rgb(0 0 0 / .3)}
+  background:var(--raised);color:var(--text);font-size:.8em;font-weight:500;pointer-events:none;box-shadow:0 4px 12px rgb(0 0 0 / .3);
+  /* as wide as its text, up to the chart's width (less a margin), then it wraps */
+  width:max-content;max-width:min(400px,calc(100% - 8px));line-height:1.35;white-space:pre-line}   /* a line break in a label starts a new line */
 .wr-tip[hidden]{display:none}
-/* the start time's box fits a half second ("3.5s") */
-.slide .step-in:has(.step-unit) input{width:3.2ch}
 /* the drawing's lines, ticks and numbers let the pointer through to the draggable window behind (only the tick targets keep it) */
 .wr-run,.wr-sub,.wr-dur,.wr-grid,.wr-tick,.wr-num,.wr-chan,.wr-endmark,.wr-name,.wr-axis,.wr-grip,.wr-order{pointer-events:none}
 /* how many Wracks: a row of small pills */
-.wr-count{display:inline-flex;gap:4px}
-.wr-count .pill{width:34px;justify-content:center;padding:0}
-.wr-at[hidden]{display:none}
 /* a DoT going on, and a Wrack's number on its handle when there are several */
 .wr-cast{fill:var(--shadow)}
 .wr-handle text{fill:var(--wc);font-size:11px;font-weight:700;pointer-events:none}
 
-/* the controls, a line each: level and spell power; the number of Wracks; then each Wrack's start and duration */
-.wr-ctl{flex-direction:column;align-items:stretch;gap:10px}
-.ctl-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px}
-.ctl-row[hidden]{display:none}
-.wr-hint{flex:1 1 auto;width:auto}
-.wr-at{gap:10px 18px}
-/* times to a twentieth of a second ("12.35 s") need a wider box */
-.wr-at .step-in{width:5.2em}
-.wr-at .step-in:has(.step-unit) input{width:5ch}
-.wr-swatch{width:12px;height:12px;border-radius:3px;background:var(--wc);margin-right:-10px}
-.wr-lbl{min-width:4.6em;font-size:.9rem;color:var(--text)}
 /* a DoT's row label: grip, cast number and name; drag it to reorder */
 .wr-row{cursor:grab;outline:none}
 .wr-rowhit{fill:transparent;stroke:transparent}
@@ -95,3 +103,102 @@
 .wr-edge:hover,.resizing .wr-edge{fill:color-mix(in srgb,var(--wc) 35%,transparent)}
 .wr-chart.resizing,.wr-chart.resizing *{cursor:ew-resize!important}
 .wr-chart.resizing{user-select:none}
+
+/* ---------- touch screens and phones ---------- */
+.wr-row{touch-action:none}
+.wr-touch{display:none}
+@media (pointer:coarse){
+  .wr-touch{display:inline}
+  .wr-mouse{display:none}
+  /* fingers: a Wrack's sides and the ticks take a wider press than they draw */
+  .wr-edge{stroke:transparent;stroke-width:18px}
+  .wr-hit{r:14px}
+  /* the sliders' thumbs, big enough to hold */
+  .slider{height:36px}
+  .slider::-webkit-slider-thumb{width:26px;height:32px;margin-top:-11px}
+  .slider::-moz-range-thumb{width:24px;height:30px}
+}
+@media (max-width:640px){
+  .wr-body{padding:12px 10px}
+  .wr-legend{gap:6px 14px}
+  .wr-take{font-size:.9em}
+  .wr-boxed{min-width:100%}
+  .wr-boxed th,.wr-boxed td{padding:6px 7px}
+  .wr-boxed thead th{white-space:normal}
+  /* the summary: each channel's times go under its number, so its own column goes */
+  .wr-sum :is(th,td):nth-child(2){display:none}
+  .wr-sum .wr-when{display:block;white-space:nowrap}
+  /* the DoT table: without Wrack small over with it, so each column is one number wide */
+  .wr-was{display:block;color:var(--muted);font-size:.8em}
+  /* the tables: names and headings wrap, so the numbers come into view */
+  .wr-patch th{white-space:normal}
+  .wr-table tbody th{white-space:normal}
+  .wr-table{font-size:.85em}
+  .wr-table :is(th,td){padding:6px 5px}
+  .wr-table :is(th,td):first-child{padding-left:8px}
+  .wr-patch td,.wr-patch th{padding:7px 9px}
+}
+.wr-handle rect.wr-grab{fill:transparent;stroke:none}   /* the handle's press area, a size bigger than it */
+
+/* ---------- the controls: two panels, You (level, spell power, haste) and Wracks (how many, and each one's start and
+   duration), each a grid so the labels, sliders and boxes line up; side by side when there's room, stacked when not ---------- */
+.wr-ctl{display:grid;gap:14px;padding:16px}
+.wr-panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:14px}
+.wr-panel{display:grid;align-content:start;min-width:0;padding:12px 14px 14px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+/* a panel's heading: small caps, with the Wracks' count beside it */
+.wr-ph{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+/* You: name | slider | box, one line each, the columns shared */
+/* both panels share one rhythm, so their lines sit level side by side: a 26px heading line, then 36px lines 10px apart */
+:is(.wr-stats,.wr-casts){grid-template-rows:26px;grid-auto-rows:36px}
+.wr-stats{display:grid;grid-template-columns:max-content minmax(0,1fr) max-content;align-items:center;gap:10px 14px}
+.wr-stats>.wr-ph{grid-column:1/-1}
+.wr-stat{display:contents}
+.wr-stat label{font-size:.9rem;color:var(--text)}
+.wr-stat .slider{width:100%;min-width:0}
+.wr-stat .step-in{width:4.4em}
+/* Wracks: name | start | duration, with the column names once over them */
+.wr-casts{display:grid;grid-template-columns:max-content max-content max-content;justify-content:start;align-items:center;gap:10px 14px}
+/* the heading runs on over the buttons' narrow column; the column names sit centred over their boxes */
+.wr-casts>.wr-ph:first-child{white-space:nowrap;overflow:visible;width:0}
+.wr-casts>.wr-col{justify-content:center;text-transform:none;letter-spacing:0;font-size:.78rem;font-weight:600}   /* plain, so they don't read on from the heading */
+.wr-at{display:contents}
+
+/* each Wrack's button: its number in a box of its shade, filled while it's on; the line beside it dims while it's off */
+.wr-pick{display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid color-mix(in srgb,var(--wc) 55%,var(--line));
+  border-radius:8px;background:transparent;color:var(--wc);font:inherit;font-size:.95rem;font-weight:700;cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s,box-shadow .15s}
+.wr-pick:hover{border-color:var(--wc);background:color-mix(in srgb,var(--wc) 14%,transparent)}
+.wr-pick[aria-pressed="true"]{border-color:var(--wc);background:var(--wc);color:var(--bg);box-shadow:0 0 10px color-mix(in srgb,var(--wc) 45%,transparent)}
+.wr-pick[data-count="1"]{cursor:default}
+.wr-pick:focus-visible{outline:2px solid var(--wc);outline-offset:2px}
+.wr-at .step{transition:opacity .15s}
+.wr-at.off .step{opacity:.35;pointer-events:none}
+/* times to a hundredth of a second ("12.35 s") */
+.wr-casts .step-in{width:5.6em}
+.wr-casts .step-in:has(.step-unit) input{width:5ch}
+.wr-hint{margin:0}
+@media (max-width:640px){
+  .wr-ctl{padding:12px 10px;gap:12px}
+  .wr-panel{padding:10px 10px 12px}
+  .wr-stats{gap:10px}
+  .wr-stat .step-in{width:3.6em}
+  /* the two time boxes share what's left after the name */
+  .wr-casts{grid-template-columns:max-content minmax(0,1fr) minmax(0,1fr);gap:10px 8px}
+  .wr-casts .step{display:flex;width:100%}
+  .wr-casts .step button{width:28px}
+  .wr-casts .step-in{flex:1;width:auto;min-width:0}
+  .wr-casts .step-in:has(.step-unit) input{width:4.6ch}
+}
+
+/* the 10 ms batch: its name, then Start, End and Between, square pills like the Wracks' buttons, filled while on */
+.wr-stat-name{font-size:.9rem;color:var(--text)}
+.wr-batch{grid-column:2/-1;display:flex;align-items:center;gap:6px}
+.wr-bt{height:34px;padding:0 12px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:8px;background:transparent;
+  color:var(--accent);font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .15s,color .15s,border-color .15s,box-shadow .15s}
+.wr-bt:hover{border-color:var(--accent);background:var(--accent-soft)}
+.wr-bt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--bg);box-shadow:0 0 10px color-mix(in srgb,var(--accent) 45%,transparent)}
+.wr-bt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* a DoT tick the 10 ms batch missed: a dotted hollow circle in the shade of the Wrack it fell in */
+.wr-miss{fill:var(--surface);stroke:var(--wc);stroke-width:1.8;stroke-dasharray:2.2 2.2;pointer-events:none}   /* hollow like a tick, so the line stops at it */
+.k-miss{width:11px;height:11px;border-radius:50%;border:2px dotted var(--accent)}
+.wr-legend li[hidden]{display:none}

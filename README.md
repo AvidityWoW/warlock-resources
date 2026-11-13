@@ -25,12 +25,16 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   `.master` + `.master-b` (a section holding other cards, with a heading band), `.pill` (Copy, chips), `.labels` (a button's two labels, Copy/Copied), `.search`, `.badge`,
   `.link`, `.empty` (nothing matches), and `.card` + `.card-h` (a table or list in a card, with a heading band; `.dtable` for its table). Use these
   rather than restyling them; a page's own file (one per page beside it) only holds what is particular to that page.
-- Frozen card titles: a card's title band (and controls marked `data-stick`) stays in view while you scroll through
-  the card, stacked under the site header, a page's sticky bar and outer cards' titles; `src/scripts/stick.ts` works out
-  where each stops. Cards use `overflow: clip`, not `hidden`, so they don't stop `position: sticky`.
+- Frozen card titles: in a card that opens with a data table, its title band (and controls marked `data-stick`) stays in
+  view with the table's heading row while you scroll through the card, stacked under the site header, a page's sticky bar and outer cards' titles; `src/scripts/stick.ts` works out
+  where each stops. Cards use `overflow: clip`, not `hidden`, so they don't stop `position: sticky`. On phones
+  (under 640 px wide or 500 px tall) only table headings stick, at the top of the screen.
 - Wrack page: `src/lib/wrack.ts` works out where each DoT tick lands while Wrack channels (ticks twice as often for
-  6 s, duration unchanged), draws the timeline SVG and the table, and `src/scripts/wrack.ts` redraws them from the start, level and spell
-  power controls. Damage comes from the Coefficients rank data.
+  6 s, duration unchanged), draws the timeline SVG and the table, and `src/scripts/wrack.ts` redraws them from the start, level, spell
+  power and haste controls. Haste (0-15%) only shortens the GCD (1.5 s / (1 + haste)); channels and DoTs
+  don't change. `src/components/WrackPage.astro` is the page; `/wrack/batched/`
+  adds 10 ms batch switches: Start, End and Between (a DoT tick in a channel's first or last 10 ms,
+  or within 5 ms of a back-to-back recast, isn't sped up); it's left out of the nav and marked noindex. Damage comes from the Coefficients rank data.
 - Coefficients page: `src/data/coefficients.ts` holds the numbers (copied from spelldb's `warlock-coefficients.html`),
   and `src/scripts/coefficients.ts` draws the summary as a PNG for Copy image / Save image. The full detail is built from
   every rank in `src/data/coefficient-ranks.ts` (generated from spelldb, Forever with hotfixes and Classic 1.15.9) by
