@@ -8,7 +8,7 @@ export const SP_MAX = 1000;
 export { CLASSIC_BUILD };
 
 const f = (x: number, d = 3) => String(+x.toFixed(d));
-const secs = (ms?: number) => (ms ? `${f(ms / 1000, 2)} s` : '');
+const secs = (ms?: number) => (ms ? `${f(ms / 1000, 3)} s` : '');
 const esc = (t: string) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
 /** the rank shown at a level: the highest one learned by then (ranks are in learn order, so a tie goes to the later rank) */

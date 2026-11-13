@@ -8,7 +8,7 @@
 import type { HTMLAttributes } from 'astro/types';
 interface Props extends Omit<HTMLAttributes<'input'>, 'size' | 'value'> {
   label: string; min: number; max: number; value?: number | string; unit?: string; size?: 'sm' | 'lg'; wide?: boolean;
-  /** how much − and + move it (1 unless given; Wrack's start time goes in 0.01 s steps, and gets a phone keypad with a decimal point) */
+  /** how much − and + move it (1 unless given; Wrack's start time goes in 0.001 s steps, and gets a phone keypad with a decimal point) */
   step?: number;
 }
 const { label, min, max, value, unit, size, wide, step = 1, ...rest } = Astro.props;

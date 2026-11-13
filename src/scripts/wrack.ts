@@ -49,12 +49,12 @@ document.addEventListener('astro:page-load', () => {
       // the next; the duration's: up to 6 s or the gap before the next is cast
       n.min = String(earliest(v.starts, i, h()));
       n.max = String(latest(v.starts, i, h()));
-      // to two decimals ("4.50"), so the boxes line up, unless it's being typed in
-      if (document.activeElement !== n) n.value = v.starts[i].toFixed(2);
+      // to three decimals ("4.500"), so the boxes line up, unless it's being typed in
+      if (document.activeElement !== n) n.value = v.starts[i].toFixed(3);
       d.min = String(MIN_DUR);
       // up to 6 s or the gap before the next is cast; shown as it runs, after any recast cuts it short
       d.max = String(longest(v.starts, i));
-      if (document.activeElement !== d) d.value = ranFor(v.starts, v.durs, i).toFixed(2);
+      if (document.activeElement !== d) d.value = ranFor(v.starts, v.durs, i).toFixed(3);
     });
     for (const k of Object.keys(pairs) as K[]) {
       const p = pairs[k];
@@ -86,7 +86,7 @@ document.addEventListener('astro:page-load', () => {
       durs.push(CHANNEL);
     }
     const fits = next[n - 1] <= LAST_START;
-    v.starts = fits ? next.map((t) => +t.toFixed(2)) : defaultStarts(h()).slice(0, n);
+    v.starts = fits ? next.map((t) => +t.toFixed(3)) : defaultStarts(h()).slice(0, n);
     v.durs = fits ? durs : Array(n).fill(CHANNEL);
     render();
   }, on);
@@ -150,7 +150,7 @@ document.addEventListener('astro:page-load', () => {
   }, on);
 
   // drag a Wrack's window (its handle on top, or the shaded channel) along the timeline, or one of its sides in or out to
-  // change how long it channels; all in 0.01 s steps. what: 'move', or the side being dragged ('l' or 'r').
+  // change how long it channels; all in 0.001 s steps. what: 'move', or the side being dragged ('l' or 'r').
   // y: where it was pressed, so a tap on a tick inside a window (which starts a drag that goes nowhere) still shows its label
   let drag: { i: number; what: 'move' | 'l' | 'r'; x: number; y: number; from: number; scale: number } | null = null;
   /** what a press lands on to drag: a side, or the window or handle; under a tick's target, the window behind it. A finger
