@@ -1,5 +1,5 @@
 /* Glossary page: a toolbar (count, search, topic chips), an A to Z strip, then each letter's terms as two-tone rows. */
-.gterm code,.notes code{padding:1px 5px;border-radius:5px;background:var(--raised);color:var(--text);font-size:.92em}
+.gterm code{padding:1px 5px;border-radius:5px;background:var(--raised);color:var(--text);font-size:.92em}
 
 /* toolbar */
 .gtools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}

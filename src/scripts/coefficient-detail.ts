@@ -35,7 +35,7 @@ const COLS = ORDER.length + 2;   // spell, rank and the cells
 
 type Cells = Record<Key, string> & { id: string; level: string; duration: string; period: string; stages?: (Partial<Record<Key, string>> & { name: string; part: string })[] };
 
-/** one rank at a level and spell power, as the table prints it (the rounding is the one in-game tooltips use, see the notes) */
+/** one rank at a level and spell power, as the table prints it (the rounding is the one in-game tooltips use) */
 export function cells(r: Rank, level: number, sp: number, agony = false): Cells {
   const n = r.per ? Math.max(0, Math.min(level, r.ml || CAP, CAP) - (r.bl ?? r.learn)) : 0;
   const add = (r.per ?? 0) * n, bonus = sp * (r.coef ?? 0);

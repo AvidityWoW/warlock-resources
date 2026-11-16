@@ -1,0 +1,16 @@
+---
+// The sticky bar of choices on Spells, Demons and Class quests: "Your level" as a slider and a number box, then whatever
+// the page adds in its slot (a .seg of buttons, .check tick boxes). lib/levelbar.ts wires it up and keeps the choices.
+import Stepper from './Stepper.astro';
+import { MAX_LEVEL } from '../lib/macro';
+interface Props { id: string; level: number }
+const { id, level } = Astro.props;
+---
+<div class="toolbar lvbar" id={id}>
+  <div class="lvbar-lv">
+    <label for={`${id}-n`}>Your level</label>
+    <input type="range" class="slider" data-lv="slider" aria-label="Your level" min="1" max={MAX_LEVEL} value={level} style={`--p:${((level - 1) / (MAX_LEVEL - 1)) * 100}%`}>
+    <Stepper id={`${id}-n`} data-lv="box" label="your level" min={1} max={MAX_LEVEL} value={level} />
+  </div>
+  <slot />
+</div>

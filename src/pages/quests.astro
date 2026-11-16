@@ -1,0 +1,170 @@
+---
+// Class quests: the warlock's own quest chains in level order, each with what it gives and its steps, by faction where
+// the routes differ. Your level shows which you can start; faction hides the other side's routes. scripts/quests.ts drives it.
+import Layout from '../layouts/Layout.astro';
+import LevelBar from '../components/LevelBar.astro';
+import FactionIcon from '../components/FactionIcon.astro';
+import BuyList from '../components/BuyList.astro';
+import { CHAINS, type Buy, type Chain, type Step } from '../data/quests';
+import { money } from '../data/spellbook';
+import { rich } from '../lib/rich';
+import { wowhead } from '../data/gear';
+import '../styles/quests.css';
+
+const LEVEL = 10;   // before any saved choice
+const sideName = (side: 'A' | 'H' | 'C') => (side === 'A' ? 'Alliance' : 'Horde');
+const letter = (i: number) => String.fromCharCode(65 + i);
+/** the lines whose quantity is our estimate, named under a cost: "Includes 3 Shadowy Potions (18g)" */
+const guessed = (c: Chain) => buys(c).filter((it) => it.guess && it.qty && it.each).map((it) => `${it.qty} ${it.name}s (${money(it.qty! * it.each!)})`).join(', ');
+/** a step's list in two: what everyone needs, and what a helping warlock would bring (plan A buys it, plan B doesn't) */
+const own = (items: Buy[]) => items.filter((it) => !it.shared), shared = (items: Buy[]) => items.filter((it) => it.shared);
+/** a route's steps in runs, each under the heading its first step carries (one run with no heading for a short chain) */
+const parts = (steps: Step[]) => steps.reduce<{ title?: string; steps: Step[] }[]>((runs, s) => {
+  if (s.part || !runs.length) runs.push({ title: s.part, steps: [] });
+  runs.at(-1)!.steps.push(s);
+  return runs;
+}, []);
+/** everything a chain's steps list to buy or gather */
+const buys = (c: Chain) => c.routes.flatMap((r) => r.steps.flatMap((s) => s.buy ?? []));
+/** what the priced lines come to, for the quantities listed (a line with no quantity isn't counted) */
+const vendorTotal = (c: Chain, helped = false) => buys(c).reduce((sum, it) => sum + (it.each && it.qty && !(helped && it.shared) ? it.each * it.qty : 0), 0);
+/** the demon chains long enough that someone could lose track partway */
+const FIND = ['voidwalker', 'succubus', 'felhunter'];
+/** a /run line for the chat box: it finds the last quest of the route the game has marked done (skipped "optional" leads
+    never are, so it scans from the end) and prints the step after it, numbered as on this page. Under 255 characters. */
+const finder = (c: Chain, steps: Step[]) => {
+  const run = `/run local q={${steps.map((s) => s.id).join(',')}}local i=#q while i>0 and not C_QuestLog.IsQuestFlaggedCompleted(q[i])do i=i-1 end print("${c.title}: "..(q[i+1]and"step "..(i+1).." of "..#q or"all done"))`;
+  if (run.length > 255) throw new Error(`${c.key}: the /run line is ${run.length} characters`);
+  return run;
+};
+---
+<Layout title="Class quests" description="Every WoW Forever warlock class quest by level: the demon quests, both mounts, and the warlock-only gear, step by step for each faction, with a shopping list for the Dreadsteed.">
+  <div class="page-head">
+    <h1>Class quests</h1>
+    <p>The quests only warlocks get: the ones that teach you a demon or a mount, and a few that give warlock gear. Set your level to see which you can start, and pick your faction to hide the other side's route.</p>
+  </div>
+
+  <LevelBar id="cq-bar" level={LEVEL}>
+    <div class="seg" role="group" aria-label="Faction" data-name="fac">
+      <button type="button" data-v="b" aria-pressed="true">Both</button>
+      <button type="button" data-v="A" aria-pressed="false" aria-label="Alliance"><FactionIcon side="Alliance" /><span class="t">Alliance</span></button>
+      <button type="button" data-v="H" aria-pressed="false" aria-label="Horde"><FactionIcon side="Horde" /><span class="t">Horde</span></button>
+    </div>
+    <span class="muted cq-count" id="cq-count"></span>
+  </LevelBar>
+
+  <nav class="cq-toc" aria-label="Quests">
+    {CHAINS.map((c) => <a class="pill" href={`#${c.key}`} data-level={c.level}><span class="num">{c.level}</span>{c.title}</a>)}
+  </nav>
+
+  {CHAINS.map((c) => (
+    <section class="card full cq-card" id={c.key} aria-labelledby={`cq-${c.key}`} data-level={c.level}>
+      <div class="card-h">
+        <h2 id={`cq-${c.key}`}>{c.title} <span class="muted">· level {c.level}</span></h2>
+        <span class="badge cq-state">{LEVEL >= c.level ? 'You can start this' : `From level ${c.level}`}</span>
+      </div>
+      <div class="cq-body">
+        <p class="cq-reward"><span class="muted">You get</span> <span set:html={rich(c.reward)} /></p>
+        {c.note && <p class="muted">{c.note}</p>}
+        {buys(c).length > 0 && (
+          <div class="cq-shop" data-chain={c.key}>
+            <p class="cq-shop-h">
+              <strong>Shopping list</strong>
+              <span class="muted">beside each step · <span class="cq-shop-n">{`0 of ${buys(c).length}`}</span> ticked</span>
+              <button type="button" class="pill cq-clear" hidden>Untick all</button>
+            </p>
+            {c.plans
+              ? <div class="cq-plans">
+                  {c.plans.map((pl, i) => (
+                    <>
+                      {i > 0 && <span class="cq-or muted">or</span>}
+                      <div class="cq-plan">
+                        <h4><b>{letter(i)}</b>{pl.title}</h4>
+                        <p class="cq-plan-g">{money(vendorTotal(c, !pl.buy))} at vendors</p>
+                        {guessed(c) && <p class="cq-plan-inc muted">Includes {guessed(c)}</p>}
+                        <p class="muted" set:html={rich(pl.text)} />
+                      </div>
+                    </>
+                  ))}
+                </div>
+              : <p class="muted">{money(vendorTotal(c))} at vendors{guessed(c) && `, including ${guessed(c)}`}</p>}
+          </div>
+        )}
+        <div class="cq-routes">
+          {c.routes.map((r) => (
+            <div class:list={['cq-route', { 'cq-buys': r.steps.some((s) => s.buy) }]} data-side={r.side}>
+              {r.side !== 'C' && <h3><FactionIcon side={sideName(r.side)} />{sideName(r.side)} <span class="muted">{r.label && `· ${r.label}`}</span></h3>}
+              {r.side === 'C' && r.label && <h3>{r.label}</h3>}
+              {parts(r.steps).map((p) => (
+                <>
+                  {p.title && <h4>{p.title}</h4>}
+                  <ol>
+                    {p.steps.map((s) => (
+                      <li class:list={{ lead: s.lead }}>
+                        <div class="cq-step">
+                          {s.link === false
+                            ? <strong>{s.name}</strong>
+                            : <a class="link" href={wowhead('quest', s.id)} target="_blank" rel="noopener">{s.name}</a>}
+                          {s.lead && <span class="muted cq-opt" title="It only sends you to the next quest's giver: you can go straight there">optional</span>}
+                          <span class="cq-what" set:html={rich(s.what)} />
+                          {s.fork && (
+                            <div class="cq-fork-row" role="list">
+                              {s.fork.map((f, i) => (
+                                <>
+                                {i > 0 && <span class="cq-fork-or" aria-hidden="true">or</span>}
+                                <div class="cq-fork" role="listitem" data-school={f.school.toLowerCase()}>
+                                  <p class="cq-fork-top">
+                                    <a class="link" href={wowhead('quest', f.id)} target="_blank" rel="noopener">{f.name}</a>
+                                    <span class="cq-fork-school">{f.school}</span>
+                                  </p>
+                                  <p class="cq-fork-what" set:html={rich(f.what)} />
+                                </div>
+                                </>
+                              ))}
+                            </div>
+                          )}
+                          {s.more && <ul class="cq-more">{s.more.map((m) => <li set:html={rich(m)} />)}</ul>}
+                        </div>
+                        {s.buy && (
+                          <div class="cq-buy-col">
+                            {own(s.buy).length > 0 && <BuyList items={own(s.buy)} step={s.id} label={`To get for ${s.name}`} />}
+                            {shared(s.buy).length > 0 && (c.plans ?? []).map((pl, i) => (
+                              <>
+                                {i > 0 && <span class="cq-or muted">or</span>}
+                                <div class="cq-opt-box">
+                                  <h5><b>{letter(i)}</b>{pl.title}</h5>
+                                  {pl.buy
+                                    ? <BuyList items={shared(s.buy!)} step={s.id} label={`Plan ${letter(i)}: ${pl.title}`} />
+                                    : <p class="muted" set:html={rich(pl.at ?? '')} />}
+                                </div>
+                              </>
+                            ))}
+                          </div>
+                        )}
+                      </li>
+                    ))}
+                  </ol>
+                </>
+              ))}
+              {r.note && <p class="muted cq-note">{r.note}</p>}
+              {FIND.includes(c.key) && (
+                <div class="cq-find">
+                  <p><strong>Partway through?</strong> <span class="muted">Paste this command into chat and it prints your next step.</span></p>
+                  <button type="button" class="pill copy" aria-label={`Copy the ${c.title} command`}>
+                    <span class="labels"><span class="a">Copy command</span><span class="b" aria-hidden="true">Copied</span></span>
+                  </button>
+                  <details>
+                    <summary class="muted">Show the command</summary>
+                    <code>{finder(c, r.steps)}</code>
+                  </details>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <script>import '../scripts/quests';</script>
+</Layout>

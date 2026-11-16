@@ -5,3 +5,9 @@ dist/
 # Wowhead tooltip cache for tools/weapons/gen.py (refetched when missing)
 tools/weapons/wowhead-cache/
 __pycache__/
+
+# Wowhead tooltip cache for tools/spellbook/gen.py (refetched when missing)
+tools/spellbook/wowhead-cache/
+
+# Wowhead item XML cache for tools/wands/pull.py (refetched when missing)
+tools/wands/wowhead-cache/

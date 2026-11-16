@@ -1,0 +1,28 @@
+/* Spells by level, and the ability tables on Demons: rows in level order. Rows you can already have are plain, the next
+   level's are lit, and the rest are dimmed. A rule sits above the first row of each level. */
+.sp-card{width:100%}
+.sp-card .empty{margin:16px}
+.sp-table{width:100%}
+.sp-table .sp-lv{width:1%;font-weight:600}
+.sp-name{display:inline-flex;align-items:baseline;gap:8px}
+.sp-name .link{font-weight:650}
+.sp-rank{font-weight:400;font-size:.9em}
+.sp-name .badge,.sp-how .badge{font-size:.72em}
+.sp-how .badge{vertical-align:.1em}
+
+/* stripes follow the rows left after filtering (the script sets .odd), not nth-child */
+.dtable.sp-table tbody tr{background:var(--row-even)}
+.dtable.sp-table tbody tr.odd{background:var(--row-odd)}
+.sp-table tbody tr.top>*{border-top:1px solid var(--line)}
+.sp-table tbody tr:not(.top) .sp-lv.sp-lv{color:transparent}   /* the level shows once per group */
+
+.sp-table tbody tr.next>*{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.sp-table tbody tr.next .sp-lv{color:var(--accent)}
+.sp-table tbody tr:not(.have,.next)>*{opacity:.6}
+
+@media (max-width:640px){
+  .sp-tree{display:none}
+  .dtable.sp-table th,.dtable.sp-table td{padding:8px 10px}
+  .dtable.sp-table :is(tbody th,.sp-how){white-space:normal}
+  .sp-name{display:flex;flex-wrap:wrap;gap:2px 8px}
+}

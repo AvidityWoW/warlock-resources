@@ -1,0 +1,22 @@
+---
+// A tick list of things to buy or gather for one quest step (Class quests). scripts/quests.ts keeps the ticks.
+import type { Buy } from '../data/quests';
+import { money, wowhead } from '../data/spellbook';
+interface Props { items: Buy[]; step: number; label: string }
+const { items, step, label } = Astro.props;
+---
+<ul class="cq-buy" aria-label={label}>
+  {items.map((it) => (
+    <li>
+      <label>
+        <input type="checkbox" data-buy={`${step}:${it.id}`}>
+        <span class="cq-qty">{it.qty ? `${it.qty}×` : ''}</span>
+        <span class="cq-item">
+          <a class="link" href={wowhead('item', it.id)} target="_blank" rel="noopener">{it.name}</a>
+          {it.note && <span class="muted">{it.note}</span>}
+        </span>
+        {it.each && <span class="cq-price">{money(it.each * (it.qty ?? 1))}{!it.qty && ' each'}</span>}
+      </label>
+    </li>
+  ))}
+</ul>

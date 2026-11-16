@@ -129,11 +129,10 @@
 [aria-checked="true"] .tick{border-color:var(--accent);background:var(--accent)}
 [aria-checked="true"] .tick::after{content:"";width:8px;height:4px;margin-top:-2px;border:solid var(--bg);border-width:0 0 2px 2px;transform:rotate(-45deg)}
 
-/* below 1230px the one line doesn't fit: Reset moves up beside search and the rest go on a second row */
-@media (max-width:1279px){   /* below this the one-line bar (~1190px of controls) no longer fits */
-  .rbtn,.gbtn{order:2}
-  .brk{display:block}
-}
+/* two rows (the controls don't fit on one): the count, search and, at the right end, Deselect all and Reset; then the
+   faction, source and tick boxes */
+.rbtn,.gbtn{order:2}
+.brk{display:block}
 /* phones: faction as crests, Source as a funnel + value, Reset as an icon, "Selected" for short */
 @media (max-width:760px){
   .search{flex:1 1 100px;min-width:0;max-width:250px}   /* phones: search takes the room the top row has left, up to its usual size */

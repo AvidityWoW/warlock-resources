@@ -1,0 +1,83 @@
+---
+// Zones by level: every zone, dungeon and raid with its levels, for any class. Your level lights up what
+// suits it (and can hide the rest), and Alliance or Horde hides the other side's zones. scripts/zones.ts drives it.
+import Layout from '../layouts/Layout.astro';
+import Stepper from '../components/Stepper.astro';
+import FactionIcon from '../components/FactionIcon.astro';
+import { SECTIONS, conVars, type Place } from '../data/zones';
+import { MAX_LEVEL } from '../lib/macro';
+import '../styles/zones.css';
+
+const LEVEL = 10;   // before any saved choice
+const fits = (p: Place, lv: number) => lv >= p.min && lv <= p.max;
+const levels = (p: Place) => (p.min === p.max ? String(p.min) : `${p.min}–${p.max}`);
+// a range's place on the 1–60 track, as percentages (a one-level range still gets a sliver)
+const left = (p: Place) => ((p.min - 1) / MAX_LEVEL) * 100;
+const width = (p: Place) => ((p.max - p.min + 1) / MAX_LEVEL) * 100;
+const sorted = (ps: Place[]) => [...ps].sort((a, b) => a.min - b.min || a.max - b.max || a.name.localeCompare(b.name));
+const ticks = [1, 10, 20, 30, 40, 50, 60];
+---
+<Layout title="Zones" description="Every WoW Forever zone, dungeon and raid by level, for any class, with what suits your level.">
+  <div class="page-head">
+    <h1>Zones by level</h1>
+    <p>Where to level, for any class: every zone, dungeon and raid with the levels it suits. Set your level to light up what fits it, and pick your faction to hide the other side's zones.</p>
+  </div>
+
+  <div class="toolbar lvbar zn-bar" id="zn-bar">
+    <div class="lvbar-lv">
+      <label for="zn-level">Your level</label>
+      <input type="range" class="slider" id="zn-level" min="1" max={MAX_LEVEL} value={LEVEL} style={`--p:${((LEVEL - 1) / (MAX_LEVEL - 1)) * 100}%`}>
+      <Stepper id="zn-level-n" label="your level" min={1} max={MAX_LEVEL} value={LEVEL} />
+    </div>
+    <div class="seg" role="group" aria-label="Faction">
+      <button type="button" data-fac="b" aria-pressed="true">Both</button>
+      <button type="button" data-fac="A" aria-pressed="false" aria-label="Alliance"><FactionIcon side="Alliance" /><span class="t">Alliance</span></button>
+      <button type="button" data-fac="H" aria-pressed="false" aria-label="Horde"><FactionIcon side="Horde" /><span class="t">Horde</span></button>
+    </div>
+    <label class="check"><input id="zn-only" type="checkbox">Only my level</label>
+    <ul class="zn-key muted" aria-label="Bar colours">
+      <li><i class="k-grey"></i>No XP</li><li><i class="k-green"></i>Easy</li><li><i class="k-yellow"></i>Even</li><li><i class="k-orange"></i>Hard</li><li><i class="k-red"></i>Very hard</li>
+    </ul>
+  </div>
+
+  {SECTIONS.map((s) => {
+    const ps = sorted(s.places), n = ps.filter((p) => fits(p, LEVEL)).length;
+    return (
+      <section class="card full zn-card" aria-labelledby={`zn-${s.kind}`} data-kind={s.kind} style={conVars(LEVEL, MAX_LEVEL)}>
+        <div class="card-h"><h2 id={`zn-${s.kind}`}>{s.title} <span class="muted zn-count" data-noun={s.noun}>{`· ${n} of ${ps.length} for level ${LEVEL}`}</span></h2></div>
+        <div class="tscroll">
+          <table class="dtable zn-table">
+            <thead>
+              <tr>
+                <th scope="col">{s.kind === 'zone' ? 'Zone' : s.kind === 'raid' ? 'Raid' : 'Dungeon'}</th>
+                <th scope="col" class="zn-where">{s.kind === 'zone' ? 'Continent' : 'Where'}</th>
+                <th scope="col" class="num">Levels</th>
+                <th scope="col" class="zn-axis" aria-hidden="true"><span class="zn-track">{ticks.map((t) => <span style={`left:${((t - 0.5) / MAX_LEVEL) * 100}%`}>{t}</span>)}</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {ps.map((p) => (
+                <tr data-min={p.min} data-max={p.max} data-side={p.side} class:list={{ fit: fits(p, LEVEL) }}>
+                  <th scope="row">
+                    <span class="zn-name">
+                      {p.side !== 'C' && <FactionIcon side={p.side === 'A' ? 'Alliance' : 'Horde'} />}
+                      {p.name}
+                      {p.size && <span class="muted zn-size">{p.size}-player</span>}
+                      {p.isNew && <span class="badge" title="Added by WoW Forever">New</span>}
+                    </span>
+                  </th>
+                  <td class="zn-where muted">{p.where}</td>
+                  <td class="num zn-lvls">{levels(p)}</td>
+                  <td class="zn-axis" aria-hidden="true"><span class="zn-track"><span class="zn-range" style={`--a:${left(p).toFixed(2)}%;--b:${(left(p) + width(p)).toFixed(2)}%`}></span></span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="empty muted" hidden>{`No ${s.noun} for level ${LEVEL}.`}</p>
+      </section>
+    );
+  })}
+
+  <script>import '../scripts/zones';</script>
+</Layout>

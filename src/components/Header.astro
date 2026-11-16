@@ -1,5 +1,5 @@
 ---
-// Sticky site header: brand (links home), a tab per page (from nav.ts), and the light / dark toggle. On a phone the tabs
+// Sticky site header: brand (links home), a tab per group of pages (from nav.ts) that opens its pages, and the light / dark toggle. On a phone the tabs
 // give way to the current page's name and a menu button, which opens every page, grouped as on the home page.
 import { nav } from '../data/nav';
 import { SITE, GAME } from '../data/site';
@@ -8,8 +8,9 @@ import { url } from '../lib/url';
 // A link is current when it matches this page's path (trailing slash optional).
 const norm = (p: string) => p.replace(/index\.html$/, '').replace(/\/?$/, '/');
 const here = norm(Astro.url.pathname);
-// The logo and name link home, so the tabs are just the pages.
+// The logo and name link home. The tabs are the groups of nav.ts, each opening a list of its pages.
 const links = nav.flatMap((g) => g.pages).map((l) => ({ ...l, href: url(l.href) }));
+const tabs = nav.map((g) => ({ group: g.group, pages: g.pages.map((p) => ({ ...p, href: url(p.href) })) }));
 /** the page's name for the phone header: its tab's title, or the site's name on home and unlisted pages */
 const hereTitle = links.find((l) => norm(l.href) === here)?.title ?? SITE;
 ---
@@ -52,7 +53,18 @@ const hereTitle = links.find((l) => norm(l.href) === here)?.title ?? SITE;
       </span>
     </a>
     <nav class="nav" aria-label="Pages">
-      {links.map((l) => <a href={l.href} aria-current={norm(l.href) === here ? 'page' : undefined}>{l.title}</a>)}
+      {tabs.map((t) => (
+        <div class:list={['nav-menu', { current: t.pages.some((p) => norm(p.href) === here) }]}>
+          <button type="button" class="nav-tab" aria-expanded="false" aria-controls={`menu-${t.group}`}>
+            {t.group}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg>
+          </button>
+          <div class="nav-panel" id={`menu-${t.group}`} hidden>
+            {t.pages.map((p) => (
+              <a href={p.href} aria-current={norm(p.href) === here ? 'page' : undefined}><span class="nav-t">{p.title}</span><span class="nav-b">{p.blurb}</span></a>
+            ))}
+          </div>
+        </div>
+      ))}
     </nav>
     <span class="here">{hereTitle}</span>
     <span class="game">for {GAME}</span>
@@ -123,6 +135,22 @@ const hereTitle = links.find((l) => norm(l.href) === here)?.title ?? SITE;
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
   document.addEventListener('pointerdown', (e) => { if (!menu.hidden && !(e.target as Element).closest?.('.mnav, .menu-btn')) setMenu(false); });
   document.addEventListener('astro:before-preparation', () => setMenu(false));
+  // the tabs' menus: open on their tab, close on Escape, a click outside, or going to a page
+  const tabMenus = [...document.querySelectorAll<HTMLElement>('.nav-menu')];
+  const setTab = (m: HTMLElement, open: boolean) => {
+    m.querySelector('.nav-panel')!.toggleAttribute('hidden', !open);
+    m.querySelector('.nav-tab')!.setAttribute('aria-expanded', String(open));
+  };
+  for (const m of tabMenus) m.querySelector('.nav-tab')!.addEventListener('click', () => {
+    const open = m.querySelector<HTMLElement>('.nav-panel')!.hidden;
+    for (const o of tabMenus) setTab(o, o === m && open);
+  });
+  document.addEventListener('keydown', (e) => {
+    const m = tabMenus.find((o) => !o.querySelector<HTMLElement>('.nav-panel')!.hidden);
+    if (e.key === 'Escape' && m) { setTab(m, false); m.querySelector<HTMLElement>('.nav-tab')!.focus(); }
+  });
+  document.addEventListener('pointerdown', (e) => { if (!(e.target as Element).closest?.('.nav-menu')) for (const m of tabMenus) setTab(m, false); });
+  document.addEventListener('astro:before-preparation', () => { for (const m of tabMenus) setTab(m, false); });
   matchMedia('(max-width:640px)').addEventListener('change', (m) => { if (!m.matches) setMenu(false); });
   const hereEl = document.querySelector<HTMLElement>('.site-header .here')!, siteName = document.querySelector('.brand')!.getAttribute('aria-label')!.replace(/, home$/, '');
   for (const a of links) a.addEventListener('click', (e) => {
@@ -138,11 +166,10 @@ const hereTitle = links.find((l) => norm(l.href) === here)?.title ?? SITE;
       if (norm(new URL(a.href).pathname) === norm(location.pathname)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     }
     // the phone header's page name: the current tab's title, or the site's name
-    hereEl.textContent = document.querySelector('.nav a[aria-current="page"]')?.textContent ?? siteName;
+    hereEl.textContent = document.querySelector('.mnav a[aria-current="page"] .mnav-t')?.textContent ?? siteName;
+    // a menu's tab is lit when one of its pages is the current one
+    for (const m of tabMenus) m.classList.toggle('current', !!m.querySelector('a[aria-current="page"]'));
+    for (const m of tabMenus) setTab(m, false);
     setMenu(false);
-    // on a narrow screen the tab row scrolls sideways; bring the current tab into view if it's off the end
-    const nav = document.querySelector<HTMLElement>('.nav'), cur = nav?.querySelector<HTMLElement>('[aria-current="page"]');
-    if (nav && cur && (cur.offsetLeft < nav.scrollLeft || cur.offsetLeft + cur.offsetWidth > nav.scrollLeft + nav.clientWidth))
-      nav.scrollLeft = cur.offsetLeft + cur.offsetWidth - nav.clientWidth + 8;
   });
 </script>

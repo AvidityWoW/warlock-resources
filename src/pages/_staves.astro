@@ -34,10 +34,4 @@ const none = data.noSource.filter((w) => w.slot === 'staff');
 
   <script>import '../scripts/gear';</script>
 
-  <div class="notes">
-    <p>Stats come from the pre-release client's game files (build {data.build}), except spell damage, which comes from Wowhead's Forever tooltips: the game servers add spell power to many items that the client files don't show. Sources are from classic server data, so items new to Forever mostly have none yet, and things may shift before launch.</p>
-    <p>SP is Spell Power (every school), ShP is Shadow spell damage and FP is Fire spell damage. Items are sorted by level, then by item level, and the suggested path follows item level, since that's what sets an item's stat budget. Only items with spell damage are listed; weapons with just Intellect, Stamina or the like are left out.</p>
-    <p>Ticks start on the suggested upgrades: each staff with a higher item level than everything before it. Untick one to drop it, or tick any other to add it. "Deselect all" starts you from an empty path; "Use suggested" brings the suggestions back. Your path and filters stay in this browser, and "Share path" copies a link to it.</p>
-    <p>A staff takes both hands, so compare it with your main hand and off-hand added together (see One-hand &amp; off-hand). A crest means only that faction can get it. A level in an outlined box means the item has no level requirement: it's the quest's level, or an estimate.</p>
-  </div>
 </Layout>

@@ -66,14 +66,5 @@ const detail = detailBody({ level: CAP, sp: 0, classic: false, pins: {} });
     </div>
   </section>
 
-  <div class="notes">
-    <p><strong>Level</strong> picks, for every spell, the highest rank learned by then and scales it: each spell's rank lock shows the rank in the middle (dimmed and slanted if not learned yet at this level; the lock is outlined when you picked it), with the ranks either side faded. Drag across it either way to roll through the ranks, click an arrow or a faded rank, or use the arrow keys, to see another rank at the current level (Shadow Bolt 9 and 10 are both learned at 60). A rank picked before the level it is learned at stays at its base damage, plus spell power: Wrack at 35 is 25 a tick before spell power.</p>
-    <p><strong>Spell power</strong> adds Coeff/tick × spell power to every hit or tick (Damage and Per tick). A tick rounds its scaled base to a whole number first, then adds the spell power and rounds again: Wrack at 35 with 113 spell power is 25 + 22.6 → 48, as in game. Direct damage adds it to both ends of the range. Bane of Agony's stages are shown unrounded.</p>
-    <p><strong>Compare with Classic</strong> adds Classic Era {CLASSIC_BUILD} under each spell at the same level and spell power, from its own tables, with what differs highlighted. Classic rolls dice for direct damage, shown here as their middle (Base) and spread (Var); the same rounding is used for both.</p>
-    <p><strong>Base</strong> is the spell's base points. <strong>/lvl</strong> adds that much per level from the level it is learned, up to 60 or the rank's own cap, giving Per tick and Damage. A per-tick value is rounded to the nearest whole number (Wrack 60.2 → 60), and Damage is Per tick × Ticks. <strong>Var</strong> is the ± spread of direct damage around that value, before rounding: the low end is rounded to the nearest whole number and the high end up, as in-game tooltips do.</p>
-    <p><strong>Coeff/tick</strong> is the spell-power coefficient of one tick; Coeff = Coeff/tick × Ticks. The number under a spell's name is the shown rank's spell ID; an → in it means the damage comes from the spell it triggers (Hellfire's self-damage and AoE use the same numbers).</p>
-    <p><strong>Bane of Agony:</strong> only the base damage ramps ×0.5 / ×1 / ×1.5 over three stages of 4 ticks; every tick gets 0.133 × spell power.</p>
-    <p><strong>Wrack</strong> is from the 70888 hotfixes, which cut it to 70%: 0.286 → 0.2002 per tick, base 36 → 25.2 and +2.5 → +1.75 per level (60 per tick at 60, was 86). While you channel it, your Siphon Life, Corruption and Bane of Agony on the target now deal their periodic damage 100% faster; before, it made the target take 10% more damage from your other Shadow DoTs.</p>
-  </div>
   <script>import '../scripts/coefficients';</script>
 </Layout>

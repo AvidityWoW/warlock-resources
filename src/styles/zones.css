@@ -1,0 +1,44 @@
+/* Zones page: the level bar (global.css: level, faction, only my level), then a table per kind, each row with its levels drawn on a
+   1–60 track and a line at your level. Rows that suit your level are lit. */
+.zn-card{width:100%}
+.zn-card .empty{margin:16px}
+.zn-table{width:100%}
+.zn-name{display:inline-flex;align-items:center;gap:8px}
+.zn-size{font-weight:400;font-size:.85em}
+.zn-name .badge{font-size:.72em}
+.zn-lvls{font-weight:600}
+
+/* difficulty colours, as the game colours a monster's level */
+.zn-bar,.zn-card{--con-grey:#8f8a99;--con-green:#5fd35f;--con-yellow:#f0e05a;--con-orange:#ff9a3c;--con-red:#ff5a5a}
+:root[data-theme="light"] :is(.zn-bar,.zn-card){--con-grey:#a29cad;--con-green:#2f9e2f;--con-yellow:#c9a800;--con-orange:#e06a00;--con-red:#d42a2a}
+.zn-key{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0;padding:0;list-style:none;font-size:.85em}
+.zn-key li{display:inline-flex;align-items:center;gap:6px}
+.zn-key i{width:12px;height:12px;border-radius:3px}
+.k-grey{background:var(--con-grey)}.k-green{background:var(--con-green)}.k-yellow{background:var(--con-yellow)}.k-orange{background:var(--con-orange)}.k-red{background:var(--con-red)}
+
+/* the range bar: a 1–60 track, the range on it, and your level as a line */
+.zn-axis{width:44%;min-width:200px}
+.zn-track{position:relative;display:block;height:10px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+.zn-track::after{content:"";position:absolute;top:-5px;bottom:-5px;left:var(--you,0);width:2px;margin-left:-1px;border-radius:1px;background:var(--text)}
+.zn-range{position:absolute;inset:0;border-radius:999px;clip-path:inset(0 calc(100% - var(--b)) 0 var(--a) round 999px);
+  background:linear-gradient(90deg,var(--con-grey) var(--c-grey),var(--con-green) var(--c-green0),var(--con-green) var(--c-green1),
+    var(--con-yellow) var(--c-yellow0),var(--con-yellow) var(--c-yellow1),var(--con-orange) var(--c-orange0),var(--con-orange) var(--c-orange1),var(--con-red) var(--c-red))}
+thead .zn-track{height:1.3em;border:0;background:none;font-size:.85em}
+thead .zn-track::after{display:none}
+thead .zn-track span{position:absolute;top:50%;transform:translate(-50%,-50%)}
+thead .zn-axis{height:2.4em}
+
+/* rows that suit your level */
+.zn-table tbody tr.fit>*{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.zn-table tbody tr:not(.fit) .zn-range{opacity:.55}
+.zn-table tbody tr.fit .zn-lvls{color:var(--accent)}
+.zn-table tbody tr:not(.fit) :is(th,.zn-lvls){color:var(--muted);font-weight:500}
+
+@media (max-width:640px){
+  .zn-where{display:none}
+  .zn-axis{width:auto;min-width:96px}
+  .dtable.zn-table th,.dtable.zn-table td{padding:8px 10px}
+  .dtable.zn-table tbody th{white-space:normal}
+  .zn-name{display:flex;flex-wrap:wrap;gap:4px 8px}
+  thead .zn-track span:not(:first-child,:last-child){display:none}   /* just 1 and 60 over the bars */
+}

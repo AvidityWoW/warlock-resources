@@ -1,6 +1,6 @@
 {
- "build": "1.60.1.70707",
- "pulled": "2026-10-31",
+ "build": "1.60.1.70862",
+ "pulled": "2026-11-16",
  "wands": [
   {
    "id": 247789,
@@ -1598,6 +1598,52 @@
    }
   },
   {
+   "id": 287004,
+   "name": "Touch of the Depths",
+   "quality": 3,
+   "ilvl": 40,
+   "req": 35,
+   "side": null,
+   "school": "Physical",
+   "dps": 37.105,
+   "damage": [
+    49,
+    92
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop in The Drowned City",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 274919,
+   "name": "Neophyte's Wand",
+   "quality": 2,
+   "ilvl": 40,
+   "req": 36,
+   "side": null,
+   "school": "Shadow",
+   "dps": 32.75,
+   "damage": [
+    46,
+    85
+   ],
+   "speed": 2.0,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 94877,
+     "name": "Saving Sunnyglade"
+    },
+    "where": null
+   }
+  },
+  {
    "id": 5215,
    "name": "Ember Wand",
    "quality": 2,
@@ -1742,6 +1788,31 @@
    }
   },
   {
+   "id": 10766,
+   "name": "Plaguerot Sprig",
+   "quality": 3,
+   "ilvl": 42,
+   "req": 37,
+   "side": null,
+   "school": "Nature",
+   "dps": 39.375,
+   "damage": [
+    44,
+    82
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 7356,
+     "name": "Plaguemaw the Rotting"
+    },
+    "where": "Razorfen Downs"
+   }
+  },
+  {
    "id": 10704,
    "name": "Chillnail Splinter",
    "quality": 2,
@@ -1764,6 +1835,31 @@
      "name": "Challenge Overlord Mok'Morokk"
     },
     "where": "Dustwallow Marsh"
+   }
+  },
+  {
+   "id": 274425,
+   "name": "White Obsidian Wand",
+   "quality": 3,
+   "ilvl": 44,
+   "req": 39,
+   "side": null,
+   "school": "Arcane",
+   "dps": 41.471,
+   "damage": [
+    49,
+    92
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 7023,
+     "name": "Obsidian Sentinel"
+    },
+    "where": "Uldaman"
    }
   },
   {
@@ -2007,6 +2103,31 @@
    }
   },
   {
+   "id": 274655,
+   "name": "Peacekeeper Wand",
+   "quality": 3,
+   "ilvl": 48,
+   "req": 43,
+   "side": null,
+   "school": "Shadow",
+   "dps": 45.526,
+   "damage": [
+    60,
+    113
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 7797,
+     "name": "Ruuzlu"
+    },
+    "where": "Zul'Farrak"
+   }
+  },
+  {
    "id": 13065,
    "name": "Wand of Allistarj",
    "quality": 3,
@@ -2151,6 +2272,56 @@
    ]
   },
   {
+   "id": 17745,
+   "name": "Noxious Shooter",
+   "quality": 3,
+   "ilvl": 51,
+   "req": 46,
+   "side": null,
+   "school": "Nature",
+   "dps": 50.0,
+   "damage": [
+    56,
+    104
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 13282,
+     "name": "Noxxion"
+    },
+    "where": "Maraudon"
+   }
+  },
+  {
+   "id": 276735,
+   "name": "Tidesong Wand",
+   "quality": 3,
+   "ilvl": 52,
+   "req": 47,
+   "side": null,
+   "school": "Frost",
+   "dps": 51.0,
+   "damage": [
+    71,
+    133
+   ],
+   "speed": 2.0,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 255997,
+     "name": "Tidemistress Ca'zass"
+    },
+    "where": "Alcaz Prison"
+   }
+  },
+  {
    "id": 15280,
    "name": "Wizard's Hand",
    "quality": 2,
@@ -2249,6 +2420,31 @@
    ]
   },
   {
+   "id": 11748,
+   "name": "Pyric Caduceus",
+   "quality": 3,
+   "ilvl": 53,
+   "req": 48,
+   "side": null,
+   "school": "Fire",
+   "dps": 52.5,
+   "damage": [
+    66,
+    123
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9024,
+     "name": "Pyromancer Loregrain"
+    },
+    "where": "Blackrock Depths"
+   }
+  },
+  {
    "id": 249232,
    "name": "Lesser Eternal Wand",
    "quality": 2,
@@ -2271,6 +2467,81 @@
      "name": "Enchanting"
     },
     "where": null
+   }
+  },
+  {
+   "id": 20082,
+   "name": "Woestave",
+   "quality": 3,
+   "ilvl": 52,
+   "req": 50,
+   "side": null,
+   "school": "Shadow",
+   "dps": 51.316,
+   "damage": [
+    68,
+    127
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8257,
+     "name": "Blood of Morphaz"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 10836,
+   "name": "Rod of Corrosion",
+   "quality": 3,
+   "ilvl": 56,
+   "req": 51,
+   "side": null,
+   "school": "Nature",
+   "dps": 55.0,
+   "damage": [
+    50,
+    93
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 5709,
+     "name": "Shade of Eranikus"
+    },
+    "where": "The Temple of Atal'Hakkar"
+   }
+  },
+  {
+   "id": 12605,
+   "name": "Serpentine Skuller",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 51,
+   "side": null,
+   "school": "Shadow",
+   "dps": 59.643,
+   "damage": [
+    58,
+    109
+   ],
+   "speed": 1.4,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10509,
+     "name": "Jed Runewatcher"
+    },
+    "where": "Blackrock Spire"
    }
   },
   {
@@ -2393,6 +2664,31 @@
    ]
   },
   {
+   "id": 22254,
+   "name": "Wand of Eternal Light",
+   "quality": 3,
+   "ilvl": 57,
+   "req": 52,
+   "side": null,
+   "school": "Holy",
+   "dps": 55.667,
+   "damage": [
+    58,
+    109
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "object",
+     "id": 161495,
+     "name": "Secret Safe"
+    },
+    "where": "Blackrock Depths"
+   }
+  },
+  {
    "id": 13004,
    "name": "Torch of Austen",
    "quality": 3,
@@ -2406,6 +2702,98 @@
     104
    ],
    "speed": 1.4,
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 18301,
+   "name": "Lethtendris's Wand",
+   "quality": 3,
+   "ilvl": 58,
+   "req": 53,
+   "side": null,
+   "school": "Shadow",
+   "dps": 56.765,
+   "damage": [
+    67,
+    126
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 14327,
+     "name": "Lethtendris"
+    },
+    "where": "Dire Maul"
+   }
+  },
+  {
+   "id": 275837,
+   "name": "Felflick's Fire Flicker",
+   "quality": 2,
+   "ilvl": 58,
+   "req": 54,
+   "side": null,
+   "school": "Fire",
+   "dps": 51.25,
+   "damage": [
+    86,
+    160
+   ],
+   "speed": 2.4,
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 96322,
+     "name": "A Revenge Now Bitter"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 18338,
+   "name": "Wand of Arcane Potency",
+   "quality": 3,
+   "ilvl": 59,
+   "req": 54,
+   "side": null,
+   "school": "Arcane",
+   "dps": 58.438,
+   "damage": [
+    65,
+    122
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop in Dire Maul",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 287036,
+   "name": "Satyr's Touch",
+   "quality": 3,
+   "ilvl": 59,
+   "req": 54,
+   "side": null,
+   "school": "Physical",
+   "dps": 58.421,
+   "damage": [
+    77,
+    145
+   ],
+   "speed": 1.9,
    "source": {
     "kind": "World drop",
     "text": "World drop",
@@ -2592,6 +2980,81 @@
    }
   },
   {
+   "id": 13396,
+   "name": "Skul's Ghastly Touch",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 55,
+   "side": null,
+   "school": "Shadow",
+   "dps": 59.722,
+   "damage": [
+    75,
+    140
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10393,
+     "name": "Skul"
+    },
+    "where": "Stratholme"
+   }
+  },
+  {
+   "id": 13534,
+   "name": "Banshee Finger",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 55,
+   "side": null,
+   "school": "Frost",
+   "dps": 59.737,
+   "damage": [
+    79,
+    148
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10436,
+     "name": "Baroness Anastari"
+    },
+    "where": "Stratholme"
+   }
+  },
+  {
+   "id": 18483,
+   "name": "Mana Channeling Wand",
+   "quality": 3,
+   "ilvl": 61,
+   "req": 56,
+   "side": null,
+   "school": "Frost",
+   "dps": 60.938,
+   "damage": [
+    68,
+    127
+   ],
+   "speed": 1.6,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 14324,
+     "name": "Cho'Rush the Observer"
+    },
+    "where": "Dire Maul"
+   }
+  },
+  {
    "id": 16997,
    "name": "Stormrager",
    "quality": 3,
@@ -2608,6 +3071,102 @@
    "source": {
     "kind": "Quest",
     "text": "Quest in Eastern Plaguelands",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 13938,
+   "name": "Bonecreeper Stylus",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "side": null,
+   "school": "Arcane",
+   "dps": 62.632,
+   "damage": [
+    83,
+    155
+   ],
+   "speed": 1.9,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 1853,
+     "name": "Darkmaster Gandling"
+    },
+    "where": "Scholomance"
+   }
+  },
+  {
+   "id": 18761,
+   "name": "Oblivion's Touch",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "side": null,
+   "school": "Shadow",
+   "dps": 62.5,
+   "damage": [
+    78,
+    147
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 14516,
+     "name": "Death Knight Darkreaver"
+    },
+    "where": "Scholomance"
+   }
+  },
+  {
+   "id": 22408,
+   "name": "Ritssyn's Wand of Bad Mojo",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "side": null,
+   "school": "Shadow",
+   "dps": 63.846,
+   "damage": [
+    58,
+    108
+   ],
+   "speed": 1.3,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10440,
+     "name": "Baron Rivendare"
+    },
+    "where": "Stratholme"
+   }
+  },
+  {
+   "id": 280031,
+   "name": "Sparklance Wand",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "side": null,
+   "school": "Nature",
+   "dps": 64.118,
+   "damage": [
+    76,
+    142
+   ],
+   "speed": 1.7,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
     "link": null,
     "where": null
    }
@@ -2817,51 +3376,51 @@
    "source": null
   },
   {
-   "id": 274919,
-   "name": "Neophyte's Wand",
-   "quality": 2,
-   "ilvl": 40,
-   "req": null,
-   "side": null,
-   "school": "Shadow",
-   "dps": 32.75,
-   "damage": [
-    46,
-    85
-   ],
-   "speed": 2.0,
-   "source": null
-  },
-  {
-   "id": 274425,
-   "name": "White Obsidian Wand",
+   "id": 9483,
+   "name": "Flaming Incinerator",
    "quality": 3,
-   "ilvl": 44,
-   "req": 39,
-   "side": null,
-   "school": "Arcane",
-   "dps": 41.471,
-   "damage": [
-    49,
-    92
-   ],
-   "speed": 1.7,
-   "source": null
-  },
-  {
-   "id": 275837,
-   "name": "Felflick's Fire Flicker",
-   "quality": 2,
-   "ilvl": 58,
-   "req": null,
+   "ilvl": 49,
+   "req": 44,
    "side": null,
    "school": "Fire",
-   "dps": 51.25,
+   "dps": 47.222,
    "damage": [
-    86,
-    160
+    59,
+    111
    ],
-   "speed": 2.4,
+   "speed": 1.8,
+   "source": null
+  },
+  {
+   "id": 282020,
+   "name": "Stonegaze Wand",
+   "quality": 2,
+   "ilvl": 51,
+   "req": 46,
+   "side": null,
+   "school": "Arcane",
+   "dps": 42.333,
+   "damage": [
+    44,
+    83
+   ],
+   "speed": 1.5,
+   "source": null
+  },
+  {
+   "id": 284070,
+   "name": "Dreadwhisper's Touch",
+   "quality": 2,
+   "ilvl": 60,
+   "req": 55,
+   "side": null,
+   "school": "Shadow",
+   "dps": 53.125,
+   "damage": [
+    59,
+    111
+   ],
+   "speed": 1.6,
    "source": null
   },
   {

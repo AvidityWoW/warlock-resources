@@ -1,4 +1,5 @@
 ---
+// Home: every page as a card under its group's label (from nav.ts). Small groups sit side by side in a row.
 import Layout from '../layouts/Layout.astro';
 import { nav } from '../data/nav';
 import { url } from '../lib/url';
@@ -9,21 +10,35 @@ import { SITE, TAGLINE } from '../data/site';
     <h1>{SITE}</h1>
     <p>{TAGLINE}</p>
   </div>
-  {nav.map((g) => (
-    <section class="master">
-      <h2 class="card-h">{g.group}</h2>
-      <ul class="cards master-b">
-        {g.pages.map((p) => (
-          <li><a href={url(p.href)}><strong>{p.title}</strong><span class="muted">{p.blurb}</span></a></li>
-        ))}
-      </ul>
-    </section>
-  ))}
+  <div class="home">
+    {nav.map((g) => (
+      <section style={`--n:${g.pages.length}`} aria-labelledby={`home-${g.group}`}>
+        <h2 id={`home-${g.group}`}>{g.group}</h2>
+        <ul>
+          {g.pages.map((p) => (
+            <li><a href={url(p.href)}><strong>{p.title}</strong><span class="muted">{p.blurb}</span></a></li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
 </Layout>
 
 <style>
-  .cards { list-style: none; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
-  .cards a { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); text-decoration: none; transition: border-color .15s, background .15s; }
-  .cards a:hover { border-color: var(--accent); background: var(--raised); }
-  .cards span { font-size: .9em; }
+  /* groups wrap like words: each asks for room in proportion to its pages, so small groups share a row and a big one
+     takes its own; inside, a group's cards split its width evenly */
+  .home { display: flex; flex-wrap: wrap; gap: 28px 24px; }
+  section { flex: var(--n) 1 calc(var(--n) * 190px); min-width: 0; display: grid; gap: 10px 12px; align-content: start;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+  h2 { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; margin: 0; color: var(--muted); font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  ul { display: contents; list-style: none; }
+  a { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); text-decoration: none; transition: border-color .15s, background .15s, translate .15s; }
+  a:hover, a:focus-visible { border-color: var(--accent); background: var(--raised); translate: 0 -1px; }
+  a:hover strong, a:focus-visible strong { color: var(--accent); }
+  strong { transition: color .15s; }
+  span { font-size: .9em; }
+  /* narrow: a group takes the full width, two cards to a row, then one */
+  @media (max-width: 860px) { section { flex-basis: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 480px) { section { grid-template-columns: minmax(0, 1fr); } }
 </style>

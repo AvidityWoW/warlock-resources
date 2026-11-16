@@ -1,5 +1,5 @@
 /* Macros page: a toolbar, then each group's macros as cards in a grid. */
-.page-head code,.notes code{padding:1px 5px;border-radius:5px;background:var(--raised);color:var(--text);font-size:.92em}
+.page-head code{padding:1px 5px;border-radius:5px;background:var(--raised);color:var(--text);font-size:.92em}
 
 /* toolbar: count, search, stone level, and links to the groups */
 .mtools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
@@ -147,4 +147,3 @@ details.note p{margin:6px 0 0}
 .g-card dt{overflow-wrap:anywhere}
 .g-card dd{margin:2px 0 0 14px;color:var(--muted)}
 .g-card dd+dt{margin-top:10px}
-.guide .notes a{color:var(--accent)}

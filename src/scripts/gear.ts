@@ -18,7 +18,7 @@ document.addEventListener('astro:page-load', () => {
   const VIEW = `${K}:view`, PICKS = `${K}:picks`, REMOVED = `${K}:removed`, BLANK = `${K}:blank`;
   const q = document.getElementById('q') as HTMLInputElement;
   const $ = (id: string) => document.getElementById(id)!;
-  const only = $('only') as HTMLInputElement;
+  const only = $('only') as HTMLInputElement, peak = $('peak') as HTMLInputElement;
   const segs = [...document.querySelectorAll<HTMLButtonElement>('.seg button')];
   const typeItems = [...document.querySelectorAll<HTMLButtonElement>('#types [role=menuitemcheckbox]')];
   const rows = [...document.querySelectorAll<HTMLElement>('.wand')];
@@ -33,9 +33,10 @@ document.addEventListener('astro:page-load', () => {
   document.addEventListener('astro:before-swap', () => ctl.abort(), { once: true });
 
   // ---- state, remembered in this browser
-  const view = load<{ fac?: Fac; only?: boolean; off?: string[] }>(VIEW, {});
+  const view = load<{ fac?: Fac; only?: boolean; peak?: boolean; off?: string[] }>(VIEW, {});
   let fac: Fac = isFac(view.fac) ? view.fac : 'b';
   only.checked = !!view.only;
+  peak.checked = !!view.peak;                             // "Best at each level"
   const off = new Set<string>(view.off ?? []);            // source types switched off
   const picks = new Set<string>(load<string[]>(PICKS, []).map(String));
   // Your path edits: wands you ticked on top of the suggestions (gold), and suggestions you unticked.
@@ -43,7 +44,7 @@ document.addEventListener('astro:page-load', () => {
   // "Deselect all" switches the suggestions off: your path is then only the wands you tick.
   let blank = load<boolean>(BLANK, false) === true;
   const save = () => {
-    store(VIEW, { fac, only: only.checked, off: [...off] }, fac === 'b' && !only.checked && !off.size);
+    store(VIEW, { fac, only: only.checked, peak: peak.checked, off: [...off] }, fac === 'b' && !only.checked && !peak.checked && !off.size);
     store(PICKS, [...picks], !picks.size);
     store(REMOVED, [...removed], !removed.size);
     store(BLANK, true, !blank);
@@ -73,16 +74,28 @@ document.addEventListener('astro:page-load', () => {
     const d = r.dataset, sd = side();
     return (!sd || !d.side || d.side === sd) && !off.has(d.kind || 'Other');
   };
+  const level = new Map(listed.map((r) => [r, parseInt(r.querySelector('.lvl')?.textContent ?? '', 10) || 0]));
   /** Your path, in level order: every item in play that beats all before it in its section (unless you unticked it),
-   *  plus the ones you ticked. After "Deselect all" there are no suggestions, so it's just the ones you ticked. */
+   *  plus the ones you ticked. With "Best at each level" on, the suggestions are instead the best item of every required
+   *  level, whether or not it beats an earlier one (its gain can then be a minus). After "Deselect all" there are no
+   *  suggestions, so it's just the ones you ticked. */
   function pathIds() {
     const ids = new Set<string>(), best = new Map<string, number>();
+    // section + level -> the best item there that's in play and not unticked (the first, on a tie)
+    const top = new Map<string, HTMLElement>();
+    if (peak.checked) for (const r of listed) {
+      if (!inPlay(r) || removed.has(r.dataset.id!)) continue;
+      const k = `${group.get(r)}:${level.get(r)}`, cur = top.get(k);
+      if (!cur || +r.dataset.score! > +cur.dataset.score!) top.set(k, r);
+    }
     for (const r of listed) {
       if (!inPlay(r)) continue;
       const id = r.dataset.id!, v = +r.dataset.score!, g = group.get(r)!;
       if (blank) { if (picks.has(id)) ids.add(id); continue; }
       if (removed.has(id)) continue;
-      if (v > (best.get(g) ?? 0)) { best.set(g, v); ids.add(id); }   // a suggestion needs a value above zero else if (picks.has(id)) ids.add(id);
+      if (peak.checked) { if ((top.get(`${g}:${level.get(r)}`) === r && v > 0) || picks.has(id)) ids.add(id); continue; }
+      if (v > (best.get(g) ?? 0)) { best.set(g, v); ids.add(id); }   // a suggestion needs a value above zero
+      else if (picks.has(id)) ids.add(id);
     }
     return ids;
   }
@@ -133,7 +146,7 @@ document.addEventListener('astro:page-load', () => {
     $('count').textContent = `${shown} ${shown === 1 ? ONE : MANY}`;
     $('empty').hidden = shown > 0;
     // One Reset button, always there: greyed out when there's nothing to reset; its tooltip says what it will reset.
-    const filters = [fac !== 'b' && 'faction', off.size && 'source', only.checked && 'show selected', q!.value && 'search'].filter(Boolean) as string[];
+    const filters = [fac !== 'b' && 'faction', off.size && 'source', peak.checked && 'best at each level', only.checked && 'show selected', q!.value && 'search'].filter(Boolean) as string[];
     const added = picks.size, dropped = removed.size;
     const edits = [blank && 'deselected all', added && `${added} added`, dropped && `${dropped} dropped`].filter(Boolean).join(', ');
     const rb = $('reset-all') as HTMLButtonElement, what = [...filters, edits && `your path (${edits})`].filter(Boolean);
@@ -198,9 +211,9 @@ document.addEventListener('astro:page-load', () => {
   if (params.has('path')) {
     const known = new Set(listed.map((r) => r.dataset.id!));
     const want = new Set((params.get('path') ?? '').split('.').filter(Boolean).map((t) => String(parseInt(t, 36))).filter((id) => known.has(id)));
-    const before = { fac, only: only.checked, off: [...off], picks: [...picks], removed: [...removed], blank };
+    const before = { fac, only: only.checked, peak: peak.checked, off: [...off], picks: [...picks], removed: [...removed], blank };
     const f = params.get('f');
-    fac = isFac(f) ? f : 'b'; only.checked = false; off.clear();
+    fac = isFac(f) ? f : 'b'; only.checked = false; peak.checked = false; off.clear();
     picks.clear(); removed.clear(); blank = want.size === 0;
     if (!blank) {
       for (const id of want) picks.add(id);
@@ -216,7 +229,7 @@ document.addEventListener('astro:page-load', () => {
     note.hidden = false;
     $('share-keep').addEventListener('click', () => { note.hidden = true; });
     $('share-undo').addEventListener('click', () => {
-      fac = before.fac; only.checked = before.only; blank = before.blank;
+      fac = before.fac; only.checked = before.only; peak.checked = before.peak; blank = before.blank;
       off.clear(); before.off.forEach((k) => off.add(k));
       picks.clear(); before.picks.forEach((k) => picks.add(k));
       removed.clear(); before.removed.forEach((k) => removed.add(k));
@@ -228,6 +241,7 @@ document.addEventListener('astro:page-load', () => {
   segs.forEach((s) => s.addEventListener('click', () => { fac = s.dataset.fac as Fac; save(); apply(); }));
   for (const t of typeItems) t.addEventListener('click', () => { const k = t.dataset.kind!; off.has(k) ? off.delete(k) : off.add(k); save(); apply(); });
   only.addEventListener('change', () => { save(); apply(); });
+  peak.addEventListener('change', () => { save(); apply(); });
   q.addEventListener('input', apply);
   // the Source menu opens under its button; if that would run off the right edge, it lines up with the button's right edge
   types.addEventListener('toggle', () => {
@@ -244,9 +258,9 @@ document.addEventListener('astro:page-load', () => {
     removed.clear(); save(); apply();
   });
   // Reset: faction, sources, show selected, search and your ticks, all back to how the page started.
-  $('reset-all').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); picks.clear(); removed.clear(); blank = false; save(); apply(); });
+  $('reset-all').addEventListener('click', () => { fac = 'b'; only.checked = false; peak.checked = false; q.value = ''; off.clear(); picks.clear(); removed.clear(); blank = false; save(); apply(); });
   // "Nothing here" only needs the filters cleared; your ticks stay.
-  $('reset').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); save(); apply(); });
+  $('reset').addEventListener('click', () => { fac = 'b'; only.checked = false; q.value = ''; off.clear(); save(); apply(); });   // "Best at each level" hides nothing, so it stays
 
   apply();
 });

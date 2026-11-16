@@ -89,13 +89,5 @@ const gapText = (g: number) => (g === 0 ? 'Your level' : g > 0 ? `+${g}` : `${g}
     </div>
   </section>
 
-  <div class="notes">
-    <p><strong>How it's worked out.</strong> Against a target up to two levels above you, your spells start at 96% and lose 1% a level. From three levels up the drop gets steep, 11% a level. Your spell hit is added on top until you reach 100%, and past that it does nothing. That is why a level-60 warlock needs 17% against a raid boss but only 6% against a level-62 elite. Monsters and players count the same.</p>
-    <p><strong>No 1% miss.</strong> Classic always let 1% of spells miss, however much hit you had. Forever doesn't: the game's tooltip says a player needs 4% spell hit to never miss targets of their own level, which is 96% + 4%.</p>
-    <p><strong>Misses only.</strong> Spell hit stops spells missing outright ("Resisted"). It does nothing about partial resists, the smaller hits you see against targets with resistance; Curse of the Elements and lower resistance help with those.</p>
-    <p><strong>Suppression</strong> takes up to {SUPPRESSION_POINTS} points, each giving +{SUPPRESSION_PER_POINT}% hit with every spell, not just Affliction ones, and less threat. It also raises your hit with physical attacks.</p>
-    <p>The drop for targets three or more levels up is Classic's; the game's tooltip only covers your own level. Forever is still in testing and could change any of this.</p>
-  </div>
-
   <script>import '../scripts/hit-cap';</script>
 </Layout>

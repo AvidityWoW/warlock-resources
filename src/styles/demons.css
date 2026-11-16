@@ -1,0 +1,31 @@
+/* Demon spells page: a card per demon (what it's for, then its spells, each a group of rows under a heading row that
+   says what it does), and a table of the demons you only call for a fight. */
+.dm-about{padding:14px 16px 16px;border-bottom:1px solid var(--line)}
+.dm-about p{max-width:80ch;margin:0 0 .5em}
+.dm-big .dm-what{white-space:normal;min-width:260px}
+/* the spells table: a heading row per spell (name, then what it does), its ranks under it. Ranks you can have by your
+   level are plain, the next level's are lit, the rest dimmed, as on Spells by level. */
+.dm-table{width:100%}
+.dm-table thead th:not(:first-child){width:1%}
+.dm-table tbody+tbody{border-top:1px solid var(--line)}
+.dtable.dm-table tbody tr{background:none}
+.dm-table .dm-spell th{padding-top:12px;padding-bottom:4px;white-space:normal;font-weight:400}
+.dm-table .dm-spell .link{font-weight:650;margin-right:10px}
+.dm-table .dm-spell .muted{font-size:.9em}
+.dm-table .dm-rank{padding-left:28px;font-weight:400}
+.dm-table .dm-rank .link{font-weight:500}
+.dm-table .dm-lv{font-weight:600}
+.dm-table tr.next>*{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.dm-table tr.next .dm-lv{color:var(--accent)}
+.dm-table tr[data-level]:not(.have,.next)>*{opacity:.6}
+@media (max-width:640px){
+  .dtable.dm-table th,.dtable.dm-table td{padding:7px 10px}
+  .dm-table .dm-rank{padding-left:18px}
+  .dm-about{padding:12px}
+  .dtable.dm-big th,.dtable.dm-big td{padding:8px 10px}
+}
+
+/* the four demons, two to a row on a wide screen, so a table's columns sit close together */
+.dm-grid{display:grid;gap:20px;margin-top:28px}
+.dm-grid>.card{margin:0}
+@media (min-width:1000px){.dm-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}

@@ -1,0 +1,99 @@
+---
+// Demons: each demon you can keep, what it's for, and its abilities rank by rank with the grimoire that teaches each.
+// Your level shows which ranks your demon can know and what those grimoires cost. scripts/demons.ts drives it.
+import Layout from '../layouts/Layout.astro';
+import LevelBar from '../components/LevelBar.astro';
+import { DEMONS, BIG } from '../data/demons';
+import { demonData, money, wowhead, type Ability } from '../data/spellbook';
+import { url } from '../lib/url';
+import '../styles/spells.css';
+import '../styles/demons.css';
+
+const LEVEL = 10;   // before any saved choice
+const { abilities } = demonData;
+const state = (rows: Ability[], r: Ability) => {
+  const next = Math.min(...rows.filter((a) => a.level > LEVEL).map((a) => a.level));
+  return r.level <= LEVEL ? 'have' : r.level === next ? 'next' : null;
+};
+/** a demon's spells, each with its ranks, in the order the demon first gets them */
+const bySpell = (rows: Ability[]) => [...Map.groupBy(rows, (r) => r.name)].map(([name, ranks]) => ({ name, ranks }));
+---
+<Layout title="Demon spells" description="The spells a WoW Forever warlock's demons cast: what each demon is for, every spell rank by level, and what the grimoires cost.">
+  <div class="page-head">
+    <h1>Demon spells</h1>
+    <p>The spells your demons cast, not yours: what each demon is for, then each of its spells rank by rank. A demon learns a new rank from a grimoire, bought from a demon trainer and used with the demon out. Set your level to see which ranks it can know and what they cost.</p>
+  </div>
+
+  <LevelBar id="dm-bar" level={LEVEL} />
+
+  <div class="dm-grid">
+  {DEMONS.map((d) => {
+    const rows = abilities[d.abilities];
+    return (
+      <section class="card full sp-card dm-card" aria-labelledby={`dm-${d.abilities}`} data-level={d.level}>
+        <div class="card-h"><h2 id={`dm-${d.abilities}`}>{d.title} <span class="muted dm-count"></span></h2></div>
+        <div class="dm-about">
+          <p>{d.role}</p>
+          <p class="muted">
+            <a class="link" href={wowhead('spell', d.summon.id)} target="_blank" rel="noopener">{d.summon.name}</a>: level {d.level}, from a <a class="link" href={url(`quests/#${d.quest}`)}>class quest</a>. A 10 sec cast{d.shard ? ' that uses a Soul Shard.' : ', and no Soul Shard.'}
+          </p>
+          {d.note && <p class="muted">{d.note}</p>}
+        </div>
+        <div class="tscroll">
+          <table class="dtable dm-table">
+            <caption class="sr-only">{d.title}'s spells, grouped by spell</caption>
+            <thead>
+              <tr><th scope="col">{d.title}'s spells</th><th scope="col" class="num">Level</th><th scope="col" class="num">Grimoire</th></tr>
+            </thead>
+            {bySpell(rows).map((g) => (
+              <tbody>
+                <tr class="dm-spell">
+                  <th scope="rowgroup" colspan="3">
+                    <a class="link" href={wowhead('spell', g.ranks.at(-1)!.id)} target="_blank" rel="noopener">{g.name}</a>
+                    {d.does[g.name] && <span class="muted">{d.does[g.name]}</span>}
+                  </th>
+                </tr>
+                {g.ranks.map((r) => (
+                  <tr data-level={r.level} data-price={r.price ?? 0} class={state(rows, r) ?? undefined}>
+                    <th scope="row" class="dm-rank"><a class="link" href={wowhead('spell', r.id)} target="_blank" rel="noopener">{r.rank ? `Rank ${r.rank}` : 'One rank'}</a></th>
+                    <td class="num dm-lv">{r.level}</td>
+                    <td class="num">
+                      {r.innate
+                        ? <span class="muted">Known when summoned</span>
+                        : <a class="link" href={wowhead('item', r.grimoire!)} target="_blank" rel="noopener">{money(r.price!)}</a>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            ))}
+          </table>
+        </div>
+      </section>
+    );
+  })}
+  </div>
+
+  <section class="card full" aria-labelledby="dm-big">
+    <div class="card-h"><h2 id="dm-big">Demons you call for a fight</h2></div>
+    <div class="tscroll">
+      <table class="dtable dm-big">
+        <thead>
+          <tr><th scope="col">Demon</th><th scope="col">Spell</th><th scope="col" class="num">Level</th><th scope="col">Needs</th><th scope="col">What happens</th></tr>
+        </thead>
+        <tbody>
+          {BIG.map((b) => (
+            <tr>
+              <th scope="row">{b.demon}</th>
+              <td><a class="link" href={wowhead('spell', b.id)} target="_blank" rel="noopener">{b.spell}</a> <span class="muted">· <a class="link" href={url(`quests/#${b.quest}`)}>class quest</a></span></td>
+              <td class="num">{b.level}</td>
+              <td>{b.needs}</td>
+              <td class="dm-what muted">{b.what}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>import '../scripts/demons';</script>
+</Layout>
