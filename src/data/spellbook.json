@@ -29,7 +29,7 @@
 {"id":706,"name":"Demon Armor","rank":1,"level":20,"tree":"Demonology","how":"train","first":true},
 {"id":3698,"name":"Health Funnel","rank":2,"level":20,"tree":"Demonology","how":"train"},
 {"id":698,"name":"Ritual of Summoning","rank":null,"level":20,"tree":"Demonology","how":"train","first":true},
-{"id":713,"name":"Summon Incubus","rank":null,"level":20,"tree":"Demonology","how":"unknown","first":true},
+{"id":713,"name":"Summon Incubus","rank":null,"level":20,"tree":"Demonology","how":"quest","first":true,"quest":"incubus"},
 {"id":712,"name":"Summon Succubus","rank":null,"level":20,"tree":"Demonology","how":"quest","first":true,"quest":"succubus"},
 {"id":1094,"name":"Immolate","rank":3,"level":20,"tree":"Destruction","how":"train"},
 {"id":5740,"name":"Rain of Fire","rank":1,"level":20,"tree":"Destruction","how":"train","first":true},

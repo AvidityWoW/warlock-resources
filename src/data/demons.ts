@@ -10,6 +10,8 @@ export interface Demon {
   abilities: DemonName;
   /** its summon spell (Wowhead spell id), the level it's learned at, and its chain on the Class quests page */
   summon: { name: string; id: number }; level: number; quest: string;
+  /** a second summon spell of the same level with its own quest chain (Summon Incubus) */
+  also?: { name: string; id: number; quest: string };
   /** Summon Imp is the only one that doesn't use a Soul Shard */
   shard: boolean;
   role: string;
@@ -37,7 +39,8 @@ export const DEMONS: Demon[] = [
     } },
   { title: 'Succubus and Incubus', abilities: 'Succubus', summon: { name: 'Summon Succubus', id: 712 }, level: 20, quest: 'succubus', shard: true,
     role: 'Melee Shadow damage, and Seduction to take a Humanoid out of the fight.',
-    note: 'The Incubus is new in Forever. Summon Incubus (also level 20) has no abilities of its own in the client, so it uses the Succubus\'s. How you learn it hasn\'t turned up yet.',
+    also: { name: 'Summon Incubus', id: 713, quest: 'incubus' },
+    note: 'The Incubus is new in Forever. It and the Succubus are both sayaad: they have the same spells, but each learns them from its own grimoires.',
     does: {
       'Lash of Pain': 'An instant Shadow attack in melee. 12 sec cooldown.',
       'Soothing Kiss': 'Makes its target more likely to attack something else. 4 sec cooldown.',

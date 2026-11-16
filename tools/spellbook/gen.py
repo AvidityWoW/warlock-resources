@@ -30,7 +30,7 @@ BUILD = db.execute("select value from Meta where key='build'").fetchone()[0]
 TREES = {'355': 'Affliction', '354': 'Demonology', '593': 'Destruction'}
 PETS = {'188': 'Imp', '204': 'Voidwalker', '205': 'Succubus', '189': 'Felhunter'}
 # spell id -> the quest that teaches it (the last quest of its chain; see src/data/quests.ts)
-QUEST = {688: 'imp', 697: 'voidwalker', 712: 'succubus', 691: 'felhunter', 5784: 'felsteed', 1122: 'infernal',
+QUEST = {688: 'imp', 697: 'voidwalker', 712: 'succubus', 713: 'incubus', 691: 'felhunter', 5784: 'felsteed', 1122: 'infernal',
          18540: 'doomguard', 23161: 'dreadsteed'}
 # taught by an item: its tooltip on Wowhead Forever says "Teaches <spell>". The four rank books dropped in Ahn'Qiraj (and
 # Shadow Ward's in Naxxramas's time) in Classic; where they come from in Forever isn't known.
@@ -38,7 +38,7 @@ ITEM = {437169: 'Grimoire of Portal of Summoning', 25307: 'Grimoire of Shadow Bo
         25311: 'Grimoire of Corruption VII', 28610: 'Grimoire of Shadow Ward IV'}
 # not spells you learn: a rune's helper that the client marks as known from the start, and a talent's stun
 SKIP = ('Metamorphosis : Demon Charge', 'Pyroclasm')
-UNKNOWN = {713}                                         # Summon Incubus: no quest or item teaches it that we know of
+UNKNOWN = set()                                         # spells nothing found so far teaches (none now)
 MOUNTS = (5784, 23161)                                  # in the Riding skill line, not a warlock one
 PASSIVE = 0x40
 

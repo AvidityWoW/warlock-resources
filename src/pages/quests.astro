@@ -29,7 +29,7 @@ const buys = (c: Chain) => c.routes.flatMap((r) => r.steps.flatMap((s) => s.buy 
 /** what the priced lines come to, for the quantities listed (a line with no quantity isn't counted) */
 const vendorTotal = (c: Chain, helped = false) => buys(c).reduce((sum, it) => sum + (it.each && it.qty && !(helped && it.shared) ? it.each * it.qty : 0), 0);
 /** the demon chains long enough that someone could lose track partway */
-const FIND = ['voidwalker', 'succubus', 'felhunter'];
+const FIND = ['voidwalker', 'succubus', 'incubus', 'felhunter'];
 /** a /run line for the chat box: it finds the last quest of the route the game has marked done (skipped "optional" leads
     never are, so it scans from the end) and prints the step after it, numbered as on this page. Under 255 characters. */
 const finder = (c: Chain, steps: Step[]) => {

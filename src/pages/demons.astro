@@ -37,6 +37,11 @@ const bySpell = (rows: Ability[]) => [...Map.groupBy(rows, (r) => r.name)].map((
           <p class="muted">
             <a class="link" href={wowhead('spell', d.summon.id)} target="_blank" rel="noopener">{d.summon.name}</a>: level {d.level}, from a <a class="link" href={url(`quests/#${d.quest}`)}>class quest</a>. A 10 sec cast{d.shard ? ' that uses a Soul Shard.' : ', and no Soul Shard.'}
           </p>
+          {d.also && (
+            <p class="muted">
+              <a class="link" href={wowhead('spell', d.also.id)} target="_blank" rel="noopener">{d.also.name}</a>: also level {d.level}, from <a class="link" href={url(`quests/#${d.also.quest}`)}>its own class quest</a>.
+            </p>
+          )}
           {d.note && <p class="muted">{d.note}</p>}
         </div>
         <div class="tscroll">

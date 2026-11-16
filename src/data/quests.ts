@@ -96,7 +96,6 @@ export const CHAINS: Chain[] = [
     ] },
 
   { key: 'succubus', title: 'Succubus', level: 20, reward: '[Summon Succubus](spell:712), and a [Small Soul Pouch](item:22243)',
-    note: 'Summon Incubus is also a level-20 spell, but no quest that teaches it has turned up yet.',
     routes: [
       { side: 'A', label: 'Stormwind', steps: [
         { id: 1717, name: 'Gakin\'s Summons', lead: true, what: 'Lago Blackwrench in Ironforge sends you to Gakin the Darkbinder in Stormwind.' },
@@ -115,6 +114,21 @@ export const CHAINS: Chain[] = [
         { id: 1472, name: 'Devourer of Souls', what: 'Carendin Halgar sends you to Godrick Farsan in the Temple of the Damned.' },
         { id: 1476, name: 'Hearts of the Pure', what: 'Bring [Dalin\'s Heart](item:6312) and [Corma\'s Heart](item:6313), the hearts of Dalin Forgewright and Corma Villard, to Carendin.' },
         { id: 1474, name: 'The Binding', what: 'Use the [Pure Hearts](item:6286) to summon a succubus, subdue it, and go back to Carendin.' }] },
+    ] },
+
+  { key: 'incubus', title: 'Incubus', level: 20, reward: '[Summon Incubus](spell:713), and a [Small Soul Pouch](item:22243)',
+    note: 'New in Forever. The Incubus is the Succubus\'s counterpart (both are sayaad): the same spells, each learned from its own grimoires.',
+    routes: [
+      { side: 'A', label: 'Stormwind', steps: [
+        { id: 65602, name: 'What Is Love?', what: 'Find the [Wooden Figurine](item:190309) in a house among the trees west of Maestra\'s Post in Ashenvale, and bring it to Gakin the Darkbinder in Stormwind\'s Mage Quarter.' },
+        { id: 65603, name: 'The Binding', what: 'Use the [Wooden Figurine](item:190186) at the summoning circle in the crypt below the Slaughtered Lamb to summon an incubus, subdue it, and go back to Gakin.' }] },
+      { side: 'H', label: 'Orgrimmar', steps: [
+        { id: 65601, name: 'Love Hurts', what: 'Speak with Magar in Orgrimmar, east of the Cleft of Shadow.' },
+        { id: 65610, name: 'Wish You Were Here', what: 'Search Fallen Sky Lake in Ashenvale, now overrun by bog beasts, for the [Withered Scarf](item:190232), and take it to Gan\'rul Bloodeye in Orgrimmar.' },
+        { id: 65604, name: 'The Binding', what: 'Use the [Withered Scarf](item:190187) at the summoning circle in Neeru\'s tent to summon an incubus, subdue it, and go back to Gan\'rul.' }] },
+      { side: 'H', label: 'Undercity', steps: [
+        { id: 65593, name: 'Hearts of the Lovers', what: 'Bring [Avelina\'s Heart](item:190179) and [Isaac\'s Heart](item:190180) to Carendin Halgar in the Temple of the Damned: Avelina Lilly is at Ambermill in Silverpine Forest, Isaac Pearson in Ratchet.' },
+        { id: 65597, name: 'The Binding', what: 'Use the [Lovers\' Hearts](item:190181) at the summoning circle below to summon an incubus, subdue it, and go back to Carendin.' }] },
     ] },
 
   { key: 'soranruk', title: 'Orb of Soran\'ruk', level: 20, reward: '[Orb of Soran\'ruk](item:6898) (off-hand) or [Staff of Soran\'ruk](item:15109)',
