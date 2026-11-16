@@ -197,7 +197,7 @@ export const CHAINS: Chain[] = [
         { id: 7603, name: 'Kroshius\' Infernal Core', what: 'Use the [Fel Fire](item:18626) at Kroshius\' remains in Shatter Scar Vale, kill him, and bring [Kroshius\' Infernal Core](item:18625) to Niby.' }] },
     ] },
 
-  { key: 'imps-request', title: 'An Imp\'s Request', level: 50, reward: '[Soul Harvester](item:20536) (staff), [Abyss Shard](item:20534) (trinket) or [Robes of Servitude](item:20530)',
+  { key: 'imps-request', title: 'An Imp\'s Request', level: 50, reward: 'All three: [Soul Harvester](item:20536) (staff), [Abyss Shard](item:20534) (trinket) and [Robes of Servitude](item:20530)',
     note: 'A level-52 chain that ends in the Sunken Temple.',
     routes: [
       { side: 'C', steps: [
