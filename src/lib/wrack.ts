@@ -7,6 +7,9 @@
 // The timeline puts the DoTs on one global cooldown apart, in the order picked (Corruption, Siphon Life, Bane of Agony by
 // default, Corruption taken as instant), then up to four Wracks, none overlapping and each at least one GCD after the cast
 // before it.
+// Each DoT can be recast once. Recasts in Forever are lossy, with no pandemic or rollover: the one before ends on the spot,
+// its remaining ticks lost, and the new one starts over, its first tick a period later (Agony back at x0.5). A recast is a
+// cast like any other, a GCD clear of the rest, and one during a channel cuts it off.
 import { ranked, type Rank } from '../data/coefficient-ranks';
 import { cells, rankAt, CAP } from '../scripts/coefficient-detail';
 
@@ -40,11 +43,14 @@ export const DEFAULT_STARTS = defaultStarts(0);
 
 /** a channel, from and to (seconds); the page keeps them in order and apart */
 export type Win = readonly [number, number];
-/** the channels as they run: each for its length, unless the next Wrack is recast before it ends, which cuts it off there */
-export const windowsOf = (starts: number[], durs: number[]): Win[] =>
-  starts.map((a, i) => [a, Math.min(a + (durs[i] ?? CHANNEL), starts[i + 1] ?? Infinity)] as const);
+/** the first of some casts (cuts: the DoT recasts) that comes after t, or Infinity */
+const nextCut = (t: number, cuts: number[]) => Math.min(Infinity, ...cuts.filter((c) => c > t + 1e-9));
+/** the channels as they run: each for its length, unless the next Wrack or a DoT recast (cuts) is cast before it ends,
+ *  which cuts it off there */
+export const windowsOf = (starts: number[], durs: number[], cuts: number[] = []): Win[] =>
+  starts.map((a, i) => [a, Math.min(a + (durs[i] ?? CHANNEL), starts[i + 1] ?? Infinity, nextCut(a, cuts))] as const);
 /** how long Wrack i actually channels, after any recast cuts it short */
-export const ranFor = (starts: number[], durs: number[], i: number) => { const [a, b] = windowsOf(starts, durs)[i]; return +(b - a).toFixed(3); };
+export const ranFor = (starts: number[], durs: number[], i: number, cuts: number[] = []) => { const [a, b] = windowsOf(starts, durs, cuts)[i]; return +(b - a).toFixed(3); };
 /** which channel a moment falls in (its place in the list), or -1 */
 const channelOf = (t: number, wins: Win[]) => wins.findIndex(([a, b]) => t >= a - 1e-9 && t < b - 1e-9);   // from its start, up to its end
 const inChannel = (t: number, wins: Win[]) => channelOf(t, wins) >= 0;
@@ -53,10 +59,18 @@ const inChannel = (t: number, wins: Win[]) => channelOf(t, wins) >= 0;
 export interface Tick { t: number; amount: number; boosted: boolean; extra: boolean; channel: number; stage?: number;
   /** one of the ticks Wrack adds, halfway between two of the DoT's own (which never move) */
   added?: boolean }
+/** one application of a DoT: cast at on, cut off at off (by a recast), or run out there (off === end) */
+export interface App { on: number; off: number; end: number }
+/** one of its own ticks a recast threw away */
+export interface Lost { t: number; amount: number; stage?: number; by: number }
 export interface DotLine {
   key: string; name: string; rank: number; learned: boolean; period: number; duration: number;
-  /** when it goes on (one GCD after the one before) and runs out */
+  /** when it first goes on (one GCD after the one before) and when it finally runs out */
   on: number; off: number;
+  /** each time it's cast, the first and then any recast */
+  apps: App[];
+  /** the ticks the recast cut off, where they would have landed */
+  lost: Lost[];
   /** its ticks with Wrack, and where they land without it */
   ticks: Tick[]; normal: number[];
   /** its sub-ticks: the halfway points between its own ticks, which only tick while a Wrack channels over them */
@@ -78,34 +92,49 @@ function rankFor(key: string, level: number) {
   return { s, i: Math.max(i, 0), learned: i >= 0 };
 }
 
-/** missed: a halfway point inside a channel that still doesn't tick (the 10 ms batch, on /wrack/batched/) */
-export function dotLine(key: string, level: number, sp: number, wins: Win[], on: number, missed: (t: number) => boolean = () => false): DotLine {
+/** a DoT's period and duration (seconds) at a level */
+export function dotTiming(key: string, level: number) {
+  const { s, i } = rankFor(key, level), r = s.forever[i];
+  return { period: (r.period ?? 0) / 1000, duration: (r.dur ?? 0) / 1000 };
+}
+
+/** ons: when it's cast, first and then any recast, in order. missed: a halfway point inside a channel that still doesn't
+ *  tick (the 10 ms batch, on /wrack/batched/) */
+export function dotLine(key: string, level: number, sp: number, wins: Win[], ons: number[], missed: (t: number) => boolean = () => false): DotLine {
   const { s, i, learned } = rankFor(key, level);
   const r = s.forever[i], c = cells(r, level, sp, s.agony);
   const period = (r.period ?? 0) / 1000, duration = (r.dur ?? 0) / 1000, n = r.ticks;
-  const off = on + duration;
+  // each cast runs its full duration, or until the next one cuts it off (a tick landing on the recast's moment still counts)
+  const apps: App[] = ons.map((on, j) => ({ on, end: on + duration, off: Math.min(on + duration, ons[j + 1] ?? Infinity) }));
   // Bane of Agony's three stages (x0.5 / x1 / x1.5 base, each with the full spell-power share) go by time since it went
-  // on: a third of its duration each (8 s), a tick on a boundary counting in the earlier one, so without Wrack it's ticks
-  // 1-4, 5-8 and 9-12. With Wrack a tick takes the stage of the moment it lands in.
+  // on (since its latest cast): a third of its duration each (8 s), a tick on a boundary counting in the earlier one, so
+  // without Wrack it's ticks 1-4, 5-8 and 9-12. With Wrack a tick takes the stage of the moment it lands in.
   const amounts = s.agony ? num(c.perTick) : [Number(c.perTick)];
-  const stage = (t: number) => Math.min(2, Math.max(0, Math.ceil((t - on) / (duration / 3) - 1e-9) - 1));
-  const amount = (t: number) => (s.agony ? amounts[stage(t)] : amounts[0]);
-  const normal = Array.from({ length: n }, (_, k) => on + (k + 1) * period);
-  // with Wrack: its own ticks, where they always are, and a tick halfway before each one that lands while Wrack channels
-  const ticks: Tick[] = [];
-  for (let k = 1; k <= n; k++) {
-    for (const [t, added] of [[on + (k - 0.5) * period, true], [on + k * period, false]] as const) {
-      const channel = channelOf(t, wins);
-      if (added && (channel < 0 || missed(t))) continue;
-      ticks.push({ t, amount: amount(t), boosted: channel >= 0, channel, added, extra: added, ...(s.agony ? { stage: stage(t) } : {}) });
+  const stage = (t: number, on: number) => Math.min(2, Math.max(0, Math.ceil((t - on) / (duration / 3) - 1e-9) - 1));
+  const amount = (t: number, on: number) => (s.agony ? amounts[stage(t, on)] : amounts[0]);
+  const st = (t: number, on: number) => (s.agony ? { stage: stage(t, on) } : {});
+  const normalTicks: { t: number; amount: number }[] = [], ticks: Tick[] = [], lost: Lost[] = [], subs: number[] = [];
+  for (const { on, off } of apps) {
+    for (let k = 1; k <= n; k++) {
+      const own = on + k * period, half = on + (k - 0.5) * period;
+      // with Wrack: its own ticks, where they always are, and a tick halfway before each one that lands while Wrack channels
+      if (half <= off + 1e-9) {
+        subs.push(half);
+        const channel = channelOf(half, wins);
+        if (channel >= 0 && !missed(half))
+          ticks.push({ t: half, amount: amount(half, on), boosted: true, channel, added: true, extra: true, ...st(half, on) });
+      }
+      if (own > off + 1e-9) { lost.push({ t: own, amount: amount(own, on), by: off, ...st(own, on) }); continue; }
+      const channel = channelOf(own, wins);
+      normalTicks.push({ t: own, amount: amount(own, on) });
+      ticks.push({ t: own, amount: amount(own, on), boosted: channel >= 0, channel, added: false, extra: false, ...st(own, on) });
     }
   }
   const total = (xs: { amount: number }[]) => xs.reduce((a, x) => a + x.amount, 0);
-  const normalTicks = normal.map((t) => ({ t, amount: amount(t) }));
   const inNormal = normalTicks.filter((x) => inChannel(x.t, wins)), inWrack = ticks.filter((x) => x.boosted);
   return {
-    key, name: s.name, rank: i + 1, learned, period, duration, on, off, ticks, normal,
-    subs: Array.from({ length: n }, (_, k) => on + (k + 0.5) * period),
+    key, name: s.name, rank: i + 1, learned, period, duration, on: ons[0], off: apps[apps.length - 1].off, apps, lost,
+    ticks, normal: normalTicks.map((x) => x.t), subs,
     totalNormal: total(normalTicks), totalWrack: total(ticks),
     inNormal: total(inNormal), inWrack: total(inWrack), ticksNormal: inNormal.length, ticksWrack: inWrack.length, count: ticks.length,
   };
@@ -121,29 +150,42 @@ export const FIRST_START = firstStart(0);
 export const earliest = (starts: number[], i: number, h = 0) => (i ? up(starts[i - 1] + gcdAt(h)) : firstStart(h));
 /** the latest Wrack i can be cast: one GCD before the next (which cuts its channel off if it comes first) */
 export const latest = (starts: number[], i: number, h = 0) => (i < starts.length - 1 ? down(starts[i + 1] - gcdAt(h)) : LAST_START);
-/** the longest Wrack i can be set to channel: a full channel, or the gap before the next is cast */
-export const longest = (starts: number[], i: number) => +Math.min(CHANNEL, i < starts.length - 1 ? starts[i + 1] - starts[i] : Infinity).toFixed(3);
+/** the longest Wrack i can be set to channel: a full channel, or the gap before the next cast (a Wrack or a recast, cuts) */
+export const longest = (starts: number[], i: number, cuts: number[] = []) =>
+  +Math.min(CHANNEL, (i < starts.length - 1 ? starts[i + 1] : Infinity) - starts[i], nextCut(starts[i], cuts) - starts[i]).toFixed(3);
+
+/** the nearest moment to t, on the 0.001 s grid, from lo to hi and a GCD (g) clear of every other cast; null if none is */
+export function fit(t: number, others: number[], lo: number, hi: number, g: number) {
+  const ok = (x: number) => x >= lo - 1e-9 && x <= hi + 1e-9 && others.every((c) => Math.abs(x - c) >= g - 1e-6);
+  const x = snap(t);
+  if (ok(x)) return +x.toFixed(3);
+  const near = [lo, hi, ...others.flatMap((c) => [up(c + g), down(c - g)])].filter(ok);
+  return near.length ? near.reduce((a, b) => (Math.abs(b - t) < Math.abs(a - t) ? b : a)) : null;
+}
 
 /** move one Wrack's cast, in 0.001 s steps, at least a GCD after the one before and before the one after (it stops there
- *  rather than pushing them). Its own length is kept: a channel the next Wrack cuts off grows back if it moves away. */
-export function settle(starts: number[], moved: number, to: number, h = 0) {
+ *  rather than pushing them), and a GCD clear of any recast (rec), hopping over one to the other side.
+ *  Its own length is kept: a channel the next cast cuts off grows back if it moves away. */
+export function settle(starts: number[], moved: number, to: number, h = 0, rec: number[] = []) {
   const out = [...starts];
-  const lo = earliest(out, moved, h), hi = latest(out, moved, h);
-  out[moved] = Math.min(hi, Math.max(lo, snap(to)));
+  out[moved] = fit(to, rec, earliest(out, moved, h), latest(out, moved, h), gcdAt(h)) ?? out[moved];
   return out;
 }
-/** change one Wrack's duration, 0.5 s to a full channel in 0.001 s steps, no longer than the gap before the next is cast */
-export function lengthen(starts: number[], durs: number[], i: number, to: number) {
+/** change one Wrack's duration, 0.5 s to a full channel in 0.001 s steps, no longer than the gap before the next cast */
+export function lengthen(starts: number[], durs: number[], i: number, to: number, rec: number[] = []) {
   const out = [...durs];
-  out[i] = +Math.min(longest(starts, i), Math.max(MIN_DUR, snap(to))).toFixed(3);
+  out[i] = +Math.min(longest(starts, i, rec), Math.max(MIN_DUR, snap(to))).toFixed(3);
   return out;
 }
 export const MIN_DUR = 0.5;
 /** drag a Wrack's left side: its cast moves, the end of its channel stays put (so it channels longer or shorter), from a
- *  GCD after the one before (cutting that one off) to 0.5 s before its end, and no more than 6 s before it */
-export function resizeStart(starts: number[], durs: number[], i: number, to: number, h = 0) {
-  const end = windowsOf(starts, durs)[i][1], lo = Math.max(earliest(starts, i, h), end - CHANNEL);
-  const start = Math.min(end - MIN_DUR, latest(starts, i, h), Math.max(lo, snap(to)));
+ *  GCD after the cast before (cutting a Wrack off) to 0.5 s before its end, and no more than 6 s before it */
+export function resizeStart(starts: number[], durs: number[], i: number, to: number, h = 0, rec: number[] = []) {
+  const g = gcdAt(h), end = windowsOf(starts, durs, rec)[i][1];
+  // a GCD clear of the recasts either side of the channel
+  const lo = Math.max(earliest(starts, i, h), end - CHANNEL, ...rec.filter((c) => c < end - 1e-9).map((c) => up(c + g)));
+  const hi = Math.min(end - MIN_DUR, latest(starts, i, h), ...rec.filter((c) => c >= end - 1e-9).map((c) => down(c - g)));
+  const start = Math.min(hi, Math.max(lo, snap(to)));
   const s2 = [...starts], d2 = [...durs];
   s2[i] = +start.toFixed(3); d2[i] = +(end - start).toFixed(3);
   return { starts: s2, durs: d2 };
@@ -157,6 +199,27 @@ export function refit(starts: number[], h = 0, was = 0) {
     out[i] = Math.abs(starts[i] - earliest(starts, i, was)) < 1e-6 ? earliest(out, i, h) : Math.max(out[i], earliest(out, i, h));
   return out[out.length - 1] <= LAST_START ? out : defaultStarts(h).slice(0, out.length);
 }
+
+/** each DoT's recast, by its key (one each at most); a time, or missing for none */
+export type Recasts = Partial<Record<string, number>>;
+/** the latest a recast can go */
+export const RECAST_LAST = 38;
+/** put one DoT's recast at t, or as near as it can go: after the opening casts, by RECAST_LAST, a GCD clear of the Wracks
+ *  and the other recasts; null if there's no room */
+export const placeRecast = (t: number, starts: number[], rec: Recasts, key: string, h = 0) =>
+  fit(t, [...starts, ...Object.entries(rec).filter(([k, x]) => k !== key && x != null).map(([, x]) => x!)], firstStart(h), RECAST_LAST, gcdAt(h));
+/** after the Wracks move (more of them, or the haste): each recast moved to the nearest place still free, or dropped */
+export function refitRecasts(rec: Recasts, starts: number[], h = 0) {
+  const out: Recasts = {};
+  for (const [k, t] of Object.entries(rec)) {
+    if (t == null) continue;
+    const at = placeRecast(t, starts, out, k, h);
+    if (at != null) out[k] = at;
+  }
+  return out;
+}
+/** the recasts' times, in no particular order */
+export const recastTimes = (rec: Recasts | undefined) => Object.values(rec ?? {}).filter((x): x is number => x != null);
 
 export function wrackLine(level: number, sp: number): WrackLine {
   const { s, i } = rankFor('Wrack', level);
@@ -229,13 +292,39 @@ export function timeline(wins: Win[], dots: DotLine[], wrackTick: number, missWh
       + [-4, 0, 4].map((dy) => `<circle class="wr-grip" cx="9" cy="${yy + dy}" r="1.4"/><circle class="wr-grip" cx="14" cy="${yy + dy}" r="1.4"/>`).join('')
       + `<text class="wr-order" x="28" y="${yy + 5}">${i + 1}</text>`
       + `<text class="wr-name" x="${LABEL - 12}" y="${yy + 5}" text-anchor="end">${d.name}</text></g>`;
-    g += `<line class="wr-run" x1="${f(x(d.on))}" x2="${f(x(d.off))}" y1="${yy}" y2="${yy}"/>`;
-    g += `<circle class="wr-cast" cx="${f(x(d.on))}" cy="${yy}" r="3"/>`;
-    hit(x(d.on), yy, `${d.name} · cast at ${secs(d.on)} · runs ${secs(d.duration)}, to ${secs(d.off)}`);
-    // where it runs out, under its last tick
-    g += `<line class="wr-endmark" x1="${f(x(d.off))}" x2="${f(x(d.off))}" y1="${yy - 9}" y2="${yy + 9}"/>`;
+    // what a recast cut off goes in a faint lane just above the row, clear of the new one's ticks
+    const ghost = yy - 14;
+    // the recast's whole run is in the recast colour: its line, own ticks, notches and end (a tick on the recast's very
+    // moment still belongs to the one before)
+    const reOn = d.apps[1]?.on ?? Infinity, re = (t: number) => (t > reOn + 1e-9 ? ' wr-rerun' : '');
+    d.apps.forEach((a, j) => {
+      // its line while it runs; cut off by a recast, the rest it would have run is dashed, up in the lane
+      g += `<line class="wr-run${j ? ' wr-rerun' : ''}" x1="${f(x(a.on))}" x2="${f(x(a.off))}" y1="${yy}" y2="${yy}"/>`;
+      if (a.off < a.end - 1e-9) g += `<path class="wr-run wr-cut" d="M${f(x(a.off))} ${yy - 6}V${ghost}H${f(x(a.end))}"/>`;
+      // where it runs out, under its last tick (unless that's past the end of the timeline)
+      else if (a.end <= SPAN + 1e-9) g += `<line class="wr-endmark${j ? ' wr-rerun' : ''}" x1="${f(x(a.end))}" x2="${f(x(a.end))}" y1="${yy - 9}" y2="${yy + 9}"/>`;
+      if (!j) {
+        g += `<circle class="wr-cast" cx="${f(x(a.on))}" cy="${yy}" r="3"/>`;
+        hit(x(a.on), yy, `${d.name} · cast at ${secs(a.on)} · runs ${secs(d.duration)}, to ${secs(a.end)}`);
+        return;
+      }
+      // the recast: a ring to drag along the row
+      const cut = d.lost.filter((l) => Math.abs(l.by - a.on) < 1e-9), was = d.apps[j - 1];
+      g += `<g class="wr-recast" data-recast="${d.key}"><circle class="wr-grab" cx="${f(x(a.on))}" cy="${yy}" r="12"/>`
+        + `<circle cx="${f(x(a.on))}" cy="${yy}" r="6"/><circle class="wr-recast-in" cx="${f(x(a.on))}" cy="${yy}" r="2"/></g>`;
+      hit(x(a.on), yy, `${d.name} · recast at ${secs(a.on)} · runs to ${secs(a.end)}&#10;`
+        + (cut.length ? `Cuts the one before off ${secs(was.end - a.on)} early: ${cut.length} tick${cut.length > 1 ? 's' : ''} lost (${+cut.reduce((s, l) => s + l.amount, 0).toFixed(1)} damage)`
+          : 'Nothing lost: the one before had run out') + '&#10;Drag to move it');
+    });
+    // the ticks a recast threw away: faded, dashed, where they would have landed
+    for (const l of d.lost) {
+      if (l.t > SPAN + 1e-9) continue;
+      g += mark(x(l.t), ghost, 3.2, 'wr-tick wr-lost', l.stage);
+      hit(x(l.t), ghost,`${d.name} · lost tick · would have landed at ${secs(l.t)} for ${+l.amount.toFixed(1)} damage&#10;Cut off by the recast at ${secs(l.by)}`);
+    }
     // its sub-ticks, halfway between its own: dormant notches, unless a Wrack channels over one and switches it on
     for (const t of d.subs) {
+      if (t > SPAN + 1e-9) continue;   // past the end of the timeline
       if (d.ticks.some((q) => q.added && Math.abs(q.t - t) < 1e-6)) continue;
       // inside a channel but missed by the batch: a dotted hollow circle in the shade of the Wrack it fell in
       const late = channelOf(t, wins), why = late >= 0 ? missWhy(t) : undefined;
@@ -244,12 +333,13 @@ export function timeline(wins: Win[], dots: DotLine[], wrackTick: number, missWh
         hit(x(t), yy, `${d.name} · missed tick at ${secs(t)}&#10;${why}, so the batch misses it`);
         continue;
       }
-      g += `<line class="wr-sub" x1="${f(x(t))}" x2="${f(x(t))}" y1="${yy - 5}" y2="${yy + 5}"/>`;
+      g += `<line class="wr-sub${re(t)}" x1="${f(x(t))}" x2="${f(x(t))}" y1="${yy - 5}" y2="${yy + 5}"/>`;
       hit(x(t), yy, `${d.name} · sub-tick at ${secs(t)}&#10;Dormant: it only ticks while Wrack channels over it`);
     }
     d.ticks.forEach((t, k) => {
+      if (t.t > SPAN + 1e-9) return;   // a recast's ticks can run past the end of the timeline (they still count in the table)
       // a sub-tick a Wrack switched on is filled, glowing in that Wrack's colour; the DoT's own stay hollow, where they always are
-      const cls = `wr-tick${t.added ? ` wr-fast wr-w${t.channel}` : ''}`;
+      const cls = `wr-tick${t.added ? ` wr-fast wr-w${t.channel}` : re(t.t)}`;
       g += mark(x(t.t), yy, t.added ? 5 : 4, cls, t.stage) + label(x(t.t), yy, k + 1, t.added ? t.channel : -1);
       hit(x(t.t), yy, `${d.name} · tick ${k + 1} · ${secs(t.t)} · ${+t.amount.toFixed(1)} damage`
         + `${t.stage !== undefined ? ` (${STAGE[t.stage]} base)` : ''}${t.added ? ` · a sub-tick switched on by Wrack${many ? ` ${t.channel + 1}` : ''}` : ''}`);
@@ -271,6 +361,8 @@ const n0 = (n: number) => String(Math.round(n));
 export interface View { starts: number[]; durs: number[]; level: number; sp: number; order: string[];
   /** haste, in percent */
   haste: number;
+  /** each DoT's recast, by its key */
+  recasts?: Recasts;
   /** the 10 ms batch: a channel's first 10 ms (start), last 10 ms (end), the 10 ms around a back-to-back recast (between),
    *  any of them, don't switch on DoT ticks */
   batch?: Batch }
@@ -293,17 +385,20 @@ function zonesOf(wins: Win[], batch: Batch | undefined): Zone[] {
 
 /** everything the page draws for a view: the timeline, the table rows and the summary of what each Wrack adds */
 export function wrackView(v: View) {
-  const h = v.haste / 100, wins = windowsOf(v.starts, v.durs);
+  const h = v.haste / 100, rec = v.recasts ?? {}, wins = windowsOf(v.starts, v.durs, recastTimes(rec));
   // the batch's zones, where a halfway point inside a channel still doesn't tick (Wrack's own ticks aren't touched)
   const zones = zonesOf(wins, v.batch);
   const missWhy = (t: number) => zones.find((z) => t >= z.a - 1e-9 && t < z.b - 1e-9)?.why;
-  const dots = v.order.map((k, i) => dotLine(k, v.level, v.sp, wins, +(i * gcdAt(h)).toFixed(3), (t) => !!missWhy(t)));
+  const dots = v.order.map((k, i) => dotLine(k, v.level, v.sp, wins, [+(i * gcdAt(h)).toFixed(3), ...(rec[k] != null ? [rec[k]!] : [])], (t) => !!missWhy(t)));
   const w = wrackLine(v.level, v.sp), nW = v.starts.length;
   const wTicks = wins.reduce((a, [p, q]) => a + ticksIn(q - p), 0), wTotal = wTicks * w.perTick;
   const rows = dots.map((d) => {
     const later = d.learned ? '' : `<span class="wr-rk">rank 1, learned at ${ranked.find((x) => x.key === d.key)!.forever[0].learn}</span>`;
+    // a recast: when, and what it threw away (in both columns, with Wrack and without)
+    const re = d.apps[1], lostDmg = d.lost.reduce((a, l) => a + l.amount, 0);
+    const recast = re ? `<span class="wr-rk wr-rk-re">recast at ${re.on.toFixed(3)} s${d.lost.length ? ` · ${d.lost.length} tick${d.lost.length > 1 ? 's' : ''} lost (${n0(lostDmg)})` : ''}</span>` : '';
     const extra = d.totalWrack - d.totalNormal;
-    return `<tr><th scope="row">${esc(d.name)}${later}</th>`
+    return `<tr><th scope="row">${esc(d.name)}${later}${recast}</th>`
       + `<td class="num"><span class="wr-was">${d.ticksNormal} →</span> <b>${d.ticksWrack}</b></td>`
       + `<td class="num"><span class="wr-was">${n0(d.inNormal)} →</span> <b>${n0(d.inWrack)}</b></td>`
       + `<td class="num"><span class="wr-was">${d.normal.length} →</span> <b>${d.count}</b></td>`

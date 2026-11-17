@@ -2,7 +2,8 @@
 // The Wrack page, drawn by src/pages/wrack.astro and, with the 10 ms batch option, by src/pages/wrack/batched.astro.
 import Layout from '../layouts/Layout.astro';
 import Stepper from './Stepper.astro';
-import { wrackView, CHANNEL, CAP, DEFAULT_STARTS, LAST_START, DOT_KEYS, MIN_DUR, FIRST_START, STEP, MAX_HASTE } from '../lib/wrack';
+import { wrackView, CHANNEL, CAP, DEFAULT_STARTS, LAST_START, DOT_KEYS, MIN_DUR, FIRST_START, STEP, MAX_HASTE, RECAST_LAST } from '../lib/wrack';
+import { ranked } from '../data/coefficient-ranks';
 import '../styles/wrack.css';
 
 interface Props {
@@ -71,8 +72,22 @@ const patch = [
             ))}
           </div>
         </div>
+        <div class="wr-panel">
+          <div class="wr-recasts">
+            <div class="wr-ph">Recasts</div><span class="wr-ph wr-col" aria-hidden="true">Recast at</span>
+            {DOT_KEYS.map((k, i) => {
+              const name = ranked.find((x) => x.key === k)!.name;
+              return (
+                <div class="wr-re off" data-key={k}>
+                  <button type="button" class="wr-bt" aria-pressed="false" title={`Recast ${name} or not. A recast cuts the one before off: its remaining ticks are lost.`}>{name}</button>
+                  <Stepper id={`wr-re-${i}`} aria-label={`${name} recast at`} label={`${name}'s recast`} min={FIRST_START} max={RECAST_LAST} step={STEP} unit="s" disabled />
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
-      <p class="ctlbar-note muted wr-hint">Drag a DoT's name on the timeline to change the cast order (top first), a Wrack's <span class="wr-mouse">window</span><span class="wr-touch">handle</span> to move it, and its sides to change how long it channels.<span class="wr-touch"> Swipe across the chart to scroll it, and tap a tick for its numbers.</span></p>
+      <p class="ctlbar-note muted wr-hint">Drag a DoT's name on the timeline to change the cast order (top first), a Wrack's <span class="wr-mouse">window</span><span class="wr-touch">handle</span> to move it, and its sides to change how long it channels. Drag a recast's ring along its row to move it.<span class="wr-touch"> Swipe across the chart to scroll it, and tap a tick for its numbers.</span></p>
     </div>
     <div class="wr-body">
       <div class="wr-chartbox"><div class="wr-chart" id="wr-chart" set:html={view.svg}></div><div class="wr-tip" id="wr-tip" role="tooltip" hidden></div></div>
@@ -81,6 +96,8 @@ const patch = [
         <li><span class="k k-tick"></span>Tick</li>
         <li><span class="k k-fast"></span>Extra tick</li>
         <li><span class="k k-sub"></span>Halfway point, no channel</li>
+        <li><span class="k k-recast"></span>Recast</li>
+        <li><span class="k k-lost"></span>Tick lost to a recast</li>
         {batched && <li class="wr-lg-miss" hidden><span class="k k-miss"></span>Missed tick (batch)</li>}
         <li>Agony <span class="k k-s0"></span>×0.5 <span class="k k-s1"></span>×1 <span class="k k-s2"></span>×1.5</li>
       </ul>

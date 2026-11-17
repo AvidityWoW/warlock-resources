@@ -1,6 +1,6 @@
 // Wrack page: the number of Wracks and their start times (boxes, or drag their windows on the timeline), the level, spell
 // power and haste redraw the timeline and the table.
-import { wrackView, ranFor, settle, lengthen, resizeStart, refit, earliest, latest, longest, gcdAt, defaultStarts, CAP, GEOM, CHANNEL, LAST_START, MAX_HASTE, MIN_DUR, STEP, DOT_KEYS, type View } from '../lib/wrack';
+import { wrackView, ranFor, settle, lengthen, resizeStart, refit, earliest, latest, longest, gcdAt, defaultStarts, firstStart, placeRecast, refitRecasts, recastTimes, dotTiming, CAP, GEOM, CHANNEL, LAST_START, MAX_HASTE, MIN_DUR, STEP, DOT_KEYS, RECAST_LAST, type View } from '../lib/wrack';
 
 document.addEventListener('astro:page-load', () => {
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
@@ -23,7 +23,17 @@ document.addEventListener('astro:page-load', () => {
   type K = keyof typeof pairs;
   const clamp = (x: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, Math.round(x) || 0));
   const v: View = { starts: defaultStarts().slice(0, 1), durs: [CHANNEL], level: clamp(+pairs.level.r.value, 1, CAP),
-    sp: clamp(+pairs.sp.r.value, 0, 9999), haste: clamp(+pairs.haste.r.value, 0, MAX_HASTE), order: [...DOT_KEYS] };
+    sp: clamp(+pairs.sp.r.value, 0, 9999), haste: clamp(+pairs.haste.r.value, 0, MAX_HASTE), order: [...DOT_KEYS], recasts: {} };
+  // each DoT's recast: its button (on or off) and its time
+  const res = [...document.querySelectorAll<HTMLElement>('.wr-re')].map((el) => ({ el, k: el.dataset.key!, b: el.querySelector('button')!, n: el.querySelector('input')! }));
+  /** the recasts' times, which the Wracks steer around and are cut off by */
+  const rt = () => recastTimes(v.recasts);
+  /** the Wracks moved: the recasts make way, to the nearest free place (or off, if there's none) */
+  const makeWay = () => { v.recasts = refitRecasts(v.recasts!, v.starts, h()); };
+  const setRecast = (k: string, t: number) => {
+    const at = placeRecast(t, v.starts, v.recasts!, k, h());
+    if (at != null) v.recasts = { ...v.recasts, [k]: at };
+  };
   // the 10 ms batch switches, start and end, only on /wrack/batched/, and their legend entry, shown while either is on
   const bStart = $<HTMLButtonElement>('wr-batch-start'), bEnd = $<HTMLButtonElement>('wr-batch-end'), bMid = $<HTMLButtonElement>('wr-batch-between');
   const pressed = (b: HTMLButtonElement | null) => b?.getAttribute('aria-pressed') === 'true';
@@ -53,9 +63,18 @@ document.addEventListener('astro:page-load', () => {
       if (document.activeElement !== n) n.value = v.starts[i].toFixed(3);
       d.min = String(MIN_DUR);
       // up to 6 s or the gap before the next is cast; shown as it runs, after any recast cuts it short
-      d.max = String(longest(v.starts, i));
-      if (document.activeElement !== d) d.value = ranFor(v.starts, v.durs, i).toFixed(3);
+      d.max = String(longest(v.starts, i, rt()));
+      if (document.activeElement !== d) d.value = ranFor(v.starts, v.durs, i, rt()).toFixed(3);
     });
+    for (const { el, k, b, n } of res) {
+      const t = v.recasts![k], off = t == null;
+      el.classList.toggle('off', off);
+      b.setAttribute('aria-pressed', String(!off));
+      n.disabled = off;
+      n.min = String(firstStart(h()));
+      if (off) n.value = '';
+      else if (document.activeElement !== n) n.value = t.toFixed(3);
+    }
     for (const k of Object.keys(pairs) as K[]) {
       const p = pairs[k];
       p.n.value = String(v[k]);
@@ -88,18 +107,30 @@ document.addEventListener('astro:page-load', () => {
     const fits = next[n - 1] <= LAST_START;
     v.starts = fits ? next.map((t) => +t.toFixed(3)) : defaultStarts(h()).slice(0, n);
     v.durs = fits ? durs : Array(n).fill(CHANNEL);
+    makeWay();
     render();
   }, on);
   ats.forEach(({ n, d }, i) => {
-    n.addEventListener('input', () => { if (n.value !== '') { v.starts = settle(v.starts, i, +n.value, h()); render(); } }, on);
-    d.addEventListener('input', () => { if (d.value !== '') { v.durs = lengthen(v.starts, v.durs, i, +d.value); render(); } }, on);
+    n.addEventListener('input', () => { if (n.value !== '') { v.starts = settle(v.starts, i, +n.value, h(), rt()); render(); } }, on);
+    d.addEventListener('input', () => { if (d.value !== '') { v.durs = lengthen(v.starts, v.durs, i, +d.value, rt()); render(); } }, on);
     for (const x of [n, d]) x.addEventListener('change', (e) => { if (e.isTrusted) render(); }, on);   // an emptied box goes back to the value shown
   });
+  // a recast's button: on, it goes as the DoT runs out (nothing lost yet; move it sooner to see what clipping costs), or
+  // as near to that as there's room for
+  for (const { k, b, n } of res) {
+    b.addEventListener('click', () => {
+      if (v.recasts![k] != null) { const { [k]: _, ...rest } = v.recasts!; v.recasts = rest; }
+      else setRecast(k, Math.min(RECAST_LAST, v.order.indexOf(k) * gcdAt(h()) + dotTiming(k, v.level).duration));
+      render();
+    }, on);
+    n.addEventListener('input', () => { if (n.value !== '' && v.recasts![k] != null) { setRecast(k, +n.value); render(); } }, on);
+    n.addEventListener('change', (e) => { if (e.isTrusted) render(); }, on);
+  }
   for (const k of Object.keys(pairs) as K[]) {
     const p = pairs[k], set = (x: number) => {
       const was = h();
       v[k] = clamp(x, p.lo, p.hi);
-      if (k === 'haste') v.starts = refit(v.starts, h(), was);   // a shorter GCD frees the casts; a longer one pushes them apart
+      if (k === 'haste') { v.starts = refit(v.starts, h(), was); makeWay(); }   // a shorter GCD frees the casts; a longer one pushes them apart
       render();
     };
     p.r.addEventListener('input', () => set(+p.r.value), on);
@@ -152,14 +183,15 @@ document.addEventListener('astro:page-load', () => {
   // drag a Wrack's window (its handle on top, or the shaded channel) along the timeline, or one of its sides in or out to
   // change how long it channels; all in 0.001 s steps. what: 'move', or the side being dragged ('l' or 'r').
   // y: where it was pressed, so a tap on a tick inside a window (which starts a drag that goes nowhere) still shows its label
-  let drag: { i: number; what: 'move' | 'l' | 'r'; x: number; y: number; from: number; scale: number } | null = null;
-  /** what a press lands on to drag: a side, or the window or handle; under a tick's target, the window behind it. A finger
-   *  only takes the handle and the sides: swiped across the middle of a window, it scrolls the chart sideways. */
+  // a DoT's recast ring drags too: what 'recast', and key says which
+  let drag: { i: number; what: 'move' | 'l' | 'r' | 'recast'; key?: string; x: number; y: number; from: number; scale: number } | null = null;
+  /** what a press lands on to drag: a recast, a side, or the window or handle; under a tick's target, what's behind it. A
+   *  finger only takes the handle, the sides and the recasts: swiped across the middle of a window, it scrolls the chart. */
   const grabbed = (e: { target: EventTarget | null; clientX: number; clientY: number }, touch: boolean) => {
     const t = e.target as Element, at = (sel: string) => t.closest(sel)
-      ?? (t.classList.contains('wr-hit') ? document.elementsFromPoint(e.clientX, e.clientY).find((x) => x.matches(sel)) ?? null : null);
-    const edge = at('[data-edge]');
-    return { edge, el: edge ?? at(touch ? '.wr-handle[data-drag]' : '[data-drag]') };
+      ?? (t.classList.contains('wr-hit') ? document.elementsFromPoint(e.clientX, e.clientY).find((x) => x.closest(sel))?.closest(sel) ?? null : null);
+    const recast = at('[data-recast]'), edge = recast ? null : at('[data-edge]');
+    return { recast, edge, el: recast ?? edge ?? at(touch ? '.wr-handle[data-drag]' : '[data-drag]') };
   };
   // on a touch screen, a finger on a handle, a side or a DoT's name drags it instead of scrolling the page or the chart
   chart.addEventListener('touchstart', (e) => {
@@ -167,14 +199,22 @@ document.addEventListener('astro:page-load', () => {
     if (e.touches.length === 1 && ((e.target as Element).closest('[data-row]') || grabbed({ target: e.target, clientX: t.clientX, clientY: t.clientY }, true).el)) e.preventDefault();
   }, { ...on, passive: false });
   chart.addEventListener('pointerdown', (e) => {
-    const { edge, el } = grabbed(e, e.pointerType === 'touch');
+    const { recast, edge, el } = grabbed(e, e.pointerType === 'touch');
     if (e.button !== 0 || !el) return;
     const r = chart.querySelector('svg')!.getBoundingClientRect();
+    // seconds per screen pixel: the drawing's time span over the width it's drawn at
+    const scale = (GEOM.SPAN / (GEOM.W - GEOM.LABEL - GEOM.RIGHT)) * (GEOM.W / r.width);
+    if (recast) {
+      const key = recast.getAttribute('data-recast')!;
+      drag = { i: -1, what: 'recast', key, x: e.clientX, y: e.clientY, from: v.recasts![key]!, scale };
+      chart.classList.add('recasting');
+      tip.hidden = true;
+      e.preventDefault();
+      return;
+    }
     const i = +(edge ? edge.getAttribute('data-edge')! : el.getAttribute('data-drag')!);
     const what = edge ? (edge.getAttribute('data-side') as 'l' | 'r') : 'move';
-    // seconds per screen pixel: the drawing's time span over the width it's drawn at
-    drag = { i, what, x: e.clientX, y: e.clientY, from: what === 'r' ? v.starts[i] + ranFor(v.starts, v.durs, i) : v.starts[i],
-      scale: (GEOM.SPAN / (GEOM.W - GEOM.LABEL - GEOM.RIGHT)) * (GEOM.W / r.width) };
+    drag = { i, what, x: e.clientX, y: e.clientY, from: what === 'r' ? v.starts[i] + ranFor(v.starts, v.durs, i, rt()) : v.starts[i], scale };
     chart.classList.add(what === 'move' ? 'dragging' : 'resizing');
     tip.hidden = true;
     e.preventDefault();
@@ -182,10 +222,16 @@ document.addEventListener('astro:page-load', () => {
   document.addEventListener('pointermove', (e) => {
     if (!drag) return;
     const to = drag.from + (e.clientX - drag.x) * drag.scale, i = drag.i;
+    if (drag.what === 'recast') {
+      const was = v.recasts![drag.key!];
+      setRecast(drag.key!, to);
+      if (v.recasts![drag.key!] !== was) render();
+      return;
+    }
     const before = `${v.starts[i]},${v.durs[i]}`;
-    if (drag.what === 'move') v.starts = settle(v.starts, i, to, h());
-    else if (drag.what === 'r') v.durs = lengthen(v.starts, v.durs, i, to - v.starts[i]);
-    else ({ starts: v.starts, durs: v.durs } = resizeStart(v.starts, v.durs, i, to, h()));
+    if (drag.what === 'move') v.starts = settle(v.starts, i, to, h(), rt());
+    else if (drag.what === 'r') v.durs = lengthen(v.starts, v.durs, i, to - v.starts[i], rt());
+    else ({ starts: v.starts, durs: v.durs } = resizeStart(v.starts, v.durs, i, to, h(), rt()));
     if (`${v.starts[i]},${v.durs[i]}` !== before) render();
   }, on);
   const stop = (e: PointerEvent) => {
@@ -195,7 +241,7 @@ document.addEventListener('astro:page-load', () => {
       if (el) show(el);
     }
     drag = null;
-    chart.classList.remove('dragging', 'resizing');
+    chart.classList.remove('dragging', 'resizing', 'recasting');
   };
   document.addEventListener('pointerup', stop, on);
   document.addEventListener('pointercancel', stop, on);

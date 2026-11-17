@@ -79,7 +79,7 @@
   width:max-content;max-width:min(400px,calc(100% - 8px));line-height:1.35;white-space:pre-line}   /* a line break in a label starts a new line */
 .wr-tip[hidden]{display:none}
 /* the drawing's lines, ticks and numbers let the pointer through to the draggable window behind (only the tick targets keep it) */
-.wr-run,.wr-sub,.wr-dur,.wr-grid,.wr-tick,.wr-num,.wr-chan,.wr-endmark,.wr-name,.wr-axis,.wr-grip,.wr-order{pointer-events:none}
+.wr-run,.wr-sub,.wr-dur,.wr-lost,.wr-grid,.wr-tick,.wr-num,.wr-chan,.wr-endmark,.wr-name,.wr-axis,.wr-grip,.wr-order{pointer-events:none}
 /* how many Wracks: a row of small pills */
 /* a DoT going on, and a Wrack's number on its handle when there are several */
 .wr-cast{fill:var(--shadow)}
@@ -202,3 +202,45 @@
 .wr-miss{fill:var(--surface);stroke:var(--wc);stroke-width:1.8;stroke-dasharray:2.2 2.2;pointer-events:none}   /* hollow like a tick, so the line stops at it */
 .k-miss{width:11px;height:11px;border-radius:50%;border:2px dotted var(--accent)}
 .wr-legend li[hidden]{display:none}
+
+/* a DoT recast: a ring on its row to drag; the rest of the one it cut off dashed, and the ticks that cost hollow and faded */
+/* recasts take their own colour (--rc, the fire orange), apart from the DoTs' shadow purple and the Wracks' shades */
+.wr-svg,.wr-legend,.wr-recasts{--rc:var(--fire)}
+.wr-recast{cursor:grab;touch-action:none}
+.wr-recast circle{fill:var(--surface);stroke:var(--rc);stroke-width:2.2;filter:drop-shadow(0 0 3px color-mix(in srgb,var(--rc) 50%,transparent))}
+.wr-recast circle.wr-recast-in{fill:var(--rc);stroke:none;filter:none}
+.wr-recast circle.wr-grab{fill:transparent;stroke:none;filter:none}
+.wr-recast:hover circle:not(.wr-grab):not(.wr-recast-in),.recasting .wr-recast circle:not(.wr-grab):not(.wr-recast-in){fill:color-mix(in srgb,var(--rc) 25%,var(--surface))}
+.wr-chart.recasting,.wr-chart.recasting *{cursor:grabbing!important}
+.wr-chart.recasting{user-select:none}
+.wr-cut{fill:none;stroke:var(--rc);stroke-width:1.6;stroke-dasharray:3 3;stroke-linecap:butt;opacity:.6}
+.wr-tick.wr-lost{fill:transparent;stroke:var(--rc);stroke-dasharray:2 2;opacity:.65}
+.k-recast{width:12px;height:12px;border-radius:50%;border:2px solid var(--rc);background:radial-gradient(var(--rc) 0 2px,var(--surface) 2.5px)}
+.k-lost{width:10px;height:10px;border-radius:50%;border:2px dashed var(--rc);opacity:.7}
+/* the Recasts panel's buttons, in the same colour */
+.wr-recasts .wr-bt{border-color:color-mix(in srgb,var(--rc) 55%,var(--line));color:var(--rc)}
+.wr-recasts .wr-bt:hover{border-color:var(--rc);background:color-mix(in srgb,var(--rc) 14%,transparent)}
+.wr-recasts .wr-bt[aria-pressed="true"]{border-color:var(--rc);background:var(--rc);color:var(--bg);box-shadow:0 0 10px color-mix(in srgb,var(--rc) 45%,transparent)}
+.wr-recasts .wr-bt:focus-visible{outline-color:var(--rc)}
+.wr-rk-re{color:var(--fire)}
+/* the recast's run, from the ring to where it runs out: line, own ticks, notches and end mark */
+.wr-run.wr-rerun{stroke:color-mix(in srgb,var(--rc) 55%,transparent)}
+.wr-tick.wr-rerun{stroke:var(--rc)}
+.wr-sub.wr-rerun{stroke:color-mix(in srgb,var(--rc) 70%,transparent)}
+.wr-endmark.wr-rerun{stroke:var(--rc)}
+/* Recasts: each DoT's button, then its time; the same rhythm as the other panels */
+.wr-recasts{display:grid;grid-template-columns:max-content max-content;grid-template-rows:26px;grid-auto-rows:36px;justify-content:start;align-items:center;gap:10px 14px}
+.wr-recasts>.wr-ph:first-child{white-space:nowrap}
+.wr-recasts>.wr-col{justify-content:center;text-transform:none;letter-spacing:0;font-size:.78rem;font-weight:600}
+.wr-re{display:contents}
+.wr-re .wr-bt{width:100%}
+.wr-re .step{transition:opacity .15s}
+.wr-re.off .step{opacity:.35;pointer-events:none}
+.wr-recasts .step-in{width:6.4em}
+.wr-recasts .step-in:has(.step-unit) input{width:6ch}
+@media (max-width:640px){
+  .wr-recasts{grid-template-columns:max-content minmax(0,1fr);gap:10px 8px}
+  .wr-recasts .step{display:flex;width:100%}
+  .wr-recasts .step button{width:28px}
+  .wr-recasts .step-in{flex:1;width:auto;min-width:0}
+}
