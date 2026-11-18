@@ -8,7 +8,7 @@ import '../styles/gear.css';
 
 const main = data.items.filter((w) => w.slot === 'main'), off = data.items.filter((w) => w.slot === 'off');
 const listed = [...main, ...off];
-const none = data.noSource.filter((w) => w.slot !== 'staff');
+const none = data.noSource.filter((w) => w.slot === 'main' || w.slot === 'off');
 ---
 <Layout title="One-hand & off-hand" description="Daggers, one-handed swords and off-hands for warlocks in WoW Forever, with their spell damage.">
   <Fragment slot="head">

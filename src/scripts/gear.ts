@@ -107,10 +107,9 @@ document.addEventListener('astro:page-load', () => {
     for (const r of rows) {
       const d = r.dataset, ok = inPlay(r), v = +d.score!, isListed = listed.includes(r), id = d.id!, sec = group.get(r) ?? '';
       const onPath = path.has(id);
-      const g = r.querySelector('.gain')!;
-      g.textContent = '';
-      g.classList.remove('down');
-      if (onPath) {
+      const g = r.querySelector('.gain');   // a ring with only hit or crit has no damage, so no gain to show
+      if (g) { g.textContent = ''; g.classList.remove('down'); }
+      if (onPath && g) {
         const prev = prevOf.get(sec);
         if (prev !== undefined) {
           const diff = v - prev;

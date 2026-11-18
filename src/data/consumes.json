@@ -1,0 +1,3718 @@
+{
+ "build": "1.60.1.70862",
+ "pulled": "2026-11-16",
+ "items": [
+  {
+   "id": 8423,
+   "name": "Cerebral Cortex Compound",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Blasted Lands",
+   "effect": "Increases Intellect by 25 when consumed. Effect lasts for 60 minutes.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": null,
+    "where": "Blasted Lands"
+   },
+   "mats": []
+  },
+  {
+   "id": 275069,
+   "name": "Scroll of Rat Familiar",
+   "quality": 1,
+   "req": 5,
+   "group": "scroll",
+   "line": "Familiars",
+   "effect": "Summon a faithful rat familiar for 60 min. Its presence increases your Intellect by 2.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 277483,
+   "name": "Scroll of Frog Familiar",
+   "quality": 1,
+   "req": 16,
+   "group": "scroll",
+   "line": "Familiars",
+   "effect": "Summon a faithful frog familiar for 60 min. Its presence increases your Intellect by 6.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 277493,
+   "name": "Scroll of Cat Familiar",
+   "quality": 1,
+   "req": 25,
+   "group": "scroll",
+   "line": "Familiars",
+   "effect": "Summon a faithful cat familiar for 60 min. Its presence increases your Intellect by 12.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 8411,
+   "name": "Lung Juice Cocktail",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Blasted Lands",
+   "effect": "Increases Stamina by 25 when consumed. Effect lasts for 60 minutes.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": null,
+    "where": "Blasted Lands"
+   },
+   "mats": []
+  },
+  {
+   "id": 5512,
+   "name": "Minor Healthstone",
+   "quality": 1,
+   "req": 1,
+   "group": "stone",
+   "line": "Healthstones",
+   "effect": "Instantly restores 120 life.",
+   "source": {
+    "kind": "Other",
+    "text": "Conjured",
+    "link": {
+     "type": "spell",
+     "id": 6201,
+     "name": "Create Healthstone"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 5511,
+   "name": "Lesser Healthstone",
+   "quality": 1,
+   "req": 12,
+   "group": "stone",
+   "line": "Healthstones",
+   "effect": "Instantly restores 300 life.",
+   "source": {
+    "kind": "Other",
+    "text": "Conjured",
+    "link": {
+     "type": "spell",
+     "id": 6202,
+     "name": "Create Healthstone"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 5509,
+   "name": "Healthstone",
+   "quality": 1,
+   "req": 24,
+   "group": "stone",
+   "line": "Healthstones",
+   "effect": "Instantly restores 600 life.",
+   "source": {
+    "kind": "Other",
+    "text": "Conjured",
+    "link": {
+     "type": "spell",
+     "id": 5699,
+     "name": "Create Healthstone"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 5510,
+   "name": "Greater Healthstone",
+   "quality": 1,
+   "req": 36,
+   "group": "stone",
+   "line": "Healthstones",
+   "effect": "Instantly restores 960 life.",
+   "source": {
+    "kind": "Other",
+    "text": "Conjured",
+    "link": {
+     "type": "spell",
+     "id": 11729,
+     "name": "Create Healthstone"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 9421,
+   "name": "Major Healthstone",
+   "quality": 1,
+   "req": 48,
+   "group": "stone",
+   "line": "Healthstones",
+   "effect": "Instantly restores 1440 life.",
+   "source": {
+    "kind": "Other",
+    "text": "Conjured",
+    "link": {
+     "type": "spell",
+     "id": 11730,
+     "name": "Create Healthstone"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 8424,
+   "name": "Gizzard Gum",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Blasted Lands",
+   "effect": "Increases Spirit by 25 when consumed. Effect lasts for 60 minutes.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": null,
+    "where": "Blasted Lands"
+   },
+   "mats": []
+  },
+  {
+   "id": 12662,
+   "name": "Demonic Rune",
+   "quality": 2,
+   "req": null,
+   "group": "stone",
+   "line": "Runes",
+   "effect": "Restores 1200 mana at the cost of 800 life.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 20520,
+   "name": "Dark Rune",
+   "quality": 2,
+   "req": null,
+   "group": "stone",
+   "line": "Runes",
+   "effect": "Restores 1200 mana at the cost of 800 life.",
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": null,
+    "where": "Scholomance"
+   },
+   "mats": []
+  },
+  {
+   "id": 247239,
+   "name": "Lesser Discolored Healing Potion",
+   "quality": 1,
+   "req": 3,
+   "group": "potion",
+   "line": "Health now, damage after",
+   "effect": "Restores 320 health instantly; however you also suffer 75% of that amount over time. The symptoms of this effect can manifest as either a 6 sec poison or a 12 sec disease.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1244645,
+     "name": "Lesser Discolored Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    },
+    {
+     "id": 2450,
+     "name": "Briarthorn",
+     "count": 1
+    },
+    {
+     "id": 730,
+     "name": "Murloc Eye",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 4596,
+   "name": "Minor Discolored Healing Potion",
+   "quality": 1,
+   "req": 5,
+   "group": "potion",
+   "line": "Health now, damage after",
+   "effect": "Restores 160 health instantly; however you also suffer 75% of that amount over time. The symptoms of this effect can manifest as either a 6 sec poison or a 12 sec disease.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 4508,
+     "name": "Minor Discolored Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    },
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    },
+    {
+     "id": 730,
+     "name": "Murloc Eye",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 247240,
+   "name": "Discolored Healing Potion",
+   "quality": 1,
+   "req": 12,
+   "group": "potion",
+   "line": "Health now, damage after",
+   "effect": "Restores 640 health instantly; however you also suffer 75% of that amount over time. The symptoms of this effect can manifest as either a 6 sec poison or a 12 sec disease.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1244646,
+     "name": "Discolored Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    },
+    {
+     "id": 2453,
+     "name": "Bruiseweed",
+     "count": 1
+    },
+    {
+     "id": 730,
+     "name": "Murloc Eye",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 247241,
+   "name": "Greater Discolored Healing Potion",
+   "quality": 1,
+   "req": 21,
+   "group": "potion",
+   "line": "Health now, damage after",
+   "effect": "Restores 1040 health instantly; however you also suffer 75% of that amount over time. The symptoms of this effect can manifest as either a 6 sec poison or a 12 sec disease.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1244647,
+     "name": "Greater Discolored Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    },
+    {
+     "id": 3356,
+     "name": "Kingsblood",
+     "count": 1
+    },
+    {
+     "id": 730,
+     "name": "Murloc Eye",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 247242,
+   "name": "Superior Discolored Healing Potion",
+   "quality": 1,
+   "req": 35,
+   "group": "potion",
+   "line": "Health now, damage after",
+   "effect": "Restores 1600 health instantly; however you also suffer 75% of that amount over time. The symptoms of this effect can manifest as either a 6 sec poison or a 12 sec disease.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1244648,
+     "name": "Superior Discolored Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    },
+    {
+     "id": 8838,
+     "name": "Sungrass",
+     "count": 1
+    },
+    {
+     "id": 730,
+     "name": "Murloc Eye",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20079,
+   "name": "Spirit of Zanza",
+   "quality": 2,
+   "req": 55,
+   "group": "quest",
+   "line": "Zul'Gurub",
+   "effect": "Increases the player's Spirit by 50 and Stamina by 50 for 120 min. You can only have the effect of one Zanza potion at a time.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8243,
+     "name": "Zanza's Potent Potables"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 250954,
+   "name": "Potion of Elemental Purging",
+   "quality": 1,
+   "req": 40,
+   "group": "burst",
+   "line": "Against one kind of enemy",
+   "effect": "Increases Spell Damage by 105 against Elementals. Lasts 5 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1251752,
+     "name": "Potion of Elemental Purging"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 4625,
+     "name": "Firebloom",
+     "count": 2
+    },
+    {
+     "id": 3819,
+     "name": "Wintersbite",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 23123,
+   "name": "Blessed Wizard Oil",
+   "quality": 2,
+   "req": 50,
+   "group": "oil",
+   "line": "Against one kind of enemy",
+   "effect": "Increases spell damage against undead by up to 60. Lasts for 1 hour.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 20081,
+   "name": "Swiftness of Zanza",
+   "quality": 2,
+   "req": 55,
+   "group": "quest",
+   "line": "Zul'Gurub",
+   "effect": "Increases the player's run speed by 20% for 120 min. You can only have the effect of one Zanza potion at a time.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8243,
+     "name": "Zanza's Potent Potables"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 6373,
+   "name": "Elixir of Fire Power",
+   "quality": 1,
+   "req": 18,
+   "group": "elixir",
+   "line": "Fire damage",
+   "effect": "Increases spell fire damage by up to 10 for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 7845,
+     "name": "Elixir of Fire Power"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 6371,
+     "name": "Fire Oil",
+     "count": 2
+    },
+    {
+     "id": 3356,
+     "name": "Kingsblood",
+     "count": 1
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20080,
+   "name": "Sheen of Zanza",
+   "quality": 2,
+   "req": 55,
+   "group": "quest",
+   "line": "Zul'Gurub",
+   "effect": "Increases the chance that the player will reflect hostile spells cast on them by 3% for 120 min. Will automatically reflect the first offensive spell cast against the user. Only one type of Zanza potion may be active at any given time.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 8243,
+     "name": "Zanza's Potent Potables"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 12458,
+   "name": "Juju Guile",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Winterspring",
+   "effect": "Increases the target's Intellect by 30 for 30 min.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4807,
+     "name": "Wildkin E'ko"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 9264,
+   "name": "Elixir of Shadow Power",
+   "quality": 1,
+   "req": 40,
+   "group": "elixir",
+   "line": "Shadow damage",
+   "effect": "Increases spell shadow damage by up to 40 for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 11476,
+     "name": "Elixir of Shadow Power"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8845,
+     "name": "Ghost Mushroom",
+     "count": 3
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12451,
+   "name": "Juju Power",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Winterspring",
+   "effect": "Increases the target's Strength by 30 for 30 min.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4802,
+     "name": "Winterfall E'ko"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 247754,
+   "name": "Minor Arcane Elixir",
+   "quality": 1,
+   "req": 1,
+   "group": "elixir",
+   "line": "Spell damage",
+   "effect": "Increases spell damage by up to 5 for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1245246,
+     "name": "Minor Arcane Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20744,
+   "name": "Minor Wizard Oil",
+   "quality": 1,
+   "req": 5,
+   "group": "oil",
+   "line": "Spell damage",
+   "effect": "Increases spell damage and healing by up to 8. Lasts for 30 minutes.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Enchanting",
+    "link": {
+     "type": "spell",
+     "id": 25124,
+     "name": "Minor Wizard Oil"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 10940,
+     "name": "Strange Dust",
+     "count": 1
+    },
+    {
+     "id": 17034,
+     "name": "Maple Seed",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 5095,
+   "name": "Rainbow Fin Albacore",
+   "quality": 1,
+   "req": 5,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 1 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 7827,
+     "name": "Rainbow Fin Albacore"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 6361,
+     "name": "Raw Rainbow Fin Albacore",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250932,
+   "name": "Minor Spellblasting Potion",
+   "quality": 1,
+   "req": 5,
+   "group": "burst",
+   "line": "Spell damage",
+   "effect": "Increases Spell Damage by 7 for 30 sec.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1251729,
+     "name": "Minor Spellblasting Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 765,
+     "name": "Silverleaf",
+     "count": 1
+    },
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 21072,
+   "name": "Smoked Sagefish",
+   "quality": 1,
+   "req": 10,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 4 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 25704,
+     "name": "Smoked Sagefish"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 21071,
+     "name": "Raw Sagefish",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250933,
+   "name": "Lesser Spellblasting Potion",
+   "quality": 1,
+   "req": 15,
+   "group": "burst",
+   "line": "Spell damage",
+   "effect": "Increases Spell Damage by 11 for 30 sec.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1251730,
+     "name": "Lesser Spellblasting Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 785,
+     "name": "Mageroyal",
+     "count": 1
+    },
+    {
+     "id": 765,
+     "name": "Silverleaf",
+     "count": 2
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250934,
+   "name": "Spellblasting Potion",
+   "quality": 1,
+   "req": 25,
+   "group": "burst",
+   "line": "Spell damage",
+   "effect": "Increases Spell Damage by 16 for 30 sec.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1251731,
+     "name": "Spellblasting Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3355,
+     "name": "Wild Steelbloom",
+     "count": 1
+    },
+    {
+     "id": 3369,
+     "name": "Grave Moss",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250342,
+   "name": "Lesser Arcane Elixir",
+   "quality": 1,
+   "req": 25,
+   "group": "elixir",
+   "line": "Spell damage",
+   "effect": "Drink to increase spell damage by up to 15. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250791,
+     "name": "Lesser Arcane Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3356,
+     "name": "Kingsblood",
+     "count": 4
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 274971,
+   "name": "Briny Seafood Stew",
+   "quality": 1,
+   "req": 25,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 14 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1295805,
+     "name": "Briny Seafood Stew"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 730,
+     "name": "Murloc Eye",
+     "count": 2
+    },
+    {
+     "id": 12206,
+     "name": "Tender Crab Meat",
+     "count": 1
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 21217,
+   "name": "Sagefish Delight",
+   "quality": 1,
+   "req": 30,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 7 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 25954,
+     "name": "Sagefish Delight"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 21153,
+     "name": "Raw Greater Sagefish",
+     "count": 1
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13931,
+   "name": "Nightfin Soup",
+   "quality": 1,
+   "req": 35,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 22 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 18243,
+     "name": "Nightfin Soup"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13759,
+     "name": "Raw Nightfin Snapper",
+     "count": 1
+    },
+    {
+     "id": 159,
+     "name": "Refreshing Spring Water",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 6887,
+   "name": "Spotted Yellowtail",
+   "quality": 1,
+   "req": 35,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 22 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 18238,
+     "name": "Spotted Yellowtail"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 4603,
+     "name": "Raw Spotted Yellowtail",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250935,
+   "name": "Greater Spellblasting Potion",
+   "quality": 1,
+   "req": 35,
+   "group": "burst",
+   "line": "Spell damage",
+   "effect": "Increases Spell Damage by 23 for 30 sec.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1251732,
+     "name": "Greater Spellblasting Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3356,
+     "name": "Kingsblood",
+     "count": 2
+    },
+    {
+     "id": 3818,
+     "name": "Fadeleaf",
+     "count": 1
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 9155,
+   "name": "Arcane Elixir",
+   "quality": 1,
+   "req": 37,
+   "group": "elixir",
+   "line": "Spell damage",
+   "effect": "Increases spell damage by up to 20 for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 11461,
+     "name": "Arcane Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8839,
+     "name": "Blindweed",
+     "count": 1
+    },
+    {
+     "id": 3821,
+     "name": "Goldthorn",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20750,
+   "name": "Wizard Oil",
+   "quality": 1,
+   "req": 40,
+   "group": "oil",
+   "line": "Spell damage",
+   "effect": "Increases spell damage and healing by up to 24. Lasts for 30 minutes.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Enchanting",
+    "link": {
+     "type": "spell",
+     "id": 25128,
+     "name": "Wizard Oil"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 16204,
+     "name": "Illusion Dust",
+     "count": 3
+    },
+    {
+     "id": 4625,
+     "name": "Firebloom",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13935,
+   "name": "Baked Salmon",
+   "quality": 1,
+   "req": 45,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 28 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 18247,
+     "name": "Baked Salmon"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13889,
+     "name": "Raw Whitescale Salmon",
+     "count": 1
+    },
+    {
+     "id": 3713,
+     "name": "Soothing Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20749,
+   "name": "Brilliant Wizard Oil",
+   "quality": 1,
+   "req": 45,
+   "group": "oil",
+   "line": "Spell damage",
+   "effect": "Increases spell damage and healing by up to 36 and increases Spell Critical chance by 1%. Lasts for 30 minutes.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Enchanting",
+    "link": {
+     "type": "spell",
+     "id": 25129,
+     "name": "Brilliant Wizard Oil"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 14344,
+     "name": "Large Brilliant Shard",
+     "count": 2
+    },
+    {
+     "id": 4625,
+     "name": "Firebloom",
+     "count": 3
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13933,
+   "name": "Lobster Stew",
+   "quality": 1,
+   "req": 45,
+   "group": "food",
+   "line": "Spell damage",
+   "effect": "Well Fed: 28 Spell Damage for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 18245,
+     "name": "Lobster Stew"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13888,
+     "name": "Darkclaw Lobster",
+     "count": 1
+    },
+    {
+     "id": 159,
+     "name": "Refreshing Spring Water",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250936,
+   "name": "Superior Spellblasting Potion",
+   "quality": 1,
+   "req": 45,
+   "group": "burst",
+   "line": "Spell damage",
+   "effect": "Increases Spell Damage by 33 for 30 sec.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1251733,
+     "name": "Superior Spellblasting Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3819,
+     "name": "Wintersbite",
+     "count": 2
+    },
+    {
+     "id": 3358,
+     "name": "Khadgar's Whisker",
+     "count": 2
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13454,
+   "name": "Greater Arcane Elixir",
+   "quality": 1,
+   "req": 47,
+   "group": "elixir",
+   "line": "Spell damage",
+   "effect": "Increases spell damage by up to 35 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17573,
+     "name": "Greater Arcane Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 3
+    },
+    {
+     "id": 13465,
+     "name": "Mountain Silversage",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13512,
+   "name": "Flask of Supreme Power",
+   "quality": 1,
+   "req": 50,
+   "group": "flask",
+   "line": "Spell damage",
+   "effect": "Increases damage done by magical spells and effects by up to 150 for 120 min. This effect persists through death.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17637,
+     "name": "Flask of Supreme Power"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 30
+    },
+    {
+     "id": 13465,
+     "name": "Mountain Silversage",
+     "count": 10
+    },
+    {
+     "id": 13468,
+     "name": "Black Lotus",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250937,
+   "name": "Major Spellblasting Potion",
+   "quality": 1,
+   "req": 55,
+   "group": "burst",
+   "line": "Spell damage",
+   "effect": "Increases Spell Damage by 47 for 30 sec.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1251734,
+     "name": "Major Spellblasting Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 2
+    },
+    {
+     "id": 13465,
+     "name": "Mountain Silversage",
+     "count": 1
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12460,
+   "name": "Juju Might",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Winterspring",
+   "effect": "Increases attack power by 40 for 10 min.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4806,
+     "name": "Frostmaul E'ko"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 250339,
+   "name": "Minor Mageblood Elixir",
+   "quality": 1,
+   "req": 5,
+   "group": "elixir",
+   "line": "Mana regeneration",
+   "effect": "Drink to regenerate 3 mana every 5 sec. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250788,
+     "name": "Minor Mageblood Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 785,
+     "name": "Mageroyal",
+     "count": 2
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20745,
+   "name": "Minor Mana Oil",
+   "quality": 1,
+   "req": 20,
+   "group": "oil",
+   "line": "Mana regeneration",
+   "effect": "Restores 5 mana to the caster every 5 seconds and increases healing done by up to 10. Lasts for 30 minutes.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Enchanting",
+    "link": {
+     "type": "spell",
+     "id": 25125,
+     "name": "Minor Mana Oil"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 11083,
+     "name": "Soul Dust",
+     "count": 1
+    },
+    {
+     "id": 17034,
+     "name": "Maple Seed",
+     "count": 2
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250340,
+   "name": "Lesser Mageblood Elixir",
+   "quality": 1,
+   "req": 25,
+   "group": "elixir",
+   "line": "Mana regeneration",
+   "effect": "Drink to regenerate 6 mana every 5 sec. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250789,
+     "name": "Lesser Mageblood Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3356,
+     "name": "Kingsblood",
+     "count": 3
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20007,
+   "name": "Mageblood Elixir",
+   "quality": 1,
+   "req": 40,
+   "group": "elixir",
+   "line": "Mana regeneration",
+   "effect": "Regenerate 12 mana per 5 sec for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 24365,
+     "name": "Mageblood Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 1
+    },
+    {
+     "id": 13466,
+     "name": "Plaguebloom",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20748,
+   "name": "Brilliant Mana Oil",
+   "quality": 1,
+   "req": 45,
+   "group": "oil",
+   "line": "Mana regeneration",
+   "effect": "Restores 15 mana to the caster every 5 seconds and increases the effect of healing spells by up to 30. Lasts for 30 minutes.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Enchanting",
+    "link": {
+     "type": "spell",
+     "id": 25130,
+     "name": "Brilliant Mana Oil"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 14344,
+     "name": "Large Brilliant Shard",
+     "count": 2
+    },
+    {
+     "id": 8831,
+     "name": "Purple Lotus",
+     "count": 3
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250336,
+   "name": "Elixir of Wicked Regeneration",
+   "quality": 1,
+   "req": 55,
+   "group": "elixir",
+   "line": "Mana regeneration",
+   "effect": "Drink to restore 9 health and 10 mana every 5 sec. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250785,
+     "name": "Elixir of Wicked Regeneration"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13464,
+     "name": "Golden Sansam",
+     "count": 3
+    },
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250341,
+   "name": "Greater Mageblood Elixir",
+   "quality": 1,
+   "req": 55,
+   "group": "elixir",
+   "line": "Mana regeneration",
+   "effect": "Drink to regenerate 20 mana every 5 sec. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250790,
+     "name": "Greater Mageblood Elixir"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8839,
+     "name": "Blindweed",
+     "count": 3
+    },
+    {
+     "id": 8836,
+     "name": "Arthas' Tears",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12450,
+   "name": "Juju Flurry",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Winterspring",
+   "effect": "Increases the target's attack speed by 3% for 20 sec.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4801,
+     "name": "Frostsaber E'ko"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 2682,
+   "name": "Cooked Crab Claw",
+   "quality": 1,
+   "req": 1,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 1 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 2545,
+     "name": "Cooked Crab Claw"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 2675,
+     "name": "Crawler Claw",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12224,
+   "name": "Crispy Bat Wing",
+   "quality": 1,
+   "req": 1,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 1 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 15935,
+     "name": "Crispy Bat Wing"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12223,
+     "name": "Meaty Bat Wing",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 5477,
+   "name": "Strider Stew",
+   "quality": 1,
+   "req": 1,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 1 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 6416,
+     "name": "Strider Stew"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 5469,
+     "name": "Strider Meat",
+     "count": 1
+    },
+    {
+     "id": 4536,
+     "name": "Shiny Red Apple",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250079,
+   "name": "Tasty Raptor Bites",
+   "quality": 1,
+   "req": 1,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 1 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1250156,
+     "name": "Tasty Raptor Bites"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3685,
+     "name": "Raptor Egg",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "id": 2683,
+   "name": "Crab Cake",
+   "quality": 1,
+   "req": 5,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 3 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 2544,
+     "name": "Crab Cake"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 2674,
+     "name": "Crawler Meat",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 263512,
+   "name": "Pincer Bites",
+   "quality": 1,
+   "req": 5,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 1 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1270635,
+     "name": "Pincer Bites"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 2675,
+     "name": "Crawler Claw",
+     "count": 1
+    },
+    {
+     "id": 10284,
+     "name": "Simple Flour",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 1082,
+   "name": "Redridge Goulash",
+   "quality": 1,
+   "req": 5,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 3 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 2547,
+     "name": "Redridge Goulash"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 1081,
+     "name": "Crisp Spider Meat",
+     "count": 1
+    },
+    {
+     "id": 1080,
+     "name": "Tough Condor Meat",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 955,
+   "name": "Scroll of Intellect",
+   "quality": 1,
+   "req": 5,
+   "group": "scroll",
+   "line": "Intellect",
+   "effect": "Increases the target's Intellect by 4 for 30 min.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 250077,
+   "name": "Twice-Spiced Raptor Slice",
+   "quality": 1,
+   "req": 5,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 3 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1250154,
+     "name": "Twice-Spiced Raptor Slice"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12184,
+     "name": "Raptor Flesh",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "id": 3383,
+   "name": "Elixir of Wisdom",
+   "quality": 1,
+   "req": 10,
+   "group": "elixir",
+   "line": "Intellect",
+   "effect": "Increases Intellect by 3 for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 3171,
+     "name": "Elixir of Wisdom"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 785,
+     "name": "Mageroyal",
+     "count": 1
+    },
+    {
+     "id": 2450,
+     "name": "Briarthorn",
+     "count": 2
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12210,
+   "name": "Roast Raptor",
+   "quality": 1,
+   "req": 15,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 5 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 15855,
+     "name": "Roast Raptor"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12184,
+     "name": "Raptor Flesh",
+     "count": 1
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 2290,
+   "name": "Scroll of Intellect II",
+   "quality": 1,
+   "req": 20,
+   "group": "scroll",
+   "line": "Intellect",
+   "effect": "Increases the target's Intellect by 8 for 30 min.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 250353,
+   "name": "Elixir of Lesser Intellect",
+   "quality": 1,
+   "req": 25,
+   "group": "elixir",
+   "line": "Intellect",
+   "effect": "Drink to increase your Intellect by 6. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250801,
+     "name": "Elixir of Lesser Intellect"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3356,
+     "name": "Kingsblood",
+     "count": 3
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 4457,
+   "name": "Barbecued Buzzard Wing",
+   "quality": 1,
+   "req": 25,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 10 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 4094,
+     "name": "Barbecued Buzzard Wing"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3404,
+     "name": "Buzzard Wing",
+     "count": 1
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250073,
+   "name": "Raging Raptor Ribs",
+   "quality": 1,
+   "req": 25,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 10 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1250150,
+     "name": "Raging Raptor Ribs"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12184,
+     "name": "Raptor Flesh",
+     "count": 2
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "id": 12216,
+   "name": "Spiced Chili Crab",
+   "quality": 1,
+   "req": 25,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 10 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 15915,
+     "name": "Spiced Chili Crab"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12206,
+     "name": "Tender Crab Meat",
+     "count": 1
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "id": 250076,
+   "name": "Raptor Rouladen",
+   "quality": 1,
+   "req": 35,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 15 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1250153,
+     "name": "Raptor Rouladen"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12184,
+     "name": "Raptor Flesh",
+     "count": 2
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "id": 18254,
+   "name": "Runn Tum Tuber Surprise",
+   "quality": 1,
+   "req": 35,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 15 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 22761,
+     "name": "Runn Tum Tuber Surprise"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 18255,
+     "name": "Runn Tum Tuber",
+     "count": 1
+    },
+    {
+     "id": 3713,
+     "name": "Soothing Spices",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 4419,
+   "name": "Scroll of Intellect III",
+   "quality": 1,
+   "req": 35,
+   "group": "scroll",
+   "line": "Intellect",
+   "effect": "Increases the target's Intellect by 12 for 30 min.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 9179,
+   "name": "Elixir of Greater Intellect",
+   "quality": 1,
+   "req": 37,
+   "group": "elixir",
+   "line": "Intellect",
+   "effect": "Increases Intellect by 25 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 11465,
+     "name": "Elixir of Greater Intellect"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8839,
+     "name": "Blindweed",
+     "count": 1
+    },
+    {
+     "id": 3358,
+     "name": "Khadgar's Whisker",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13447,
+   "name": "Elixir of the Sages",
+   "quality": 1,
+   "req": 38,
+   "group": "elixir",
+   "line": "Intellect",
+   "effect": "Increases Intellect and Spirit by 18 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17555,
+     "name": "Elixir of the Sages"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 1
+    },
+    {
+     "id": 13466,
+     "name": "Plaguebloom",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250354,
+   "name": "Elixir of Intellect",
+   "quality": 1,
+   "req": 45,
+   "group": "elixir",
+   "line": "Intellect",
+   "effect": "Drink to increase your Intellect by 10. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250802,
+     "name": "Elixir of Intellect"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3358,
+     "name": "Khadgar's Whisker",
+     "count": 3
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250067,
+   "name": "Bat Hachee",
+   "quality": 1,
+   "req": 45,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 20 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1250144,
+     "name": "Bat Hachee"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12223,
+     "name": "Meaty Bat Wing",
+     "count": 3
+    },
+    {
+     "id": 3713,
+     "name": "Soothing Spices",
+     "count": 2
+    }
+   ]
+  },
+  {
+   "id": 250075,
+   "name": "Prehistoric Pulled Raptor",
+   "quality": 1,
+   "req": 45,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 20 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1250152,
+     "name": "Prehistoric Pulled Raptor"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 12184,
+     "name": "Raptor Flesh",
+     "count": 3
+    },
+    {
+     "id": 3713,
+     "name": "Soothing Spices",
+     "count": 4
+    }
+   ]
+  },
+  {
+   "id": 250066,
+   "name": "Soaring Pamplona",
+   "quality": 1,
+   "req": 45,
+   "group": "food",
+   "line": "Intellect",
+   "effect": "Well Fed: 20 Intellect for 15 min",
+   "source": {
+    "kind": "Crafted",
+    "text": "Cooking",
+    "link": {
+     "type": "spell",
+     "id": 1250143,
+     "name": "Soaring Pamplona"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3404,
+     "name": "Buzzard Wing",
+     "count": 3
+    },
+    {
+     "id": 3713,
+     "name": "Soothing Spices",
+     "count": 3
+    }
+   ]
+  },
+  {
+   "id": 10308,
+   "name": "Scroll of Intellect IV",
+   "quality": 1,
+   "req": 50,
+   "group": "scroll",
+   "line": "Intellect",
+   "effect": "Increases the target's Intellect by 16 for 30 min.",
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 250337,
+   "name": "Elixir of the Owl",
+   "quality": 1,
+   "req": 55,
+   "group": "elixir",
+   "line": "Intellect",
+   "effect": "Drink to increase your Intellect by 25 and chance to critically hit by 2%. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250786,
+     "name": "Elixir of the Owl"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 4
+    },
+    {
+     "id": 13465,
+     "name": "Mountain Silversage",
+     "count": 2
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12459,
+   "name": "Juju Escape",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Winterspring",
+   "effect": "Increases your chance to dodge by 5% for 10 sec.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4805,
+     "name": "Ice Thistle E'ko"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 2458,
+   "name": "Elixir of Minor Fortitude",
+   "quality": 1,
+   "req": 2,
+   "group": "elixir",
+   "line": "Fortitude (maximum health)",
+   "effect": "Increases the player's maximum health by 27 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 2334,
+     "name": "Elixir of Minor Fortitude"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 2449,
+     "name": "Earthroot",
+     "count": 2
+    },
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 3825,
+   "name": "Elixir of Lesser Fortitude",
+   "quality": 1,
+   "req": 25,
+   "group": "elixir",
+   "line": "Fortitude (maximum health)",
+   "effect": "Increases the player's maximum health by 120 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 3450,
+     "name": "Elixir of Lesser Fortitude"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3355,
+     "name": "Wild Steelbloom",
+     "count": 1
+    },
+    {
+     "id": 3821,
+     "name": "Goldthorn",
+     "count": 1
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250334,
+   "name": "Elixir of Fortitude",
+   "quality": 1,
+   "req": 45,
+   "group": "elixir",
+   "line": "Fortitude (maximum health)",
+   "effect": "Drink to increase your maximum health by 200. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250783,
+     "name": "Elixir of Fortitude"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3821,
+     "name": "Goldthorn",
+     "count": 4
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13510,
+   "name": "Flask of the Titans",
+   "quality": 1,
+   "req": 50,
+   "group": "flask",
+   "line": "Fortitude (maximum health)",
+   "effect": "Increases the player's maximum health by 1200 for 120 min. This effect persists through death.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17635,
+     "name": "Flask of the Titans"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8846,
+     "name": "Gromsblood",
+     "count": 30
+    },
+    {
+     "id": 13423,
+     "name": "Stonescale Oil",
+     "count": 10
+    },
+    {
+     "id": 13468,
+     "name": "Black Lotus",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250335,
+   "name": "Elixir of Greater Fortitude",
+   "quality": 1,
+   "req": 55,
+   "group": "elixir",
+   "line": "Fortitude (maximum health)",
+   "effect": "Drink to increase your maximum health by 400. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250784,
+     "name": "Elixir of Greater Fortitude"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8838,
+     "name": "Sungrass",
+     "count": 4
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 250329,
+   "name": "Elixir of the Phalanx",
+   "quality": 1,
+   "req": 55,
+   "group": "elixir",
+   "line": "Fortitude (maximum health)",
+   "effect": "Drink to gain 400 Maximum Health and 500 Armor. Lasts for 30 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1250778,
+     "name": "Elixir of the Phalanx"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13464,
+     "name": "Golden Sansam",
+     "count": 2
+    },
+    {
+     "id": 8838,
+     "name": "Sungrass",
+     "count": 4
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12455,
+   "name": "Juju Ember",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Winterspring",
+   "effect": "Increases Fire resistance by 15 for 10 min.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4803,
+     "name": "Shardtooth E'ko"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 5997,
+   "name": "Elixir of Minor Defense",
+   "quality": 1,
+   "req": 1,
+   "group": "elixir",
+   "line": "Defense (armor)",
+   "effect": "Increases armor by 50 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 7183,
+     "name": "Elixir of Minor Defense"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 765,
+     "name": "Silverleaf",
+     "count": 1
+    },
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 3389,
+   "name": "Elixir of Lesser Defense",
+   "quality": 1,
+   "req": 16,
+   "group": "elixir",
+   "line": "Defense (armor)",
+   "effect": "Increases armor by 150 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 3177,
+     "name": "Elixir of Lesser Defense"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3355,
+     "name": "Wild Steelbloom",
+     "count": 1
+    },
+    {
+     "id": 3820,
+     "name": "Stranglekelp",
+     "count": 1
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 8951,
+   "name": "Elixir of Defense",
+   "quality": 1,
+   "req": 29,
+   "group": "elixir",
+   "line": "Defense (armor)",
+   "effect": "Increases armor by 250 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 11450,
+     "name": "Elixir of Defense"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3355,
+     "name": "Wild Steelbloom",
+     "count": 1
+    },
+    {
+     "id": 3821,
+     "name": "Goldthorn",
+     "count": 1
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13445,
+   "name": "Elixir of Greater Defense",
+   "quality": 1,
+   "req": 43,
+   "group": "elixir",
+   "line": "Defense (armor)",
+   "effect": "Increases armor by 450 for 60 min.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17554,
+     "name": "Elixir of Greater Defense"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13423,
+     "name": "Stonescale Oil",
+     "count": 2
+    },
+    {
+     "id": 8838,
+     "name": "Sungrass",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12457,
+   "name": "Juju Chill",
+   "quality": 1,
+   "req": null,
+   "group": "quest",
+   "line": "Winterspring",
+   "effect": "Increase Frost resistance by 15 for 10 min.",
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4804,
+     "name": "Chillwind E'ko"
+    },
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 2456,
+   "name": "Minor Rejuvenation Potion",
+   "quality": 1,
+   "req": 5,
+   "group": "potion",
+   "line": "Mana and health",
+   "effect": "Restores 120 mana and 120 health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 2332,
+     "name": "Minor Rejuvenation Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 785,
+     "name": "Mageroyal",
+     "count": 2
+    },
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 12190,
+   "name": "Dreamless Sleep Potion",
+   "quality": 1,
+   "req": 35,
+   "group": "potion",
+   "line": "Mana and health",
+   "effect": "Puts the imbiber in a dreamless sleep for 12 sec. During that time the imbiber heals 1200 health and 1200 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 15833,
+     "name": "Dreamless Sleep Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8831,
+     "name": "Purple Lotus",
+     "count": 3
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 9144,
+   "name": "Wildvine Potion",
+   "quality": 1,
+   "req": 35,
+   "group": "potion",
+   "line": "Mana and health",
+   "effect": "Restores 750 health and 750 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 11458,
+     "name": "Wildvine Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8153,
+     "name": "Wildvine",
+     "count": 1
+    },
+    {
+     "id": 8831,
+     "name": "Purple Lotus",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 11952,
+   "name": "Night Dragon's Breath",
+   "quality": 1,
+   "req": 45,
+   "group": "stone",
+   "line": "Mana and health",
+   "effect": "Restores 425 mana and 425 health.",
+   "source": {
+    "kind": "Other",
+    "text": "Cleansed Night Dragon in Felwood (as in Classic)",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 18253,
+   "name": "Major Rejuvenation Potion",
+   "quality": 1,
+   "req": 50,
+   "group": "potion",
+   "line": "Mana and health",
+   "effect": "Restores 1600 mana and health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 22732,
+     "name": "Major Rejuvenation Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 10286,
+     "name": "Heart of the Wild",
+     "count": 1
+    },
+    {
+     "id": 13464,
+     "name": "Golden Sansam",
+     "count": 4
+    },
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 4
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 20002,
+   "name": "Greater Dreamless Sleep Potion",
+   "quality": 1,
+   "req": 55,
+   "group": "potion",
+   "line": "Mana and health",
+   "effect": "Puts the imbiber in a dreamless sleep for 12 sec. During that time the imbiber heals 2100 health and 2100 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 24366,
+     "name": "Greater Dreamless Sleep Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 2
+    },
+    {
+     "id": 13464,
+     "name": "Golden Sansam",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 2455,
+   "name": "Minor Mana Potion",
+   "quality": 1,
+   "req": 5,
+   "group": "potion",
+   "line": "Mana",
+   "effect": "Restores 160 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 2331,
+     "name": "Minor Mana Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 785,
+     "name": "Mageroyal",
+     "count": 1
+    },
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 3385,
+   "name": "Lesser Mana Potion",
+   "quality": 1,
+   "req": 14,
+   "group": "potion",
+   "line": "Mana",
+   "effect": "Restores 320 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 3173,
+     "name": "Lesser Mana Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 785,
+     "name": "Mageroyal",
+     "count": 1
+    },
+    {
+     "id": 3820,
+     "name": "Stranglekelp",
+     "count": 1
+    },
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 3827,
+   "name": "Mana Potion",
+   "quality": 1,
+   "req": 22,
+   "group": "potion",
+   "line": "Mana",
+   "effect": "Restores 520 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 3452,
+     "name": "Mana Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3820,
+     "name": "Stranglekelp",
+     "count": 1
+    },
+    {
+     "id": 3356,
+     "name": "Kingsblood",
+     "count": 1
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 6149,
+   "name": "Greater Mana Potion",
+   "quality": 1,
+   "req": 31,
+   "group": "potion",
+   "line": "Mana",
+   "effect": "Restores 800 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 11448,
+     "name": "Greater Mana Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3358,
+     "name": "Khadgar's Whisker",
+     "count": 1
+    },
+    {
+     "id": 3821,
+     "name": "Goldthorn",
+     "count": 1
+    },
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13443,
+   "name": "Superior Mana Potion",
+   "quality": 1,
+   "req": 41,
+   "group": "potion",
+   "line": "Mana",
+   "effect": "Restores 1200 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17553,
+     "name": "Superior Mana Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8838,
+     "name": "Sungrass",
+     "count": 2
+    },
+    {
+     "id": 8839,
+     "name": "Blindweed",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13444,
+   "name": "Major Mana Potion",
+   "quality": 1,
+   "req": 49,
+   "group": "potion",
+   "line": "Mana",
+   "effect": "Restores 1800 mana.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17580,
+     "name": "Major Mana Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 3
+    },
+    {
+     "id": 13467,
+     "name": "Icecap",
+     "count": 2
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13511,
+   "name": "Flask of Distilled Wisdom",
+   "quality": 1,
+   "req": 50,
+   "group": "flask",
+   "line": "Mana",
+   "effect": "Increases the player's maximum Mana by 2000 for 120 min. This effect persists through death.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17636,
+     "name": "Flask of Distilled Wisdom"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13463,
+     "name": "Dreamfoil",
+     "count": 30
+    },
+    {
+     "id": 13467,
+     "name": "Icecap",
+     "count": 10
+    },
+    {
+     "id": 13468,
+     "name": "Black Lotus",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 118,
+   "name": "Minor Healing Potion",
+   "quality": 1,
+   "req": 1,
+   "group": "potion",
+   "line": "Health",
+   "effect": "Restores 80 health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "First Aid",
+    "link": {
+     "type": "spell",
+     "id": 1244431,
+     "name": "Minor Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 1
+    },
+    {
+     "id": 2447,
+     "name": "Peacebloom",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 858,
+   "name": "Lesser Healing Potion",
+   "quality": 1,
+   "req": 3,
+   "group": "potion",
+   "line": "Health",
+   "effect": "Restores 160 health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "First Aid",
+    "link": {
+     "type": "spell",
+     "id": 1244432,
+     "name": "Lesser Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3371,
+     "name": "Empty Vial",
+     "count": 1
+    },
+    {
+     "id": 2678,
+     "name": "Mild Spices",
+     "count": 2
+    },
+    {
+     "id": 2450,
+     "name": "Briarthorn",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 929,
+   "name": "Healing Potion",
+   "quality": 1,
+   "req": 12,
+   "group": "potion",
+   "line": "Health",
+   "effect": "Restores 320 health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "First Aid",
+    "link": {
+     "type": "spell",
+     "id": 1244433,
+     "name": "Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 1
+    },
+    {
+     "id": 2453,
+     "name": "Bruiseweed",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 1710,
+   "name": "Greater Healing Potion",
+   "quality": 1,
+   "req": 21,
+   "group": "potion",
+   "line": "Health",
+   "effect": "Restores 520 health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "First Aid",
+    "link": {
+     "type": "spell",
+     "id": 1244434,
+     "name": "Greater Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 3372,
+     "name": "Leaded Vial",
+     "count": 1
+    },
+    {
+     "id": 2692,
+     "name": "Hot Spices",
+     "count": 3
+    },
+    {
+     "id": 3357,
+     "name": "Liferoot",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 3928,
+   "name": "Superior Healing Potion",
+   "quality": 1,
+   "req": 35,
+   "group": "potion",
+   "line": "Health",
+   "effect": "Restores 800 health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "First Aid",
+    "link": {
+     "type": "spell",
+     "id": 1244435,
+     "name": "Superior Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    },
+    {
+     "id": 3713,
+     "name": "Soothing Spices",
+     "count": 1
+    },
+    {
+     "id": 8838,
+     "name": "Sungrass",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 13446,
+   "name": "Major Healing Potion",
+   "quality": 1,
+   "req": 45,
+   "group": "potion",
+   "line": "Health",
+   "effect": "Restores 1400 health.",
+   "source": {
+    "kind": "Crafted",
+    "text": "First Aid",
+    "link": {
+     "type": "spell",
+     "id": 1244436,
+     "name": "Major Healing Potion"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    },
+    {
+     "id": 3713,
+     "name": "Soothing Spices",
+     "count": 3
+    },
+    {
+     "id": 13464,
+     "name": "Golden Sansam",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 11951,
+   "name": "Whipper Root Tuber",
+   "quality": 1,
+   "req": 45,
+   "group": "stone",
+   "line": "Health",
+   "effect": "Restores 800 health.",
+   "source": {
+    "kind": "Other",
+    "text": "Cleansed Whipper Root in Felwood (as in Classic)",
+    "link": null,
+    "where": null
+   },
+   "mats": []
+  },
+  {
+   "id": 13513,
+   "name": "Flask of Chromatic Resistance",
+   "quality": 1,
+   "req": 50,
+   "group": "flask",
+   "line": "Other",
+   "effect": "Increases your resistance to all schools of magic by 25 for 120 min. This effect persists through death and stacks with all other resistance spells and items.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 17638,
+     "name": "Flask of Chromatic Resistance"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 13467,
+     "name": "Icecap",
+     "count": 30
+    },
+    {
+     "id": 13465,
+     "name": "Mountain Silversage",
+     "count": 10
+    },
+    {
+     "id": 13468,
+     "name": "Black Lotus",
+     "count": 1
+    },
+    {
+     "id": 8925,
+     "name": "Crystal Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 274273,
+   "name": "Flask of Natural Accuracy",
+   "quality": 2,
+   "req": 55,
+   "group": "flask",
+   "line": "Other",
+   "effect": "Increases your Stamina by 30. While in Mount Hyjal, Hyjal Summit, and the Barrow Deeps, you also gain 2% Hit Chance. Lasts for 120 min. This effect persists through death.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1293559,
+     "name": "Flask of Natural Accuracy"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 248822,
+     "name": "Death Lotus",
+     "count": 1
+    },
+    {
+     "id": 248821,
+     "name": "Demonsage",
+     "count": 12
+    },
+    {
+     "id": 13464,
+     "name": "Golden Sansam",
+     "count": 9
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 274274,
+   "name": "Flask of Natural Aggression",
+   "quality": 2,
+   "req": 55,
+   "group": "flask",
+   "line": "Other",
+   "effect": "Increases your Stamina by 30. While in Mount Hyjal, Hyjal Summit, and the Barrow Deeps, you also gain 2% Critical Strike Chance. Lasts for 120 min. This effect persists through death.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1293560,
+     "name": "Flask of Natural Aggression"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 248822,
+     "name": "Death Lotus",
+     "count": 1
+    },
+    {
+     "id": 248821,
+     "name": "Demonsage",
+     "count": 18
+    },
+    {
+     "id": 13465,
+     "name": "Mountain Silversage",
+     "count": 6
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": 274276,
+   "name": "Flask of Natural Swiftness",
+   "quality": 2,
+   "req": 55,
+   "group": "flask",
+   "line": "Other",
+   "effect": "Increases your Stamina by 30. While in Mount Hyjal, Hyjal Summit, and the Barrow Deeps, you also gain 2% Haste. Lasts for 120 min. This effect persists through death.",
+   "source": {
+    "kind": "Crafted",
+    "text": "Alchemy",
+    "link": {
+     "type": "spell",
+     "id": 1293562,
+     "name": "Flask of Natural Swiftness"
+    },
+    "where": null
+   },
+   "mats": [
+    {
+     "id": 248822,
+     "name": "Death Lotus",
+     "count": 1
+    },
+    {
+     "id": 248823,
+     "name": "Marefoil",
+     "count": 18
+    },
+    {
+     "id": 13467,
+     "name": "Icecap",
+     "count": 6
+    },
+    {
+     "id": 18256,
+     "name": "Imbued Vial",
+     "count": 1
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+---
+// Talents: a calculator for Forever's warlock tree (Affliction, Demonology, Destruction), from the client's own data
+// (tools/talents/gen.py). The trees are drawn here; scripts/talents.ts keeps the build, in the URL, and redraws.
+import Layout from '../layouts/Layout.astro';
+import { data } from '../data/talents';
+import '../styles/talents.css';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const COLS = 4;   // every tree on the same four-column grid, so the trees line up
+const idx = new Map(data.talents.map((t, i) => [t.id, i]));
+---
+<Layout title="Talents" description="Talent calculator for WoW Forever warlocks: Forever's own Affliction, Demonology and Destruction trees, with Wrack, Bane of Havoc and Incinerate, and a link to share your build.">
+  <div class="page-head">
+    <h1>Talents</h1>
+    <p>Forever's warlock talents, straight from the game client: Wrack, Malevolence, Bane of Havoc, Incinerate and the rest. Spend your {data.points} points, then copy the link to share the build.</p>
+  </div>
+
+  <section class="card full tl" aria-labelledby="tl-h">
+    <div class="card-h" data-stick>
+      <h2 id="tl-h">Calculator</h2>
+      <p class="tl-sum" aria-live="polite"><span><b id="tl-spent">0</b> / {data.points} points</span><span class="muted" id="tl-level">Spend a point to see the level it needs</span></p>
+      <div class="acts">
+        <button type="button" class="pill" id="tl-copy"><span class="labels"><span class="a">Copy link</span><span class="b">Copied</span></span></button>
+        <button type="button" class="pill" id="tl-reset">Reset all</button>
+      </div>
+    </div>
+    <div class="tl-trees">
+      {data.tabs.map((tab, ti) => (
+        <div class={`tl-tree tl-t${ti}`} data-tree={ti}>
+          <div class="tl-head">
+            <h3>{tab.name}</h3>
+            <span class="tl-pts"><b data-pts={ti}>0</b> points</span>
+            <button type="button" class="link tl-reset" data-reset={ti} aria-label={`Reset ${tab.name}`}>Reset</button>
+          </div>
+          <div class="tl-grid" style={`--cols:${COLS};--rows:${tab.rows}`}>
+            {data.talents.flatMap((t) => t.tab !== ti ? [] : t.needs.map((id) => {
+              const s = data.talents[idx.get(id)!];
+              // an arrow from the prerequisite down to this talent, in their shared column
+              return <span class="tl-arrow" data-from={idx.get(id)} style={`grid-column:${t.col};grid-row:${s.row}/${t.row + 1}`} aria-hidden="true"></span>;
+            }))}
+            {data.talents.map((t, i) => t.tab === ti && (
+              <button type="button" class="tl-talent" data-i={i} style={`grid-column:${t.col};grid-row:${t.row}`} aria-label={`${t.name}, 0 of ${t.max}`}>
+                <img src={`${base}talents/${t.icon}.jpg`} alt="" width="56" height="56" decoding="async">
+                <span class="tl-rank">0/{t.max}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+    <p class="muted tl-hint"><span class="tl-mouse">Click a talent to learn it, right-click to unlearn. </span><span class="tl-touch">Tap a talent for what it does, with − and + to change it. </span>A talent needs 5 more points in its tree for each row down, and an arrow means the talent above has to be maxed first. Points can come off anywhere: a talent left without what it needs turns red until you fix it.</p>
+    <div class="tl-tip" id="tl-tip" hidden></div>
+  </section>
+
+  <section class="card full" aria-labelledby="tl-list-h">
+    <div class="card-h"><h2 id="tl-list-h">Your talents</h2></div>
+    <div class="tl-list" id="tl-list" aria-live="polite"><p class="muted tl-none">No talents yet.</p></div>
+  </section>
+
+  <script>import '../scripts/talents';</script>
+</Layout>

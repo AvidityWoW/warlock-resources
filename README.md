@@ -40,9 +40,9 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   range comes from (Classic's suggested ranges; the client for Forever's new zones). Each table row's bar is coloured
   by difficulty at your level, as the game colours a monster's level (`conVars`). `src/scripts/zones.ts` drives the
   level, faction and "Only my level" controls (saved as `zones:v1`).
-- Level bar: Spells, Demon spells and Class quests share `src/components/LevelBar.astro` (your level as a slider and a number
+- Level bar: Spells, Demon spells, Class quests and Consumes share `src/components/LevelBar.astro` (your level as a slider and a number
   box, plus a slot for a `.seg` of buttons and `.check` tick boxes) and `src/lib/levelbar.ts`, which runs it and keeps the
-  choices: your level once for all three (`level:v1`), the rest per page (`spells:v1`, `demons:v1`, `quests:v1`). Its styles
+  choices: your level once for all of them (`level:v1`), the rest per page (`spells:v1`, `demons:v1`, `quests:v1`, `consumes:v1`). Its styles
   (`.lvbar`, `.seg`, `.check`) are in `global.css`; Zones uses them too, with its own script.
 - Spells page (`spells/`) and Demon spells page (`demons/`): `src/data/spellbook.json` (every trained spell and rank by level, and
   how it's learned) and `src/data/demons.json` (the demons' ability ranks with their grimoires and prices), typed in
@@ -52,6 +52,11 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   spells a quest teaches, which a book teaches. The Demon spells page's wording (what each demon and spell does) is in
   `src/data/demons.ts`. It groups each demon's ranks under one heading row per spell (`src/styles/demons.css`); Spells uses
   `src/styles/spells.css`. In both, rows you can have are plain, the next level's are lit, later ones dimmed.
+- Talents page (`talents/`): `src/data/talents.json` (typed in `talents.ts`) is Forever's warlock tree from the client's
+  Trait tables (not its Classic `Talent` table, which lacks Wrack and the rest), written by
+  `python3 tools/talents/gen.py ~/spelldb`, which also fetches the icons into `public/talents/`. The rules (row gates,
+  arrows, what can be unlearned) and the build code in the URL hash (a digit per talent, trees split by `-`) are in
+  `src/lib/talents.ts`; `src/scripts/talents.ts` runs the page and keeps the build as `talents:v1`.
 - Class quests page (`quests/`, "Quests" in the nav): the chains are hand-written in `src/data/quests.ts`, whose header says
   where each part comes from (Classic server data for the chains and levels, Wowhead's Forever pages for the checks). A chain's
   `key` is its anchor; the Spells and Demons pages link to `quests/#<key>`. In a step or a reward, `[Name](item:123)`
@@ -68,27 +73,40 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   every rank in `src/data/coefficient-ranks.ts` (generated from spelldb, Forever with hotfixes and Classic 1.15.9) by
   `src/scripts/coefficient-detail.ts`, at level 60 on the server and again in the browser for the level slider, rank
   chips and Classic comparison.
-- Gear pages (`wands`, `one-hand`, `staves`) share their parts. One-hand and Staves are not released yet: their pages are
+- Gear pages (`wands`, `rings`, `one-hand`, `staves`) share their parts. One-hand and Staves are not released yet: their pages are
   `src/pages/_one-hand.astro` and `_staves.astro` (Astro skips files starting with `_`) and their nav entries are commented out.
   Rename them and uncomment the entries to publish them.
   - `src/data/wands.json` (typed in `wands.ts`): the wand data, ranked by DPS. `python3 tools/wands/pull.py ~/spelldb` adds
     wands that have since appeared on Wowhead's Forever site: it asks Wowhead for each wand ID in the client that the file
     lacks (item XML, cached in `tools/wands/wowhead-cache/`, not committed), skips test items and wands a warlock can't
     use, and moves a `noSource` wand up once Wowhead gives it a source.
-  - `src/data/weapons.json` (typed in `weapons.ts`): one-hand weapons, off-hands and staves, in level then item-level order.
-    Rows show spell damage (SP, ShP, FP) up front, and the suggested path follows item level. Built by `tools/weapons/gen.py`
+  - `src/data/weapons.json` (typed in `weapons.ts`): one-hand weapons, off-hands, staves and rings, in level then item-level order.
+    Rows show spell damage (SP, ShP, FP) up front, and the suggested path follows item level (for rings, spell damage: `score`). Rings are also listed for hit or crit alone,
+    which get their own columns (as percentages) and don't count towards the path. Built by `tools/weapons/gen.py`
     (usage in its docstring) from the spelldb client tables and the cmangos dump. Spell damage is taken from Wowhead's Forever
     tooltips (cached in `tools/weapons/wowhead-cache/`, not committed), because server hotfixes add spell power the client lacks.
-    Stats are from the Forever client and sources from classic server data (cmangos classic-db), so items new to Forever
-    mostly have none. Only items with spell damage (SP, ShP or FP) are listed. Without a Wowhead tooltip, spell damage falls back to the client: stat 45/42, and the unnamed stats 88 (Shadow) and 85 (Fire).
+    Stats are from the Forever client and sources from classic server data (cmangos classic-db); an item with none there
+    (most of those new to Forever) gets the source on its Wowhead Forever page (item XML, same cache). Pass absolute paths. A quest reward with no
+    level requirement is filed under the lowest level its quest can be picked up at: from the cmangos dump for Classic quests,
+    and for Forever's own from `tools/weapons/quest-levels.json`, which the script fills from a copy of the game's
+    `Cache/WDB/enUS/questcache.wdb` when given one (it only holds quests your client has been shown). A quest in neither
+    gets an estimate, item level minus 5. Only items with spell damage (SP, ShP or FP) are listed. Without a Wowhead tooltip, spell damage falls back to the client: stat 45/42, and the unnamed stats 88 (Shadow) and 85 (Fire).
   - `src/components/GearControls.astro` (legend, Share path, sticky toolbar) and `LevelBands.astro` (level bands; with
     `group`, a page section with its own upgrade path, like Main hand and Off-hand).
   - `src/components/WandItem.astro`, `GearItem.astro`: one row each. Rows reflow with container queries: stacked, two-line, or one line.
   - `src/scripts/gear.ts`: the controls (faction, sources, search, your path, Best at each level, Deselect all, Reset,
     Share path). "Best at each level" swaps the suggestions (each item that beats all before it) for the best item of
     every required level, upgrade or not. Choices are
-    kept in `localStorage` per page (`wands:*`, `one-hand:*`, `staves:*`); a shared link is
+    kept in `localStorage` per page (`wands:*`, `rings:*`, `one-hand:*`, `staves:*`); a shared link is
     `<page>/?path=<base-36 ids joined by .>&f=<a|h>`.
+- Consumes page (`consumes/`, under Items): `src/data/consumes.json` (typed in `consumes.ts`, which also names the page's
+  sections) is written by `python3 tools/consumes/gen.py ~/spelldb`. It sorts every consumable in the client into a
+  section by its use text (the rules are `group_of` in the script) and names the buff each gives (`line_of`: Fortitude,
+  Defense, Spell damage), which the page uses to put like buffs together under a heading row; `paint` in `consumes.ts` colours the amounts in
+  each tooltip by stat, then asks Wowhead's Forever item XML (cached in
+  `tools/consumes/wowhead-cache/`, not committed) for the source and a crafted one's materials. An item with no source
+  on Wowhead is left out. Mana and health items are split by shared cooldown, read from the client's spell categories:
+  potions (with the burst potions), and healthstones, runes and Felwood's plants, which have their own. `src/scripts/consumes.ts` dims or hides what's above your level.
 - Macros page: the macros are in `src/data/macros.ts`; `src/lib/macro.ts` colours them and swaps `{item:Healthstone}` /
   `{create:Healthstone}` for the stone rank of the level picked on the page (saved as `macros:level`); `src/scripts/macros.ts`
   handles search, the level and Copy.

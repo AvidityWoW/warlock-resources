@@ -6,12 +6,12 @@ import GearItem from './GearItem.astro';
 import { levelBands } from '../data/gear';
 import { upgradePaths } from '../lib/path';
 import type { Wand } from '../data/wands';
-import type { Weapon } from '../data/weapons';
+import { score, type Weapon } from '../data/weapons';
 type Props =
   | { kind: 'wand'; items: Wand[]; noun: string; group?: string; title?: string; short?: string; blurb?: string }
   | { kind: 'gear'; items: Weapon[]; noun: string; group?: string; title?: string; short?: string; blurb?: string };
 const { kind, items, noun, group, title, short = title, blurb } = Astro.props;   // short: the section's name in the sticky label, which has little room
-const paths = kind === 'wand' ? upgradePaths(items as Wand[], (w) => w.dps) : upgradePaths(items as Weapon[], (w) => w.ilvl);
+const paths = kind === 'wand' ? upgradePaths(items as Wand[], (w) => w.dps) : upgradePaths(items as Weapon[], score);
 const H = group ? 'h3' : 'h2';
 const id = (top: number) => `${group ? group + '-' : ''}lv${top}`;
 ---

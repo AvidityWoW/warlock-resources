@@ -40,10 +40,12 @@
 .wand.up:not(.pick){box-shadow:inset 3px 0 0 var(--good);background-image:linear-gradient(var(--up-tint),var(--up-tint))}
 .gain{display:inline-block;min-width:3.2em;margin-left:8px;color:var(--good);font-weight:600;text-align:left}
 /* weapon rows: spell damage in the DPS spot (Shadow and Fire in their school colours), item level and its gain in the details */
-.pow{display:flex;gap:12px}
+.pow{display:flex;gap:12px;align-items:baseline}
 .pw-shadow b{color:var(--shadow)}.pw-fire b{color:var(--fire)}
 .il{white-space:nowrap}
 .il .gain{min-width:2em;margin-left:5px}
+.pc-dmg{display:inline-flex;gap:8px;align-items:baseline}
+.pow .gain{min-width:0;margin-left:0}
 .gain:empty{min-width:0;margin:0}
 .gain.down{color:var(--muted);font-weight:500}
 
@@ -71,6 +73,10 @@
   /* weapon rows: a narrower spell-damage column and room for item level plus stats, which may wrap */
   .gear{grid-template-columns:1.25rem 2rem minmax(0,1fr) minmax(0,1fr) 8.5em minmax(0,16em)}
   .gear .meta{white-space:normal}
+  /* rings: spell damage, hit and crit each in a column of their own */
+  .ring{grid-template-columns:1.25rem 2rem minmax(0,1fr) minmax(0,1fr) 16.5em minmax(0,12em)}
+  .ring .pow{display:grid;grid-template-columns:7.5em 4.5em 4.5em;gap:0;width:100%}
+  .pc-dmg{grid-column:1}.pc-hit{grid-column:2}.pc-crit{grid-column:3}
 }
 
 .extra{margin-top:28px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}   /* a panel, same width as the lists */

@@ -11,3 +11,4 @@ tools/spellbook/wowhead-cache/
 
 # Wowhead item XML cache for tools/wands/pull.py (refetched when missing)
 tools/wands/wowhead-cache/
+tools/consumes/wowhead-cache/

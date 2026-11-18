@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GearItem from '../components/GearItem.astro';
+import GearControls from '../components/GearControls.astro';
+import LevelBands from '../components/LevelBands.astro';
+import { data } from '../data/weapons';
+import '../styles/gear.css';
+
+const rings = data.items.filter((w) => w.slot === 'ring');
+const none = data.noSource.filter((w) => w.slot === 'ring');
+---
+<Layout title="Rings" description="Rings with spell damage, hit or crit for warlocks in WoW Forever, by level, with where each comes from.">
+  <Fragment slot="head">
+    <script is:inline>window.whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };   // read by Wowhead's tooltips.js</script>
+    <script is:inline src="https://wow.zamimg.com/js/tooltips.js"></script>
+  </Fragment>
+
+  <div class="page-head">
+    <h1>Rings</h1>
+    <p>Rings with spell damage, hit or crit, sorted by level and item level. Spell Power (SP), Shadow (ShP) and Fire (FP) spell damage, hit and crit each have a column. The suggested upgrades go by spell damage alone (Spell Power plus the better of Shadow and Fire), so weigh hit and crit yourself.</p>
+  </div>
+
+  <GearControls store="rings" total={rings.length} noun="rings" one="ring" searchLabel="Search rings, stats, quests and zones"
+    kindsOf={rings.map((w) => w.source?.kind)} />
+
+  <LevelBands kind="gear" items={rings} noun="rings" />
+
+  <details class="extra">
+    <summary>{none.length} more without a known source</summary>
+    <p class="muted">These are in the game files, but neither the classic server data nor Wowhead says where they come from.</p>
+    <ul class="wands">{none.map((w) => <GearItem w={w} pathable={false} />)}</ul>
+  </details>
+
+  <script>import '../scripts/gear';</script>
+
+</Layout>

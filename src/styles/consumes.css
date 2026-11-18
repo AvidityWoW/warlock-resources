@@ -1,0 +1,35 @@
+/* Consumes page: a card per kind of consumable, rows in level order. Rows above your level are dimmed. */
+.cs-toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.cs-toc .pill{text-decoration:none}
+.cs-card{margin-top:20px;scroll-margin-top:120px}
+.cs-blurb{margin:0;padding:12px 16px;border-bottom:1px solid var(--line)}
+.cs-table{width:100%}
+.cs-table .cs-lv{width:1%;font-weight:600}
+.cs-table tbody th{white-space:nowrap}
+.cs-table .link{font-weight:600}
+.cs-table :is(.cs-what,.cs-from){white-space:normal}
+.cs-what{min-width:16em;max-width:46ch}
+.cs-from{min-width:12em}
+/* the amounts in a tooltip, coloured by stat */
+.cs-v{font-weight:600}
+.cs-sp{color:var(--arcane)}.cs-fire{color:var(--fire)}.cs-shadow{color:var(--shadow)}.cs-mana{color:var(--frost)}.cs-life{color:var(--good)}.cs-rate{color:var(--gold)}
+.cs-mats{display:block;font-size:.9em}
+.cs-table tbody tr[data-level]:not(.have)>*{opacity:.55}
+/* a heading row per buff, its items under it */
+.cs-table tbody+tbody{border-top:1px solid var(--line)}
+.dtable.cs-table tr.cs-line{background:none}
+.cs-table .cs-line th{padding-top:14px;padding-bottom:6px;font-weight:650;color:var(--accent);font-size:.82em;letter-spacing:.06em;text-transform:uppercase}
+.cs-none{display:none}
+/* phones: each row stacks (level beside the name, then what it does, then where it's from) */
+@media (max-width:640px){
+  .cs-table,.cs-table tbody{display:block}
+  .cs-table tbody[hidden]{display:none}
+  .cs-table tbody tr.cs-line{display:block;padding:12px 12px 4px}
+  .cs-table thead{display:none}
+  .cs-table tbody tr{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:2px 10px;padding:10px 12px}
+  .cs-table tbody tr[hidden]{display:none}
+  .dtable.cs-table tbody :is(th,td){display:block;padding:0;border:0;min-width:0;max-width:none;width:auto;text-align:left;white-space:normal}
+  .cs-table .cs-lv{grid-row:1/4}
+  .cs-table :is(.cs-what,.cs-from){grid-column:2}
+  .cs-from{font-size:.92em}
+}

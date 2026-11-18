@@ -3,7 +3,8 @@
 //   client has no ranges of its own (its zone tooltips on Wowhead are just the lowest and highest subarea exploration
 //   levels, so a single new area skews them: Dun Morogh shows 1-56 for its level-56 Ironforge Submarine Facility).
 // - New Forever zones (Riverglades, Zephras Isle): their subareas' exploration levels, from the client's AreaTable
-//   (1.60.1.70862), which is all there is so far.
+//   (1.60.1.70862), which is all there is so far. Mount Hyjal (area 616): its subareas have no exploration levels yet
+//   (1.60.1.70938), so 55-60 is the range guides give, from the in-game Group Finder; Blizzard hasn't published one.
 // - Forever's nine new dungeons: the ranges in Blizzard's "Explore the New Dungeons of World of Warcraft: Forever"
 //   (news.blizzard.com/en-us/article/24301455). Each one's lowest level matches its level in the client's group finder
 //   (LFGDungeons -> ContentTuning, 1.60.1.70862), except Excavation Site (26 there) and Shaper's Terrace (60).
@@ -68,6 +69,7 @@ export const ZONES: Place[] = [
   { name: 'Winterspring', min: 53, max: 60, where: KAL, side: 'C' },
   { name: 'Deadwind Pass', min: 55, max: 60, where: EK, side: 'C' },
   { name: 'Silithus', min: 55, max: 60, where: KAL, side: 'C' },
+  { name: 'Mount Hyjal', min: 55, max: 60, where: KAL, side: 'C', isNew: true },
 ];
 
 export const DUNGEONS: Place[] = [

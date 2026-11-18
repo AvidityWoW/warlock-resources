@@ -1,0 +1,74 @@
+---
+// Consumes: flasks, elixirs, potions, oils, food and scrolls for a caster, a card per kind. In a card, like buffs sit
+// together under a heading row (Fortitude, Defense), weakest first, with where
+// each comes from and what a crafted one is made from. Your level dims what you can't use yet. scripts/consumes.ts drives it.
+import Layout from '../layouts/Layout.astro';
+import LevelBar from '../components/LevelBar.astro';
+import { data, GROUPS, paint, type Consume } from '../data/consumes';
+import { wowhead } from '../data/gear';
+import '../styles/consumes.css';
+
+const LEVEL = 10;   // before any saved choice
+/** a card's rows by buff; the flasks, each its own buff, get no heading rows */
+const lines = (rows: Consume[]) => {
+  const by = [...Map.groupBy(rows, (c) => c.line)].map(([line, items]) => ({ line, items }));
+  return rows[0]?.group !== 'flask' ? by : [{ line: '', items: rows.toSorted((a, b) => (a.req ?? 0) - (b.req ?? 0)) }];
+};
+---
+<Layout title="Consumes" description="Consumables for warlocks in WoW Forever: flasks, spell damage elixirs, potions, weapon oils and food by level, with what each is made from.">
+  <Fragment slot="head">
+    <script is:inline>window.whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };   // read by Wowhead's tooltips.js</script>
+    <script is:inline src="https://wow.zamimg.com/js/tooltips.js"></script>
+  </Fragment>
+
+  <div class="page-head">
+    <h1>Consumes</h1>
+    <p>Flasks, elixirs, potions, weapon oils, food and scrolls that help a caster, with like buffs together, weakest first. Each says where it comes from and, if it's crafted, what it takes to make one. Set your level to dim what you can't use yet.</p>
+  </div>
+
+  <LevelBar id="cs-bar" level={LEVEL}>
+    <label class="check"><input type="checkbox" data-name="only"><span>Only what I can use</span></label>
+  </LevelBar>
+
+  <nav class="cs-toc" aria-label="Kinds">
+    {GROUPS.map(([g, title]) => <a class="pill" href={`#${g}`}>{title}</a>)}
+  </nav>
+
+  {GROUPS.map(([g, title, blurb]) => {
+    const rows = data.items.filter((c) => c.group === g);
+    return (
+      <section class="card full cs-card" id={g} aria-labelledby={`cs-${g}`}>
+        <div class="card-h"><h2 id={`cs-${g}`}>{title} <span class="muted cs-count"></span></h2></div>
+        <p class="muted cs-blurb">{blurb}</p>
+        <div class="tscroll">
+          <table class="dtable cs-table">
+            <thead>
+              <tr><th scope="col" class="num">Level</th><th scope="col">Item</th><th scope="col">What it does</th><th scope="col">From</th></tr>
+            </thead>
+            {lines(rows).map((l) => (
+            <tbody>
+              {l.line && <tr class="cs-line"><th scope="rowgroup" colspan="4">{l.line}</th></tr>}
+              {l.items.map((c) => (
+                <tr data-level={c.req ?? 1} class={(c.req ?? 1) <= LEVEL ? 'have' : undefined}>
+                  <td class="num cs-lv">{c.req ?? '—'}</td>
+                  <th scope="row"><a class="link" href={wowhead('item', c.id)} target="_blank" rel="noopener">{c.name}</a></th>
+                  <td class="cs-what" set:html={paint(c.effect)} />
+                  <td class="cs-from">
+                    {c.source.link
+                      ? <a class="link" href={wowhead(c.source.link.type, c.source.link.id)} target="_blank" rel="noopener">{c.source.kind === 'Crafted' ? c.source.text : `${c.source.text}: ${c.source.link.name}`}</a>
+                      : c.source.text}
+                    {c.source.where && ` · ${c.source.where}`}
+                    {c.mats.length > 0 && <span class="muted cs-mats">{c.mats.map((m) => `${m.count} ${m.name}`).join(', ')}</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            ))}
+          </table>
+        </div>
+      </section>
+    );
+  })}
+
+  <script>import '../scripts/consumes';</script>
+</Layout>
