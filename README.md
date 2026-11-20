@@ -70,7 +70,7 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   game has marked complete. The build fails if one would pass chat's 255-character limit.
 - Coefficients page: `src/data/coefficients.ts` holds the numbers (copied from spelldb's `warlock-coefficients.html`),
   and `src/scripts/coefficients.ts` draws the summary as a PNG for Copy image / Save image. The full detail is built from
-  every rank in `src/data/coefficient-ranks.ts` (generated from spelldb, Forever with hotfixes and Classic 1.15.9) by
+  every rank in `src/data/coefficient-ranks.ts` (generated from spelldb, Forever with hotfixes and Classic 1.15.9; mana is each rank's `SpellPower.ManaCost`) by
   `src/scripts/coefficient-detail.ts`, at level 60 on the server and again in the browser for the level slider, rank
   chips and Classic comparison.
 - Gear pages (`wands`, `rings`, `one-hand`, `staves`) share their parts. One-hand and Staves are not released yet: their pages are

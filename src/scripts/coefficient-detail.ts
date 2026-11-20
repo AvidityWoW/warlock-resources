@@ -18,12 +18,12 @@ export function rankAt(ranks: Rank[], level: number) {
   return i;
 }
 
-/** the columns after Spell, Part and Rank, in table order: what the spell is, the result, the formula behind it, then its timing */
+/** the columns after Spell, Part and Rank, in table order: what the spell is, the result, the formula behind it, then its cost and timing */
 export const GROUPS = [
   { label: 'Spell', cols: [] },
   { label: 'Result', cols: [['perTick', 'Per tick'], ['damage', 'Damage']] },
   { label: 'Formula', cols: [['base', 'Base'], ['perLevel', '/lvl'], ['variance', 'Var'], ['coeffPerTick', 'Coeff/tick'], ['coeff', 'Coeff']] },
-  { label: 'Timing', cols: [['cast', 'Cast'], ['ticks', 'Ticks']] },
+  { label: 'Cast', cols: [['mana', 'Mana'], ['cast', 'Cast'], ['ticks', 'Ticks']] },
 ] as const;
 type Key = (typeof GROUPS)[number]['cols'][number][0];
 const ORDER = GROUPS.flatMap((g) => g.cols.map((c) => c[0])) as Key[];
@@ -40,7 +40,7 @@ export function cells(r: Rank, level: number, sp: number, agony = false): Cells 
   const n = r.per ? Math.max(0, Math.min(level, r.ml || CAP, CAP) - (r.bl ?? r.learn)) : 0;
   const add = (r.per ?? 0) * n, bonus = sp * (r.coef ?? 0);
   const out: Cells = {
-    id: r.dmgId ? `${r.id} → ${r.dmgId}` : String(r.id), level: String(r.learn), cast: r.cast ? secs(r.cast) : 'instant',
+    id: r.dmgId ? `${r.id} → ${r.dmgId}` : String(r.id), level: String(r.learn), mana: String(r.mana), cast: r.cast ? secs(r.cast) : 'instant',
     duration: r.ticks ? secs(r.dur) : '', period: r.ticks ? secs(r.period) : '', ticks: r.ticks ? `${r.ticks} × ${secs(r.period)}` : '',   // ticks × period; duration is their product
     base: f(r.base, 2), perLevel: r.per ? `+${f(r.per, 2)}` : '', variance: r.var && !r.ticks ? `±${f(r.var * 50, 1)}%` : '',
     coeffPerTick: r.ticks ? f(r.coef ?? 0, 4) : '', coeff: f((r.coef ?? 0) * (r.ticks || 1)), perTick: '', damage: '',
