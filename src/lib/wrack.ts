@@ -349,7 +349,7 @@ export function timeline(wins: Win[], dots: DotLine[], wrackTick: number, missWh
   const ay = TOP + rows * ROW + 18;
   for (let t = 0; t <= SPAN; t += 5) g += `<text class="wr-axis" x="${f(x(t))}" y="${ay}" text-anchor="middle">${t} s</text>`;
   g += hits;
-  return `<svg class="wr-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Timeline: your DoTs one GCD apart, Wrack channelled from ${starts.map((a) => `${a} s`).join(', ')}, and the ticks">${g}</svg>`;
+  return `<svg class="wr-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Timeline: your DoTs one GCD apart, Wrack channeled from ${starts.map((a) => `${a} s`).join(', ')}, and the ticks">${g}</svg>`;
 }
 
 /* ---------- the numbers under the timeline ---------- */

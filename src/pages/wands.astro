@@ -6,7 +6,7 @@ import LevelBands from '../components/LevelBands.astro';
 import { data } from '../data/wands';
 import '../styles/gear.css';
 ---
-<Layout title="Wands" description="Every wand a warlock can use in WoW Forever, grouped by level.">
+<Layout title="Wands" description="Every wand a Warlock can use in WoW Forever, grouped by level.">
   <Fragment slot="head">
     <script is:inline>window.whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };   // read by Wowhead's tooltips.js</script>
     <script is:inline src="https://wow.zamimg.com/js/tooltips.js"></script>
@@ -14,7 +14,7 @@ import '../styles/gear.css';
 
   <div class="page-head">
     <h1>Wands</h1>
-    <p>Wands for warlocks in WoW Forever, sorted by level. Tick the ones you want on your upgrade path.</p>
+    <p>Wands available to Warlocks, sorted by level. Filter, search and select the ones you want on your upgrade path.</p>
   </div>
 
   <GearControls store="wands" total={data.wands.length} noun="wands" one="wand" searchLabel="Search wands, quests, zones and schools"
@@ -24,7 +24,7 @@ import '../styles/gear.css';
 
   <details class="extra">
     <summary>{data.noSource.length} more without a known source</summary>
-    <p class="muted">These are in the game files, but nobody's found where they drop yet.</p>
+    <p class="muted">Wands in the game files with no known source yet.</p>
     <ul class="wands">{data.noSource.map((w) => <WandItem w={w} pathable={false} />)}</ul>
   </details>
 

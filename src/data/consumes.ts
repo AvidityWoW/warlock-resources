@@ -21,15 +21,15 @@ export const data = raw as { build: string; pulled: string; items: Consume[] };
 
 /** the page's sections, in order: [group, heading, what's in it] */
 export const GROUPS: [Group, string, string][] = [
-  ['flask', 'Flasks', 'Two hours each, and kept through death. One at a time.'],
+  ['flask', 'Flasks', 'Last two hours and persist through death. Only one can be active.'],
   ['elixir', 'Elixirs', 'Spell damage, Intellect, mana regeneration, health and armor, each from weakest to strongest.'],
   ['burst', 'Burst potions', 'Spell damage for a short while. They share the potion cooldown with mana and healing potions.'],
-  ['potion', 'Mana and healing potions', 'All on the one potion cooldown: two minutes after you drink any of them.'],
-  ['stone', 'Healthstones, runes and tubers', 'These share a two-minute cooldown of their own, apart from the potion one, so you can use one of these and a potion back to back.'],
-  ['oil', 'Weapon oils', 'Rubbed on your main-hand weapon.'],
+  ['potion', 'Mana and healing potions', 'Share a two-minute potion cooldown.'],
+  ['stone', 'Healthstones, runes and tubers', 'Share their own two-minute cooldown, separate from potions, so you can use one alongside a potion.'],
+  ['oil', 'Weapon oils', 'Applied to your main-hand weapon.'],
   ['food', 'Food', 'Well Fed with spell damage or Intellect, after ten seconds of eating.'],
   ['scroll', 'Scrolls', 'Intellect from a scroll.'],
-  ['quest', 'Quest buffs', 'Handed out by repeatable quests, and bound to you: you can\'t buy or trade them.'],
+  ['quest', 'Quest buffs', 'Rewards from repeatable quests. Soulbound, so they can\'t be bought or traded.'],
 ];
 
 // the amounts in a tooltip, in either order: "Intellect by 25" and "25 Intellect"

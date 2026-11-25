@@ -11,10 +11,10 @@ const h = hit(BOSS_GAP, 0);
 const gaps = [-2, -1, 0, 1, 2, 3, 4, 5];
 const gapText = (g: number) => (g === 0 ? 'Your level' : g > 0 ? `+${g}` : `${g}`);
 ---
-<Layout title="Hit cap" description="Spell hit calculator for WoW Forever warlocks: your chance to hit by target level, and how much hit you need.">
+<Layout title="Hit cap" description="Spell hit calculator for WoW Forever Warlocks: your chance to hit by target level, and how much hit you need.">
   <div class="page-head">
     <h1>Hit cap</h1>
-    <p>How often your spells will land, and how much spell hit you need before more stops helping. Pick your level and your target, then add up the hit on your gear.</p>
+    <p>How spell hit affects your chance to hit. Pick your level and your target, then add up the hit on your gear below.</p>
   </div>
 
   <section class="master" aria-labelledby="hc-h">
@@ -68,7 +68,7 @@ const gapText = (g: number) => (g === 0 ? 'Your level' : g > 0 ? `+${g}` : `${g}
   </section>
 
   <section class="card full hc-table">
-    <div class="card-h"><h2>Hit you need, by target level</h2></div>
+    <div class="card-h"><h2>Hit caps by target level</h2></div>
     <div class="tscroll">
       <table class="dtable">
         <thead>

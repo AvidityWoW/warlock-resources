@@ -15,7 +15,7 @@ const lines = (rows: Consume[]) => {
   return rows[0]?.group !== 'flask' ? by : [{ line: '', items: rows.toSorted((a, b) => (a.req ?? 0) - (b.req ?? 0)) }];
 };
 ---
-<Layout title="Consumes" description="Consumables for warlocks in WoW Forever: flasks, spell damage elixirs, potions, weapon oils and food by level, with what each is made from.">
+<Layout title="Consumes" description="Consumables for Warlocks in WoW Forever: flasks, spell damage elixirs, potions, weapon oils and food by level, with what each is made from.">
   <Fragment slot="head">
     <script is:inline>window.whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };   // read by Wowhead's tooltips.js</script>
     <script is:inline src="https://wow.zamimg.com/js/tooltips.js"></script>
@@ -23,7 +23,7 @@ const lines = (rows: Consume[]) => {
 
   <div class="page-head">
     <h1>Consumes</h1>
-    <p>Flasks, elixirs, potions, weapon oils, food and scrolls that help a caster, with like buffs together, weakest first. Each says where it comes from and, if it's crafted, what it takes to make one. Set your level to dim what you can't use yet.</p>
+    <p>Flasks, elixirs, potions, weapon oils, food and scrolls for casters, grouped by buff from weakest to strongest. The from column indicates where to get or how to craft them. Set your level to dim what you can't use yet.</p>
   </div>
 
   <LevelBar id="cs-bar" level={LEVEL}>

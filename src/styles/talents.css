@@ -1,5 +1,5 @@
 /* Talents page: three trees side by side (stacked on a phone), each a grid of icon buttons with prerequisite arrows */
-.tl{--ic:46px}
+.tl{--ic:50px}
 /* red, for talents missing their requirements (the site has no red of its own) */
 :root{--bad:#ff6188}
 :root[data-theme="light"]{--bad:#c4213b}
@@ -9,33 +9,52 @@
 .tl-t1{--tc:var(--nature)}
 .tl-t2{--tc:var(--fire)}
 
-/* the heading band: points spent and the level they need, beside the title */
-.tl-sum{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;margin:0;font-size:.68em;font-weight:500}
-.tl-sum b{font-size:1.25em;font-variant-numeric:tabular-nums}
+/* the heading band: points spent, split by tree as a bar in the trees' colours, and the level they need */
+.tl-sum{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;font-size:.68em;font-weight:500}
+.tl-sum p{margin:0;font-variant-numeric:tabular-nums}
+.tl-sum b{font-size:1.25em}
+.tl-split{margin-left:6px;color:var(--muted);font-weight:400}
+.tl-bar{display:flex;gap:2px;width:120px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.tl-bar i{flex:0 1 0;min-width:0;background:var(--tc);transition:flex-grow .25s}
 
 .tl-trees{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:16px;padding:16px}
-.tl-tree{display:grid;justify-items:center;align-content:start;gap:14px;padding:12px 14px 20px;border:1px solid var(--line);border-radius:8px;
-  background:linear-gradient(color-mix(in srgb,var(--tc) 10%,var(--bg)),var(--bg) 70%)}
+.tl-tree{position:relative;isolation:isolate;display:grid;justify-items:center;align-content:start;gap:14px;padding:12px 14px 20px;
+  border:1px solid color-mix(in srgb,var(--tc) 22%,var(--line));border-radius:8px;overflow:clip;
+  background:radial-gradient(120% 60% at 50% 0,color-mix(in srgb,var(--tc) 16%,var(--bg)),var(--bg) 75%)}
+/* the tree's last talent, blown up and faded behind the bottom of the tree */
+.tl-tree::before{content:"";position:absolute;z-index:-1;inset:auto -10% -18% -10%;height:70%;background:var(--cap) center/cover;
+  opacity:.1;filter:blur(18px) saturate(1.3);-webkit-mask:linear-gradient(transparent,#000 60%);mask:linear-gradient(transparent,#000 60%);pointer-events:none}
+:root[data-theme="light"] .tl-tree::before{opacity:.14}
 /* a tree with a red talent in it: a red edge and glow all round */
 .tl-tree.bad{border-color:var(--bad);box-shadow:0 0 18px color-mix(in srgb,var(--bad) 40%,transparent),inset 0 0 24px color-mix(in srgb,var(--bad) 14%,transparent)}
-.tl-head{display:flex;align-items:baseline;gap:10px;width:100%}
-.tl-head h3{color:var(--tc);font-size:1.05rem}
+.tl-head{display:flex;align-items:baseline;gap:10px;width:100%;padding-bottom:8px;border-bottom:1px solid color-mix(in srgb,var(--tc) 25%,transparent)}
+.tl-head h3{color:var(--tc);font-family:var(--title-font);font-size:1.05rem;letter-spacing:.02em}
 .tl-pts{color:var(--muted);font-size:.85em}
 .tl-pts b{color:var(--text);font-variant-numeric:tabular-nums}
 .tl-head .tl-reset{margin-left:auto;font-size:.85em}
 
-.tl-grid{display:grid;grid-template-columns:repeat(var(--cols),var(--ic));grid-template-rows:repeat(var(--rows),var(--ic));gap:16px 18px}
+.tl-grid{display:grid;grid-template-columns:20px repeat(var(--cols),var(--ic));grid-template-rows:repeat(var(--rows),var(--ic));gap:16px 18px;
+  margin-left:-20px}
+/* the rail down the tree's edge: the points each row needs in the rows above it, lit once they're there */
+.tl-gate{grid-column:1;align-self:center;justify-self:end;min-width:20px;padding:1px 0;border-radius:5px;text-align:center;
+  font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);opacity:.45;transition:color .2s,opacity .2s,background .2s}
+.tl-gate.met:not(:empty){color:var(--tc);opacity:1;background:color-mix(in srgb,var(--tc) 14%,transparent)}
 
 /* a talent: its icon in a frame, greyed while it can't be learned, green with points in it, gold when maxed */
-.tl-talent{position:relative;z-index:1;width:var(--ic);height:var(--ic);padding:0;border:2px solid var(--line);border-radius:9px;background:var(--bg);
-  cursor:pointer;transition:border-color .15s,box-shadow .15s;-webkit-touch-callout:none;user-select:none}
-.tl-talent img{display:block;width:100%;height:100%;border-radius:7px;transition:filter .15s}
+.tl-talent{position:relative;z-index:1;width:var(--ic);height:var(--ic);padding:0;border:2px solid var(--line);border-radius:10px;background:var(--bg);
+  cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .12s;-webkit-touch-callout:none;user-select:none}
+.tl-talent img{display:block;width:100%;height:100%;border-radius:8px;transition:filter .15s}
+/* a little bevel over the icon, like the game's frames */
+.tl-talent::after{content:"";position:absolute;inset:0;border-radius:8px;box-shadow:inset 0 1px 0 rgb(255 255 255 / .18),inset 0 -6px 10px rgb(0 0 0 / .35);pointer-events:none}
+.tl-talent:not(.locked):active{transform:scale(.94)}
+/* the talent the mouse is on in the Order list */
+.tl-talent.hot{outline:2px solid var(--accent);outline-offset:3px}
 .tl-talent.locked img{filter:grayscale(1) brightness(.5)}
 .tl-talent.locked{cursor:default}
 .tl-talent.open{border-color:color-mix(in srgb,var(--good) 70%,var(--line))}
 .tl-talent.open:hover{box-shadow:0 0 10px color-mix(in srgb,var(--good) 45%,transparent)}
 .tl-talent.on{border-color:var(--good)}
-.tl-talent.max{border-color:var(--gold);box-shadow:0 0 8px color-mix(in srgb,var(--gold) 35%,transparent)}
+.tl-talent.max{border-color:var(--gold);box-shadow:0 0 12px color-mix(in srgb,var(--gold) 40%,transparent)}
 /* learned, but missing its gate or prerequisite: red frame, rank and a red wash over the icon */
 .tl-talent.bad,.tl-talent.bad.max{border-color:var(--bad);box-shadow:0 0 10px color-mix(in srgb,var(--bad) 45%,transparent)}
 .tl-talent.bad img{filter:sepia(1) saturate(4) hue-rotate(-50deg) brightness(.7)}
@@ -67,7 +86,13 @@
 .tl-tip[hidden]{display:none}
 .tl-tip p{margin:0 0 6px}
 .tl-tip p:last-child{margin-bottom:0}
-.tl-tip-h{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.tl-tip{border-top:3px solid var(--tc)}
+.tl-tip-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.tl-tip-h img{flex:none;width:34px;height:34px;border-radius:6px;border:1px solid var(--line)}
+.tl-tip-h p{display:grid;margin:0}
+.tl-tip-h b{color:var(--tc);font-size:1.05em}
+.tl-tip-h .muted{font-size:.85em}
+.tl-tip-lv{margin-top:8px!important;color:var(--muted);font-size:.85em}
 .tl-tip-why{color:var(--warn)}
 .tl-tip-why.bad,.tl-tip-bad{color:var(--bad)}
 .tl-tip-bad{font-weight:650}
@@ -79,18 +104,135 @@
 .tl-tip-acts .pill{justify-content:center;width:52px;height:36px;font-size:1.2em;color:var(--text)}
 .tl-tip-acts .pill:disabled{opacity:.35;cursor:default}
 
+/* under the calculator: the order, then your talents */
+.tl-below{display:grid;gap:var(--gap);margin-top:var(--gap)}
+.tl-below .card{margin:0}
+
+/* Order: a line per run of points, the levels in a gutter and the talent's tree as a stripe */
+.tl-order{margin:0;padding:8px 0;list-style:none;columns:4 240px;column-gap:0}
+.tl-order li{display:flex;align-items:center;gap:8px;padding:3px 12px 3px 10px;border-left:3px solid var(--tc);break-inside:avoid;
+  font-size:.9em;line-height:1.3;transition:background .15s}
+.tl-order li.hot{background:var(--accent-soft)}
+.tl-order li.bad{border-left-color:var(--bad)}
+.tl-order li.bad b,.tl-order li.bad .tl-r{color:var(--bad)}
+.tl-order img,.tl-sec img{flex:none;width:24px;height:24px;border-radius:5px;border:1px solid var(--line)}
+.tl-lv{flex:none;min-width:2.4ch;color:var(--muted);font-size:.9em;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.tl-on{min-width:0}
+.tl-order-hint,.tl-moved{margin:0;padding:10px 16px 0;font-size:.85em}
+.tl-moved{color:var(--warn)}
+/* dragging a line: its handle, the line left behind, the copy under the pointer, and where it will land */
+.tl-grip{flex:none;display:grid;place-items:center;width:18px;height:28px;margin:-4px -4px -4px -6px;padding:0;border:0;border-radius:5px;
+  background:none;color:var(--muted);cursor:grab;touch-action:none;opacity:.55;transition:opacity .15s,background .15s}
+.tl-grip svg{width:8px;height:13px;fill:currentColor}
+.tl-order li:hover .tl-grip,.tl-grip:focus-visible{opacity:1}
+.tl-grip:hover{background:var(--raised)}
+.tl-grip:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.tl-order li.dragging{opacity:.3}
+.tl-order li.drop-a{box-shadow:inset 0 2px 0 var(--accent)}
+.tl-order li.drop-b{box-shadow:inset 0 -2px 0 var(--accent)}
+.tl-ghost{position:fixed;z-index:60;display:flex;align-items:center;gap:10px;margin:0;padding:5px 14px 5px 12px;list-style:none;
+  border:1px solid var(--line);border-left:3px solid var(--tc);border-radius:6px;background:var(--raised);font-size:.9em;
+  box-shadow:0 8px 22px rgb(0 0 0 / .4);pointer-events:none;opacity:.95}
+.tl-ghost img{flex:none;width:26px;height:26px;border-radius:5px}
+.tl-ghost .tl-bad{display:block}
+.tl-dragging,.tl-dragging *{cursor:grabbing!important;user-select:none!important}
+.tl-on{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-on .tl-bad{display:block}
+
 /* Your talents: what's picked, tree by tree, each with what it does at its rank */
 .tl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px;padding:14px 16px 18px}
 .tl-sec h3{margin:0 0 8px;color:var(--tc);font-size:1rem}
 .tl-sec h3 .muted{font-size:.85em;font-weight:500}
 .tl-sec ul{margin:0;padding:0;list-style:none}
-.tl-sec li{margin:0 0 8px}
+.tl-sec li{display:flex;gap:10px;align-items:flex-start;margin:0 0 10px}
+.tl-sec li img{margin-top:2px}
 .tl-sec li .muted{display:block;font-size:.9em}
-.tl-r{margin-left:4px;color:var(--tc);font-weight:650;font-variant-numeric:tabular-nums}
-.tl-none{margin:0}
+.tl-r{margin-left:4px;white-space:nowrap;color:var(--tc);font-weight:650;font-variant-numeric:tabular-nums}
+.tl-none{margin:0;padding:14px 16px 18px}
+.tl-list .tl-none{padding:0}
 
 @media (max-width:640px){
   .tl{--ic:42px}
+  .tl-bar{width:80px}
   .tl-trees{padding:12px 10px}
-  .tl-grid{gap:16px 20px}
+  .tl-grid{gap:16px 16px}
 }
+
+
+/* the icon on a line is a handle too */
+.tl-order li>img{cursor:grab;touch-action:none}
+
+/* the extras each Order line carries: the rank's text, the 5-level band and the row it opens */
+.tl-order li::before,.tl-order li::after{display:none}
+/* Order as a timeline: a line down the levels, a round icon per rank in its tree's colour, a band every 5 levels, rows opening marked */
+.tl-order{columns:auto;max-width:900px;margin:0 auto;padding:4px 16px 18px}
+.tl-order li{position:relative;flex-wrap:wrap;align-items:flex-start;gap:4px 12px;padding:8px 10px 8px 0;border-left:0;
+  background:none}
+.tl-order li.hot{background:var(--accent-soft);border-radius:8px}
+/* the rail and the dot */
+.tl-lv{order:1;min-width:3ch;font-size:1.15em;color:var(--text);padding-top:4px}
+.tl-order li>img{order:2;width:36px;height:36px;border-radius:50%;border:3px solid var(--tc);box-shadow:0 0 0 4px var(--surface)}
+.tl-order li.bad>img{border-color:var(--bad)}
+.tl-on{order:3;flex:1;white-space:normal;padding-top:2px}
+.tl-grip{order:4;margin:4px 0 0}
+.tl-txt{display:block;color:var(--muted);font-size:.9em}
+.tl-order li .tl-on>b{color:var(--tc)}
+.tl-order li:not(:last-child)>img{position:relative}
+.tl-order{background:linear-gradient(var(--line),var(--line)) no-repeat calc(16px + 3ch + 12px + 17px) 0/2px 100%}
+/* the band heading every 5 levels, and the row-opening chip */
+.tl-order li[data-band]::before{display:block;content:attr(data-band);order:0;flex-basis:100%;margin:14px 0 4px;padding:4px 10px;
+  border-radius:6px;background:var(--raised);color:var(--muted);font-size:.78em;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.tl-order li[data-note]::after{display:inline-block;content:"▲ " attr(data-note);order:5;flex-basis:100%;margin:2px 0 0 calc(3ch + 12px + 48px);
+  color:var(--tc);font-size:.78em;font-weight:650}
+
+
+/* Icons only: a row per five levels (the levels label on the left), every rank an icon with its level and rank on it */
+.tl-order.icons{display:grid;grid-template-columns:repeat(5,64px);gap:18px 14px;justify-content:start;max-width:none;padding:10px 16px 18px 128px;background:none}
+.tl-order.icons li{position:relative;display:block;width:64px;height:64px;padding:0;border-radius:12px}
+.tl-order.icons li>img{display:block;width:64px;height:64px;border-radius:12px;border:3px solid var(--tc);box-shadow:none}
+.tl-order.icons li.bad>img{border-color:var(--bad);filter:sepia(1) saturate(4) hue-rotate(-50deg) brightness(.75)}
+.tl-order.icons li.hot{background:none;outline:2px solid var(--accent);outline-offset:2px}
+.tl-order.icons .tl-txt{display:none}
+.tl-order.icons .tl-lv{position:absolute;top:-7px;left:-7px;z-index:1;min-width:0;padding:0 5px;border-radius:6px;background:var(--surface);
+  border:1px solid var(--line);font-size:.75em;line-height:17px;padding-top:0}
+.tl-order.icons li::after{display:none!important}
+/* the rank, bottom right, like on the trees */
+.tl-order.icons .tl-on{display:contents}
+.tl-order.icons .tl-on>b,.tl-order.icons .tl-on>.tl-bad{display:none}
+.tl-order.icons .tl-r{position:absolute;right:-7px;bottom:-7px;margin:0;padding:0 4px;border:1px solid var(--line);border-radius:6px;
+  background:var(--surface);color:var(--tc);font-size:.72em;line-height:16px}
+.tl-order.icons li.bad .tl-r{color:var(--bad);border-color:var(--bad)}
+/* the tile itself is the handle; the grip stays for the keyboard, unseen until focused */
+.tl-order.icons li{cursor:grab;touch-action:none}
+.tl-order.icons .tl-grip{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0!important;background:none!important}
+.tl-order.icons li:has(.tl-grip:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
+.tl-order.icons li[data-band]::before{position:absolute;right:calc(100% + 18px);top:50%;transform:translateY(-50%);width:96px;margin:0;padding:3px 8px;text-align:center}
+/* the point that opens a tree's next row: a marker on its corner */
+.tl-order.icons li[data-note]{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--tc)}
+.tl-order.icons li.drop-a{box-shadow:-8px 0 0 -4px var(--accent)}
+.tl-order.icons li.drop-b{box-shadow:8px 0 0 -4px var(--accent)}
+/* desktop: two bands side by side (a row = ten levels), each with its label in a gutter on its left */
+@media (min-width:1100px){
+  .tl-order.icons{grid-template-columns:120px repeat(5,64px) 120px repeat(5,64px);padding-left:16px;justify-content:center}
+  .tl-order.icons li:nth-child(10n+1){grid-column:2}
+  .tl-order.icons li:nth-child(10n+6){grid-column:8}
+  .tl-order.icons li[data-band]::before{right:calc(100% + 22px);width:auto;white-space:nowrap;letter-spacing:.03em}
+}
+@media (max-width:640px){.tl-order.icons{grid-template-columns:repeat(5,48px);gap:8px;padding-left:16px}
+  .tl-order.icons li,.tl-order.icons li>img{width:48px;height:48px}
+  .tl-order.icons li[data-band]::before{display:none}}
+
+/* the tile under the pointer while dragging with Icons only: the icon, lifted, with its level and rank */
+.tl-ghost.icon{display:block;width:64px!important;height:64px;padding:0;border:0;border-radius:12px;background:none;
+  box-shadow:0 12px 26px rgb(0 0 0 / .55);transform:scale(1.08) rotate(-3deg);opacity:1}
+.tl-ghost.icon>img{display:block;width:64px;height:64px;border-radius:12px;border:3px solid var(--tc)}
+.tl-ghost.icon.bad>img{border-color:var(--bad)}
+.tl-ghost.icon .tl-on{display:contents}
+.tl-ghost.icon .tl-on>b,.tl-ghost.icon .tl-txt,.tl-ghost.icon .tl-grip,.tl-ghost.icon .tl-bad{display:none}
+.tl-ghost.icon .tl-lv{position:absolute;top:-7px;left:-7px;min-width:0;padding:0 5px;border:1px solid var(--line);border-radius:6px;
+  background:var(--surface);color:var(--text);font-size:.75em;line-height:17px}
+.tl-ghost.icon .tl-r{position:absolute;right:-7px;bottom:-7px;margin:0;padding:0 4px;border:1px solid var(--line);border-radius:6px;
+  background:var(--surface);color:var(--tc);font-size:.72em;line-height:16px}
+/* the tile being dragged fades, but its band's label stays */
+.tl-order.icons li.dragging{opacity:1}
+.tl-order.icons li.dragging>img,.tl-order.icons li.dragging .tl-lv,.tl-order.icons li.dragging .tl-r{opacity:.3}

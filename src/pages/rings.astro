@@ -9,7 +9,7 @@ import '../styles/gear.css';
 const rings = data.items.filter((w) => w.slot === 'ring');
 const none = data.noSource.filter((w) => w.slot === 'ring');
 ---
-<Layout title="Rings" description="Rings with spell damage, hit or crit for warlocks in WoW Forever, by level, with where each comes from.">
+<Layout title="Rings" description="Rings with spell damage, hit or crit for Warlocks in WoW Forever, by level, with where each comes from.">
   <Fragment slot="head">
     <script is:inline>window.whTooltips = { colorLinks: false, iconizeLinks: false, renameLinks: false };   // read by Wowhead's tooltips.js</script>
     <script is:inline src="https://wow.zamimg.com/js/tooltips.js"></script>
@@ -17,7 +17,9 @@ const none = data.noSource.filter((w) => w.slot === 'ring');
 
   <div class="page-head">
     <h1>Rings</h1>
-    <p>Rings with spell damage, hit or crit, sorted by level and item level. Spell Power (SP), Shadow (ShP) and Fire (FP) spell damage, hit and crit each have a column. The suggested upgrades go by spell damage alone (Spell Power plus the better of Shadow and Fire), so weigh hit and crit yourself.</p>
+    <p>Rings with spell damage, hit or crit sorted by level then item level. 
+
+The suggested upgrades path is ranked by spell damage (Spell Power plus the better of Shadow and Fire), so weigh hit and crit yourself.</p>
   </div>
 
   <GearControls store="rings" total={rings.length} noun="rings" one="ring" searchLabel="Search rings, stats, quests and zones"
@@ -27,7 +29,7 @@ const none = data.noSource.filter((w) => w.slot === 'ring');
 
   <details class="extra">
     <summary>{none.length} more without a known source</summary>
-    <p class="muted">These are in the game files, but neither the classic server data nor Wowhead says where they come from.</p>
+    <p class="muted">Rings in the game files with no known source.</p>
     <ul class="wands">{none.map((w) => <GearItem w={w} pathable={false} />)}</ul>
   </details>
 

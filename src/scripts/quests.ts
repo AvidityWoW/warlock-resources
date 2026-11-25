@@ -1,6 +1,6 @@
 // Class quests page: your level marks each chain as startable or not (on its card and in the row of links at the top);
 // faction hides the other side's routes. A shopping list's ticks are kept too (quests:shop:v2), and the
-// "Partway through?" commands copy.
+// "Progress check" commands copy.
 import { levelBar, onPage } from '../lib/levelbar';
 
 onPage('cq-bar', (bar, signal) => {
@@ -26,7 +26,7 @@ onPage('cq-bar', (bar, signal) => {
     sync();
   }
 
-  // the "Partway through?" commands: copy, with a moment of "Copied"
+  // the "Progress check" commands: copy, with a moment of "Copied"
   for (const btn of document.querySelectorAll<HTMLButtonElement>('.cq-find .copy')) {
     let timer = 0;
     btn.addEventListener('click', async () => {

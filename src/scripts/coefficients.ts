@@ -1,9 +1,10 @@
 // Coefficients page: "Copy image" and "Save image" draw the summary table onto a canvas, in the current theme, with the
 // page title, build and site link, so it can be pasted into Discord or saved as a PNG.
-import { coefficients, COEFF_BUILD } from '../data/coefficients';
+import { coefficients, COEFF_BUILD, LIFE_TAP } from '../data/coefficients';
 import { SITE } from '../data/site';
 import { ranked } from '../data/coefficient-ranks';
 import { detailBody, CAP, SP_MAX, type View } from './coefficient-detail';
+import { utilityBody, rankCount, SPI_MAX } from './utility-detail';
 
 const SCALE = 2;   // draw at twice the size, so it stays sharp on high-DPI screens and when zoomed in Discord
 const PAD = 28, ROW = 34, HEAD = 30, GAP = 28;
@@ -31,6 +32,9 @@ function draw(): HTMLCanvasElement {
     mark: r.school === 'Fire' ? '◆' : '●',
     cells: [r.label ?? r.name, r.damage, r.perTick ?? '', r.ticks ?? '', r.coeff, r.coeffPerTick ?? ''],
   }));
+  // Life Tap last, under a rule: it scales with Spirit
+  rows.push({ color: c.shadow, mark: '●', cells: [LIFE_TAP.name, LIFE_TAP.amount, '', '', LIFE_TAP.coeff, ''] });
+  const ruleAt = rows.length - 1;
 
   // column widths from their widest cell (the marker sits in the Dmg column, before the number)
   const m = document.createElement('canvas').getContext('2d')!;
@@ -62,6 +66,9 @@ function draw(): HTMLCanvasElement {
   g.restore();
   g.strokeStyle = c.line; g.lineWidth = 1;
   g.beginPath(); g.roundRect(x0 + .5, tableY + .5, w0 - 1, hT - 1, 10); g.stroke();
+  g.lineWidth = 2;
+  g.beginPath(); g.moveTo(x0, tableY + HEAD + ruleAt * ROW); g.lineTo(x0 + w0, tableY + HEAD + ruleAt * ROW); g.stroke();
+  g.lineWidth = 1;
 
   // x where each column starts and ends
   const xs: [number, number][] = [];
@@ -139,35 +146,46 @@ document.addEventListener('astro:page-load', () => {
   }, { signal: ctl.signal });
 });
 
-// Full detail: the level and spell-power sliders (each with a number box), rank chips and Classic toggle redraw the table body
-document.addEventListener('astro:page-load', () => {
-  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
-  const lvl = $<HTMLInputElement>('cf-level'), body = $<HTMLElement>('cf-rows');
+// Full detail and Utility spells: each has a level slider and a second one (spell power, or Spirit), each with a number box,
+// rank chips and a Classic toggle, which redraw its table body. The same wiring serves both, by their id prefix.
+interface Table {
+  /** the ids' prefix: cf-level, cf-sp, cf-rows ... */
+  p: string;
+  /** the second slider's id part and what the Result heading calls it */
+  second: string; unit: string; max: number;
+  body: (level: number, x: number, classic: boolean, pins: Record<string, number>) => { html: string; note: string };
+  ranks: (key: string) => number;
+}
+
+function wire(t: Table) {
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(`${t.p}-${id}`) as T | null;
+  const lvl = $<HTMLInputElement>('level'), body = $<HTMLElement>('rows');
   if (!lvl || !body) return;   // not the coefficients page
-  const lvlN = $<HTMLInputElement>('cf-level-n')!, sp = $<HTMLInputElement>('cf-sp')!, spN = $<HTMLInputElement>('cf-sp-n')!;
-  const at = $<HTMLElement>('cf-at')!, cmp = $<HTMLButtonElement>('cf-classic')!, note = $<HTMLElement>('cf-note')!;
+  const lvlN = $<HTMLInputElement>('level-n')!, sp = $<HTMLInputElement>(t.second)!, spN = $<HTMLInputElement>(`${t.second}-n`)!;
+  const at = $<HTMLElement>('at')!, cmp = $<HTMLButtonElement>('classic')!, note = $<HTMLElement>('note')!;
+  const card = body.closest<HTMLElement>('section')!;
   const hint = note.textContent;
   const ctl = new AbortController(), on = { signal: ctl.signal };
   document.addEventListener('astro:before-swap', () => ctl.abort(), { once: true });
   const clamp = (x: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, Math.round(x) || 0));
   // the browser may keep the sliders' values when coming back to the page: start from them
-  const v: View = { level: clamp(+lvl.value, 1, CAP), sp: clamp(+sp.value, 0, 9999), classic: false, pins: {} };
+  const v = { level: clamp(+lvl.value, 1, CAP), sp: clamp(+sp.value, 0, 9999), classic: false, pins: {} as Record<string, number> };
 
   const render = () => {
     lvl.value = lvlN.value = String(v.level);
-    spN.value = String(v.sp); sp.value = String(Math.min(v.sp, SP_MAX));   // the box can go past the slider's end
-    at.textContent = `at level ${v.level}, ${v.sp} SP`;
+    spN.value = String(v.sp); sp.value = String(Math.min(v.sp, t.max));   // the box can go past the slider's end
+    at.textContent = `at level ${v.level}, ${v.sp} ${t.unit}`;
     for (const r of [lvl, sp]) r.style.setProperty('--p', `${((+r.value - +r.min) / (+r.max - +r.min)) * 100}%`);   // the slider's filled part
     // − and + grey out at the ends of their box's range
-    for (const st of document.querySelectorAll<HTMLElement>('#cf-detail [data-stepper]')) {
+    for (const st of card.querySelectorAll<HTMLElement>('[data-stepper]')) {
       const el = st.querySelector('input')!;
       st.querySelector<HTMLButtonElement>('[data-step="-1"]')!.disabled = +el.value <= +el.min;
       st.querySelector<HTMLButtonElement>('[data-step="1"]')!.disabled = +el.value >= +el.max;
     }
     cmp.setAttribute('aria-pressed', String(v.classic));
-    const d = detailBody(v);
+    const d = t.body(v.level, v.sp, v.classic, v.pins);
     body.innerHTML = d.html;
-    note.textContent = [Object.keys(v.pins).length ? 'Showing the ranks you picked; moving the level resets them.' : hint, d.note].filter(Boolean).join(' · ');
+    note.textContent = [Object.keys(v.pins).length ? 'Showing your picked ranks. Changing the level resets them.' : hint, d.note].filter(Boolean).join(' · ');
   };
   const setLevel = (x: number) => { v.level = clamp(x, 1, CAP); v.pins = {}; render(); };
   const setSp = (x: number) => { v.sp = clamp(x, 0, 9999); render(); };
@@ -180,13 +198,12 @@ document.addEventListener('astro:page-load', () => {
   for (const n of [lvlN, spN]) n.addEventListener('change', render, on);
   cmp.addEventListener('click', () => { v.classic = !v.classic; render(); }, on);
   // rank locks: drag across one either way to roll through its ranks (drag left for higher, like turning a gear), or click
-  // an arrow or a faded neighbour. A rank is shown at the current level; one learned later stays at its base damage. The table
+  // an arrow or a faded neighbour. A rank is shown at the current level; one learned later stays at its base amount. The table
   // is redrawn on every step, so the lock is found again by its spell each time.
   const STEP = 16;   // px of drag per rank
   const lock = (key: string) => body.querySelector<HTMLElement>(`.lock[data-k="${CSS.escape(key)}"]`);
   const pick = (key: string, i: number) => {
-    const n = ranked.find((x) => x.key === key)!.forever.length;
-    i = Math.min(n - 1, Math.max(0, i));
+    i = Math.min(t.ranks(key) - 1, Math.max(0, i));
     if (v.pins[key] !== i) { v.pins[key] = i; render(); }
     lock(key)?.focus({ preventScroll: true });
   };
@@ -223,5 +240,11 @@ document.addEventListener('astro:page-load', () => {
     pick(l.dataset.k!, to);
   }, on);
   if (v.level !== CAP || v.sp !== 0) render();
+}
 
+document.addEventListener('astro:page-load', () => {
+  wire({ p: 'cf', second: 'sp', unit: 'SP', max: SP_MAX, ranks: (key) => ranked.find((x) => x.key === key)!.forever.length,
+    body: (level, sp, classic, pins) => detailBody({ level, sp, classic, pins } satisfies View) });
+  wire({ p: 'cu', second: 'spi', unit: 'Spirit', max: SPI_MAX, ranks: rankCount,
+    body: (level, spirit, classic, pins) => utilityBody({ level, spirit, classic, pins }) });
 });

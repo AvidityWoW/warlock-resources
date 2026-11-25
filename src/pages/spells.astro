@@ -13,10 +13,10 @@ const next = Math.min(...spells.filter((s) => s.level > LEVEL).map((s) => s.leve
 const state = (s: Spell) => (s.level <= LEVEL ? 'have' : s.level === next ? 'next' : null);
 const trees = ['Affliction', 'Demonology', 'Destruction'];
 ---
-<Layout title="Warlock spells by level" description="Every spell and rank a WoW Forever warlock learns, level by level, and whether it comes from a trainer, a talent, a quest or a book.">
+<Layout title="Warlock spells by level" description="Every spell and rank a WoW Forever Warlock learns, level by level, and whether it comes from a trainer, a talent, a quest or a book.">
   <div class="page-head">
     <h1>Warlock spells by level</h1>
-    <p>Your own spells, not your demons': every spell and rank a warlock learns, in the order you get them, and where each comes from. Set your level to see what you should have by now and what the next trip to the trainer brings.</p>
+    <p>Every Warlock spell and rank by level, and where each is learned. Set your level to see what you should have by now and what your next trainer visit brings.</p>
   </div>
 
   <LevelBar id="sp-bar" level={LEVEL}>
@@ -24,8 +24,7 @@ const trees = ['Affliction', 'Demonology', 'Destruction'];
       <button type="button" data-v="all" aria-pressed="true">All</button>
       {trees.map((t) => <button type="button" data-v={t} aria-pressed="false">{t}</button>)}
     </div>
-    <label class="check"><input type="checkbox" data-name="fresh">New spells only</label>
-    <label class="check"><input type="checkbox" data-name="ahead">Hide what I have</label>
+    <label class="check"><input type="checkbox" data-name="ahead">Hide below my level</label>
   </LevelBar>
 
   <section class="card full sp-card" aria-labelledby="sp-h">
@@ -37,13 +36,12 @@ const trees = ['Affliction', 'Demonology', 'Destruction'];
         </thead>
         <tbody>
           {spells.map((s, i) => (
-            <tr data-level={s.level} data-tree={s.tree} data-first={s.first ? '' : undefined} class:list={[state(s), { top: s.level !== spells[i - 1]?.level, odd: i % 2 === 0 }]}>
+            <tr data-level={s.level} data-tree={s.tree} class:list={[state(s), { top: s.level !== spells[i - 1]?.level, odd: i % 2 === 0 }]}>
               <td class="num sp-lv">{s.level}</td>
               <th scope="row">
                 <span class="sp-name">
                   <a class="link" href={wowhead('spell', s.id)} target="_blank" rel="noopener">{s.name}</a>
                   {s.rank && <span class="muted sp-rank">Rank {s.rank}</span>}
-                  {s.first && <span class="badge" title="A new spell, not a higher rank of one you have">New</span>}
                 </span>
               </th>
               <td class="sp-tree muted">{s.tree}</td>
@@ -60,7 +58,7 @@ const trees = ['Affliction', 'Demonology', 'Destruction'];
         </tbody>
       </table>
     </div>
-    <p class="empty muted" hidden>Nothing left to learn with these choices.</p>
+    <p class="empty muted" hidden>No spells at or above this level.</p>
   </section>
 
   <script>import '../scripts/spells';</script>

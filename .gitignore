@@ -12,3 +12,6 @@ tools/spellbook/wowhead-cache/
 # Wowhead item XML cache for tools/wands/pull.py (refetched when missing)
 tools/wands/wowhead-cache/
 tools/consumes/wowhead-cache/
+
+# Copies the dev-only text editor makes before each save (src/editor/)
+.edit-backups/

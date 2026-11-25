@@ -8,7 +8,7 @@ export interface Stage { ticks: string; mult: string; perTick: string; damage: s
 export interface CoeffRow {
   school: School;
   name: string;
-  /** name in the summary when it differs (Immolate's DoT part) */
+  /** name in the summary when it differs (Immolate's DoT part; the top trainer rank and the book rank of Corruption, Immolate and Shadow Bolt) */
   label?: string;
   /** Direct, DoT, Channel, with (leech), (aoe) and so on */
   part: string;
@@ -43,19 +43,28 @@ export const coefficients: CoeffRow[] = [
     ] },
   { school: 'Shadow', name: 'Bane of Doom', part: 'DoT', id: '603', level: '60', cast: 'instant', duration: '60 s', base: '1742', period: '60 s', ticks: '1', perTick: '1742', damage: '1742', coeffPerTick: '4', coeff: '4' },
   { school: 'Fire', name: 'Conflagrate', part: 'Direct', id: '18932', level: '60', cast: 'instant', base: '282', perLevel: '+1.3', variance: '±11%', damage: '251–313', coeff: '0.429' },
-  { school: 'Shadow', name: 'Corruption', part: 'DoT', id: '25311', level: '60', cast: '2 s', duration: '18 s', base: '73', period: '3 s', ticks: '6', perTick: '73', damage: '438', coeffPerTick: '0.2', coeff: '1.2' },
+  { school: 'Shadow', name: 'Corruption', label: 'Corruption (Rank 6)', part: 'DoT', id: '11672', level: '54', cast: '2 s', duration: '18 s', base: '57', period: '3 s', ticks: '6', perTick: '57', damage: '342', coeffPerTick: '0.2', coeff: '1.2' },
+  { school: 'Shadow', name: 'Corruption', label: 'Corruption (Rank 7, book)', part: 'DoT', id: '25311', level: '60', cast: '2 s', duration: '18 s', base: '73', period: '3 s', ticks: '6', perTick: '73', damage: '438', coeffPerTick: '0.2', coeff: '1.2' },
   { school: 'Shadow', name: 'Death Coil', part: 'Direct (leech)', id: '17926', level: '58', cast: 'instant', base: '454', perLevel: '+3', damage: '460', coeff: '0.214' },
   { school: 'Shadow', name: 'Drain Life', part: 'Channel (leech)', id: '11700', level: '54', cast: 'instant', duration: '5 s', base: '51', period: '1 s', ticks: '5', perTick: '51', damage: '255', coeffPerTick: '0.1', coeff: '0.5' },
   { school: 'Shadow', name: 'Drain Soul', part: 'Channel', id: '11675', level: '52', cast: 'instant', duration: '15 s', base: '84', period: '3 s', ticks: '5', perTick: '84', damage: '420', coeffPerTick: '0.1', coeff: '0.5' },
   { school: 'Fire', name: 'Hellfire', part: 'Channel (self + aoe)', id: '11684 → 11682', level: '54', cast: 'instant', duration: '15 s', base: '206', perLevel: '+0.7', period: '1 s', ticks: '15', perTick: '210', damage: '3150', coeffPerTick: '0.022', coeff: '0.33' },
-  { school: 'Fire', name: 'Immolate', part: 'Direct', id: '25309', level: '60', cast: '2 s', base: '158', perLevel: '+2.3', damage: '158', coeff: '0.2' },
-  { school: 'Fire', name: 'Immolate', label: 'Immolate (dot)', part: 'DoT', id: '25309', level: '60', cast: '2 s', duration: '15 s', base: '55', period: '3 s', ticks: '5', perTick: '55', damage: '275', coeffPerTick: '0.13', coeff: '0.65' },
+  { school: 'Fire', name: 'Immolate', label: 'Immolate (Rank 7)', part: 'Direct', id: '11668', level: '60', cast: '2 s', base: '146', perLevel: '+2.3', damage: '146', coeff: '0.2' },
+  { school: 'Fire', name: 'Immolate', label: 'Immolate (dot, Rank 7)', part: 'DoT', id: '11668', level: '60', cast: '2 s', duration: '15 s', base: '52', period: '3 s', ticks: '5', perTick: '52', damage: '260', coeffPerTick: '0.13', coeff: '0.65' },
+  { school: 'Fire', name: 'Immolate', label: 'Immolate (Rank 8, book)', part: 'Direct', id: '25309', level: '60', cast: '2 s', base: '158', perLevel: '+2.3', damage: '158', coeff: '0.2' },
+  { school: 'Fire', name: 'Immolate', label: 'Immolate (dot, Rank 8, book)', part: 'DoT', id: '25309', level: '60', cast: '2 s', duration: '15 s', base: '55', period: '3 s', ticks: '5', perTick: '55', damage: '275', coeffPerTick: '0.13', coeff: '0.65' },
   { school: 'Fire', name: 'Incinerate', part: 'Direct', id: '1293813', level: '60', cast: '2.5 s', base: '217', perLevel: '+1.4', variance: '±7.5%', damage: '201–234', coeff: '0.714' },
   { school: 'Fire', name: 'Rain of Fire', part: 'Channel (aoe)', id: '11678 → 1282385', level: '58', cast: 'instant', duration: '8 s', base: '220', perLevel: '+0.6', period: '2 s', ticks: '4', perTick: '221', damage: '884', coeffPerTick: '0.083', coeff: '0.332' },
   { school: 'Fire', name: 'Searing Pain', part: 'Direct', id: '17923', level: '58', cast: '1.5 s', base: '114', perLevel: '+1.2', variance: '±8.1%', damage: '107–126', coeff: '0.429' },
-  { school: 'Shadow', name: 'Shadow Bolt', part: 'Direct', id: '25307', level: '60', cast: '3 s', base: '268', perLevel: '+1.9', variance: '±5.5%', damage: '253–283', coeff: '0.857' },
+  { school: 'Shadow', name: 'Shadow Bolt', label: 'Shadow Bolt (Rank 9)', part: 'Direct', id: '11661', level: '60', cast: '3 s', base: '251', perLevel: '+1.8', variance: '±5.4%', damage: '237–265', coeff: '0.857' },
+  { school: 'Shadow', name: 'Shadow Bolt', label: 'Shadow Bolt (Rank 10, book)', part: 'Direct', id: '25307', level: '60', cast: '3 s', base: '268', perLevel: '+1.9', variance: '±5.5%', damage: '253–283', coeff: '0.857' },
   { school: 'Shadow', name: 'Shadowburn', part: 'Direct', id: '18871', level: '56', cast: 'instant', base: '266', perLevel: '+1.8', variance: '±5.5%', damage: '258–289', coeff: '0.429' },
   { school: 'Shadow', name: 'Siphon Life', part: 'DoT (leech)', id: '18881', level: '58', cast: 'instant', duration: '30 s', base: '41', period: '3 s', ticks: '10', perTick: '41', damage: '410', coeffPerTick: '0.05', coeff: '0.5' },
   { school: 'Fire', name: 'Soul Fire', part: 'Direct', id: '17924', level: '56', cast: '6 s', base: '431', perLevel: '+1.9', variance: '±11.2%', damage: '389–488', coeff: '1' },
   { school: 'Shadow', name: 'Wrack', part: 'Channel', id: '1316697', level: '40', cast: 'instant', duration: '6 s', base: '25.2', perLevel: '+1.75', period: '1 s', ticks: '6', perTick: '60', damage: '360', coeffPerTick: '0.2002', coeff: '1.201' },
 ];
+
+/** Life Tap, last in the summary: it scales with Spirit, not spell power ($m1 + $SPI*1 in its tooltip). Rank 6, learned at
+    56, gains 1 a level to 60. Shadow school. */
+export const LIFE_TAP = { name: 'Life Tap', amount: '424 mana', coeff: '1 per Spirit' };
+

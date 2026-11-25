@@ -18,10 +18,10 @@ const state = (rows: Ability[], r: Ability) => {
 /** a demon's spells, each with its ranks, in the order the demon first gets them */
 const bySpell = (rows: Ability[]) => [...Map.groupBy(rows, (r) => r.name)].map(([name, ranks]) => ({ name, ranks }));
 ---
-<Layout title="Demon spells" description="The spells a WoW Forever warlock's demons cast: what each demon is for, every spell rank by level, and what the grimoires cost.">
+<Layout title="Demon spells" description="The spells a WoW Forever Warlock's demons cast: what each demon is for, every spell rank by level, and what the grimoires cost.">
   <div class="page-head">
     <h1>Demon spells</h1>
-    <p>The spells your demons cast, not yours: what each demon is for, then each of its spells rank by rank. A demon learns a new rank from a grimoire, bought from a demon trainer and used with the demon out. Set your level to see which ranks it can know and what they cost.</p>
+    <p>Spells for each Warlock demon, rank by rank. New ranks are learned from grimoires, bought from a demon trainer and used with the demon out. Set your level to see which ranks your demon can know and what they cost.</p>
   </div>
 
   <LevelBar id="dm-bar" level={LEVEL} />
@@ -79,7 +79,7 @@ const bySpell = (rows: Ability[]) => [...Map.groupBy(rows, (r) => r.name)].map((
   </div>
 
   <section class="card full" aria-labelledby="dm-big">
-    <div class="card-h"><h2 id="dm-big">Demons you call for a fight</h2></div>
+    <div class="card-h"><h2 id="dm-big">Infernal and Doomguard</h2></div>
     <div class="tscroll">
       <table class="dtable dm-big">
         <thead>

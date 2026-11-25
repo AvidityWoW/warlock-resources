@@ -64,3 +64,6 @@
 .cf th .sid{display:block;margin-top:1px;font-size:.75em;font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums}
 /* a little tighter than other tables, so the whole of it fits a wide screen */
 .cf.full :is(th,td){padding-left:11px;padding-right:11px}
+
+/* Life Tap, last in the summary: set apart from the damage spells above it */
+.cf tr.util>*{border-top:2px solid var(--line)}

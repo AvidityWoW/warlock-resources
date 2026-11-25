@@ -64,26 +64,26 @@ const ex = (s: string) => highlight(s);
 
 <div class="guide">
 <section class="master" aria-labelledby="guide-h">
-  <h2 class="card-h" id="guide-h">How macros read</h2>
+  <h2 class="card-h" id="guide-h">Macro syntax</h2>
 
   <div class="g-grid master-b">
     <article class="g-card">
-      <h3>Conditions in one <code>[ ]</code>: all must hold (AND)</h3>
+      <h3>AND: conditions in one <code>[ ]</code></h3>
       <pre class="code"><code set:html={ex('/cast [@mouseover,harm,nodead] Corruption')} /></pre>
       <p>Casts only if there's a mob under your cursor, it's hostile, and it's alive. Separate conditions with commas.</p>
     </article>
     <article class="g-card">
-      <h3>Several <code>[ ][ ]</code> in a row: any can hold (OR)</h3>
+      <h3>OR: sets in a row <code>[ ][ ]</code></h3>
       <pre class="code"><code set:html={ex('/cast [@mouseover,harm,nodead][] Corruption')} /></pre>
       <p>Tries the mouseover first; the empty <code>[]</code> always holds, so otherwise it falls back to your normal target.</p>
     </article>
     <article class="g-card">
-      <h3><code>;</code> starts the next spell (else if)</h3>
+      <h3>Else if: <code>;</code></h3>
       <pre class="code"><code set:html={ex('/cast [mod:shift] Bane of Doom; [mod:ctrl] Bane of Havoc; Bane of Agony')} /></pre>
       <p>Shift: Doom. Otherwise Ctrl: Havoc. Otherwise: Agony. The first clause that holds wins and the rest are skipped.</p>
     </article>
     <article class="g-card">
-      <h3><code>@unit</code> picks who it's cast on</h3>
+      <h3>Targeting: <code>@unit</code></h3>
       <pre class="code"><code set:html={ex('/cast [@focus,harm,nodead][] Banish')} /></pre>
       <p>An <code>@</code> inside a set aims that set's spell, and the other conditions in the set are checked against that unit, not your target.</p>
     </article>
@@ -104,7 +104,7 @@ const ex = (s: string) => highlight(s);
       <p class="muted">Checked when you press the button, so they work from keybinds too.</p>
     </article>
     <article class="g-card">
-      <h3>The unit</h3>
+      <h3>Unit conditions</h3>
       <dl>
         <dt><code>[harm]</code> / <code>[noharm]</code></dt><dd>you can / can't attack it</dd>
         <dt><code>[help]</code> / <code>[nohelp]</code></dt><dd>you can / can't help it</dd>
@@ -136,7 +136,7 @@ const ex = (s: string) => highlight(s);
       </dl>
     </article>
     <article class="g-card">
-      <h3>The icon line</h3>
+      <h3>Icon line</h3>
       <dl>
         <dt><code>#showtooltip</code></dt><dd>with the question-mark icon, the button shows the spell it will cast now, its cooldown and tooltip</dd>
         <dt><code>#showtooltip Spell</code></dt><dd>always show that spell</dd>

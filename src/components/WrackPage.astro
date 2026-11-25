@@ -29,11 +29,11 @@ const patch = [
 <Layout title="Wrack" hidden={batched} description="How Wrack works in WoW Forever: a 6-second channel that makes your Corruption, Siphon Life and Bane of Agony tick twice as fast, on a timeline.">
   <div class="page-head">
     <h1>Wrack</h1>
-    <p>Forever's new Affliction channel, learned at 40: six seconds of Shadow ticks, and while it channels your Corruption, Siphon Life and Bane of Agony on the target tick twice as fast. They still last as long as ever, so those faster ticks are extra ones: more damage from DoTs you already have up.</p>
+    <p>While Wrack channels your Corruption, Siphon Life and Bane of Agony tick twice as often. Their durations don't change, Wrack just enables the glowing 'shadow ticks' shown below.</p>
   </div>
 
   <section class="card full" id="wr">
-    <div class="card-h"><h2>On a timeline</h2></div>
+    <div class="card-h"><h2>Timeline</h2></div>
     <div class="ctlbar wr-ctl" data-stick>
       <div class="wr-panels">
         <div class="wr-panel">
@@ -87,7 +87,7 @@ const patch = [
           </div>
         </div>
       </div>
-      <p class="ctlbar-note muted wr-hint">Drag a DoT's name on the timeline to change the cast order (top first), a Wrack's <span class="wr-mouse">window</span><span class="wr-touch">handle</span> to move it, and its sides to change how long it channels. Drag a recast's ring along its row to move it.<span class="wr-touch"> Swipe across the chart to scroll it, and tap a tick for its numbers.</span></p>
+      <p class="ctlbar-note muted wr-hint">Drag a DoT's name to change the cast order, a Wrack's <span class="wr-mouse">window</span><span class="wr-touch">handle</span> to move it, and its edges to change its channel length. Drag a recast's ring along its row to move it.<span class="wr-touch"> Swipe to scroll the chart, and tap a tick for its numbers.</span></p>
     </div>
     <div class="wr-body">
       <div class="wr-chartbox"><div class="wr-chart" id="wr-chart" set:html={view.svg}></div><div class="wr-tip" id="wr-tip" role="tooltip" hidden></div></div>
@@ -116,7 +116,7 @@ const patch = [
   </section>
 
   <section class="card full">
-    <div class="card-h"><h2>The 70888 hotfix</h2></div>
+    <div class="card-h"><h2>Hotfix 70888</h2></div>
     <div class="tscroll">
       <table class="dtable wr-patch">
         <thead><tr><th></th><th>Before: {BEFORE}</th><th>After: {AFTER}</th></tr></thead>

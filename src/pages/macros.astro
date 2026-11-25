@@ -15,10 +15,10 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
   return `${rank ? `${rank} ` : ''}${s} (${lvl})`;
 }).join(', ');
 ---
-<Layout title="Macros" description="Copy-ready warlock macros for WoW Forever: casting, crowd control, demons and stones.">
+<Layout title="Macros" description="Copy-ready Warlock macros for WoW Forever: casting, crowd control, demons and stones.">
   <div class="page-head">
     <h1>Macros</h1>
-    <p>Warlock macros for WoW Forever, ready to copy. Paste one into the game's macro window (<code>/macro</code>), choose the question-mark icon, and drag it to your bars.</p>
+    <p>Warlock macros, ready to copy. Paste one into the game's macro window (<code>/macro</code>), choose the question-mark icon, and drag it to your bars.</p>
   </div>
 
   <!-- two tabs: the macro library, and the guide with its builder (#guide links straight to it) -->
@@ -106,7 +106,7 @@ const rankNote = (body: string, level: number, picked: Picked) => stonesIn(body,
               {m.validate && <p class="mwarn" role="status" hidden data-validate={JSON.stringify({ ...m.validate, kinds: SPELL_KIND, says: KIND_SAYS })}></p>}
               {m.cqs && (
                 <p class="cqs-warn" role="status" hidden={!slowed}>
-                  <strong>/cqs runs on your unmodified presses.</strong> Every <span class="cqs-spell">{slowed}</span> then waits for the cast before it to finish before it starts, so your filler gets slower. Put the cooldowns on a modifier key to keep unmodified presses at full speed.
+                  <strong>/cqs is on your unmodified presses.</strong> Each <span class="cqs-spell">{slowed}</span> waits for the previous cast to finish, which slows your filler. Put the cooldowns on a modifier key to avoid this.
                 </p>
               )}
               {rest ? (

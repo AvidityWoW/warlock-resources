@@ -1,5 +1,5 @@
-// Spells page: your level marks each row as had, next (the next level that brings something) or later; the tree buttons,
-// "New spells only" and "Hide what I have" filter the rows. Choices are kept by lib/levelbar.ts (spells:v1).
+// Spells page: your level marks each row as had, next (the next level that brings something) or later; the tree buttons and
+// "Hide below my level" filter the rows. Choices are kept by lib/levelbar.ts (spells:v1).
 import { levelBar, onPage } from '../lib/levelbar';
 
 onPage('sp-bar', (bar, signal) => {
@@ -8,11 +8,11 @@ onPage('sp-bar', (bar, signal) => {
   const count = document.getElementById('sp-count')!, scroll = card.querySelector<HTMLElement>('.tscroll')!, empty = card.querySelector<HTMLElement>('.empty')!;
 
   levelBar(bar, 'spells:v1', signal, (c) => {
-    const picked = rows.filter((r) => (c.tree === 'all' || r.dataset.tree === c.tree || r.dataset.tree === 'Mount') && (!c.fresh || 'first' in r.dataset));
+    const picked = rows.filter((r) => (c.tree === 'all' || r.dataset.tree === c.tree || r.dataset.tree === 'Mount'));
     const next = Math.min(...picked.map((r) => +r.dataset.level!).filter((lv) => lv > c.level));   // Infinity at the end
     let have = 0, shown = 0, last = 0;
     for (const r of rows) {
-      const lv = +r.dataset.level!, on = picked.includes(r) && !(c.ahead && lv <= c.level);
+      const lv = +r.dataset.level!, on = picked.includes(r) && !(c.ahead && lv < c.level);
       r.hidden = !on;
       r.classList.toggle('have', lv <= c.level);
       r.classList.toggle('next', lv === next);

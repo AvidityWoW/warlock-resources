@@ -38,10 +38,10 @@ const finder = (c: Chain, steps: Step[]) => {
   return run;
 };
 ---
-<Layout title="Class quests" description="Every WoW Forever warlock class quest by level: the demon quests, both mounts, and the warlock-only gear, step by step for each faction, with a shopping list for the Dreadsteed.">
+<Layout title="Class quests" description="Every WoW Forever Warlock class quest by level: the demon quests, both mounts, and the warlock-only gear, step by step for each faction, with a shopping list for the Dreadsteed.">
   <div class="page-head">
     <h1>Class quests</h1>
-    <p>The quests only warlocks get: the ones that teach you a demon or a mount, and a few that give warlock gear. Set your level to see which you can start, and pick your faction to hide the other side's route.</p>
+    <p>Warlock class quests, select a shortcut below to jump to a specific quest.</p>
   </div>
 
   <LevelBar id="cq-bar" level={LEVEL}>
@@ -64,7 +64,7 @@ const finder = (c: Chain, steps: Step[]) => {
         <span class="badge cq-state">{LEVEL >= c.level ? 'You can start this' : `From level ${c.level}`}</span>
       </div>
       <div class="cq-body">
-        <p class="cq-reward"><span class="muted">You get</span> <span set:html={rich(c.reward)} /></p>
+        <p class="cq-reward"><span class="muted">You learn</span> <span set:html={rich(c.reward)} /></p>
         {c.note && <p class="muted">{c.note}</p>}
         {buys(c).length > 0 && (
           <div class="cq-shop" data-chain={c.key}>
@@ -149,7 +149,7 @@ const finder = (c: Chain, steps: Step[]) => {
               {r.note && <p class="muted cq-note">{r.note}</p>}
               {FIND.includes(c.key) && (
                 <div class="cq-find">
-                  <p><strong>Partway through?</strong> <span class="muted">Paste this command into chat and it prints your next step.</span></p>
+                  <p><strong>Progress check</strong> <span class="muted">Paste this command into chat to print your next step.</span></p>
                   <button type="button" class="pill copy" aria-label={`Copy the ${c.title} command`}>
                     <span class="labels"><span class="a">Copy command</span><span class="b" aria-hidden="true">Copied</span></span>
                   </button>

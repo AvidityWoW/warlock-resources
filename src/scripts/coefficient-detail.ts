@@ -2,17 +2,21 @@
 // renders it at level 60 with no spell power on the server, and redraws it in the browser when a slider, a rank chip or the
 // Classic toggle changes.
 import { ranked, CLASSIC_BUILD, type Rank, type RankedSpell } from '../data/coefficient-ranks';
+import spellbook from '../data/spellbook.json';
+
+/** ranks learned from a book, not a trainer (spellbook.json's how: 'item'): marked under the spell's name */
+const BOOK = new Set(spellbook.spells.filter((s) => s.how === 'item').map((s) => s.id));
 
 export const CAP = 60;
 export const SP_MAX = 1000;
 export { CLASSIC_BUILD };
 
-const f = (x: number, d = 3) => String(+x.toFixed(d));
-const secs = (ms?: number) => (ms ? `${f(ms / 1000, 3)} s` : '');
-const esc = (t: string) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+export const f = (x: number, d = 3) => String(+x.toFixed(d));
+export const secs = (ms?: number) => (ms ? `${f(ms / 1000, 3)} s` : '');
+export const esc = (t: string) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
 /** the rank shown at a level: the highest one learned by then (ranks are in learn order, so a tie goes to the later rank) */
-export function rankAt(ranks: Rank[], level: number) {
+export function rankAt(ranks: { learn: number }[], level: number) {
   let i = -1;
   ranks.forEach((r, k) => { if (r.learn <= level) i = k; });
   return i;
@@ -74,11 +78,12 @@ const sch = (s: RankedSpell) => (s.school === 'Fire' ? 'fire' : 'shadow');
 const tds = (c: Partial<Record<Key, string>>, mark?: (k: Key) => boolean) =>
   ORDER.map((k) => `<td class="${cls(k)}${mark?.(k) ? ' chg' : ''}">${esc(c[k] ?? '')}</td>`).join('');
 /** the spell column: the name, with what it is and the rank's spell ID under it ("Channel · 11678 → 1282385" when another spell deals the damage) */
-const name = (t: string, id?: string) => `<th scope="row">${t}${id ? `<span class="sid">${esc(id)}</span>` : ''}</th>`;
+export const name = (t: string, id?: string) => `<th scope="row">${t}${id ? `<span class="sid">${esc(id)}</span>` : ''}</th>`;
 
 /** the rank picker, like a gear lock: ‹ previous · shown · next ›, the neighbours faded. Drag across it either way to roll
  *  through the ranks, or click an arrow or a neighbour, or use the arrow keys. A rank not learned yet at this level is dimmed. */
-function chips(s: RankedSpell, shown: number, level: number, picked: boolean) {
+/** works for any spell with ranks: the damage spells here, and the utility spells (utility-detail.ts) */
+export function chips(s: { key: string; name: string; forever: { id: number; learn: number }[] }, shown: number, level: number, picked: boolean) {
   const n = s.forever.length, i = Math.max(shown, 0), r = s.forever[i];
   const num = (k: number, c: string) => k < 0 || k >= n ? `<span class="lk-n ${c}" aria-hidden="true"></span>`
     : `<span class="lk-n ${c}${s.forever[k].learn <= level ? '' : ' later'}" data-to="${k}" aria-hidden="true">${k + 1}</span>`;
@@ -109,7 +114,8 @@ export function detailBody(v: View) {
       continue;
     }
     const c = cells(s.forever[shown], v.level, v.sp, s.agony);
-    html += `<tr class="${sch(s)}">${name(esc(s.name), `${s.part} · ${c.id}`)}${rest}${tds(c)}</tr>`;
+    const book = BOOK.has(s.forever[shown].id) ? ' · book' : '';
+    html += `<tr class="${sch(s)}">${name(esc(s.name), `${s.part} · ${c.id}${book}`)}${rest}${tds(c)}</tr>`;
     for (const st of c.stages ?? []) html += `<tr class="${sch(s)} stage">${name(st.name, `${st.part}`)}<td></td>${tds(st)}</tr>`;
     if (!v.classic) continue;
     const cr = s.classic, label = `Classic${cr && cr.name !== s.name ? ` · ${esc(cr.name)}` : ''}`;

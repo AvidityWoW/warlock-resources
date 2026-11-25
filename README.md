@@ -15,6 +15,26 @@ npm run backdrop  # regenerate the fel-fire backdrop images (tools/backdrop.mjs)
 
 Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
 
+## Editing text in the browser
+
+With `npm run dev` running, press **Edit text** in the header, then click any text on a page. Plain text opens where it
+stands: Enter saves, Esc cancels. Text with markup in it (a glossary `[[link]]`, a quest's `[Name](item:123)`, inline tags in
+a page) opens in a box under it, and the page shows the result as you type: Ctrl+Enter saves. The change is written to the
+source file the text came from, and the page reloads. The message after a save has an **Undo** button.
+
+- Where the text comes from: in dev, Astro marks each element with the `.astro` file and line it's written on. Text written
+  there is changed there. Text from code (`{p.blurb}`, `set:html={rich(s.what)}`) is looked up as a string in the
+  `src/data/*.ts` files that page imports, and it has to match exactly one string.
+- Each save is checked: the old file is copied to `.edit-backups/` (ignored by git), then the page is rendered again. If
+  it fails, as a build would (a glossary `[[link]]` to no entry, a quest's `/run` line over 255 characters), or if the
+  page doesn't change, the file is put back and the editor shows why.
+- Generated data (the `.json` files, `coefficients.ts`, `coefficient-ranks.ts`, `utility-ranks.ts`) can't be edited here: the `tools/` scripts
+  rewrite those files. The editor says which script owns the text. Text the page's script writes after loading, and text
+  put together from pieces (a total, a level), can't be edited here either. It names the file to change instead.
+- Nothing commits or pushes. Review with `git diff`, then commit as usual.
+- It's all in `src/editor/`, added in `astro.config.mjs`, and only runs under `astro dev`: `npm run build` produces
+  exactly the same site without it.
+
 ## Layout
 
 - `src/data/nav.ts`: every page, by category. The header links and the home page come from here. The header has one tab
@@ -55,8 +75,15 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
 - Talents page (`talents/`): `src/data/talents.json` (typed in `talents.ts`) is Forever's warlock tree from the client's
   Trait tables (not its Classic `Talent` table, which lacks Wrack and the rest), written by
   `python3 tools/talents/gen.py ~/spelldb`, which also fetches the icons into `public/talents/`. The rules (row gates,
-  arrows, what can be unlearned) and the build code in the URL hash (a digit per talent, trees split by `-`) are in
-  `src/lib/talents.ts`; `src/scripts/talents.ts` runs the page and keeps the build as `talents:v1`.
+  arrows, what can be unlearned) are in `src/lib/talents.ts`. The page keeps the build as its order (each point in the
+  order it was spent, shown under the trees, a line a level); a point comes off at its talent's last step, and
+  `repair` then moves any step that's now too early down to where the game allows it. Lines in the Order list can be dragged by
+  their handle (or moved with the arrow keys on it); one dropped above its gate or arrow goes to the first level it can be
+  taken at, with a note. The code in the URL hash is a digit
+  per talent (trees split by `-`), then `~` and a character per step; a link with only the digits gets an order made up
+  tree by tree. `src/scripts/talents.ts` runs the page and keeps the code as `talents:v1`. The Order is drawn as a timeline: a band every five
+  levels, each rank on its own line with that rank's text, and a note on the point that opens a tree's next row. Icons only
+  (remembered as `talents:icons`) shows each band as a row of five icons instead.
 - Class quests page (`quests/`, "Quests" in the nav): the chains are hand-written in `src/data/quests.ts`, whose header says
   where each part comes from (Classic server data for the chains and levels, Wowhead's Forever pages for the checks). A chain's
   `key` is its anchor; the Spells and Demons pages link to `quests/#<key>`. In a step or a reward, `[Name](item:123)`
@@ -68,7 +95,10 @@ Pushing to `main` builds and deploys through `.github/workflows/deploy.yml`.
   drawn side by side in their spell school's colour (the Orb of Orahil: felhound for Shadow, infernal for Fire). The demon chains listed in `FIND` (in `quests.astro`) get a
   "Partway through?" `/run` line under each route, built from its quest ids: it prints the step after the last one the
   game has marked complete. The build fails if one would pass chat's 255-character limit.
-- Coefficients page: `src/data/coefficients.ts` holds the numbers (copied from spelldb's `warlock-coefficients.html`),
+- Coefficients page: `src/data/coefficients.ts` holds the numbers (copied from spelldb's `warlock-coefficients.html`;
+  `LIFE_TAP`, the summary's last row, was read from spelldb's tables by hand). The Utility spells table (Life Tap, Health
+  Funnel, Shadow Ward, Drain Mana) works like the full detail, with Spirit in place of spell power: its ranks are
+  `src/data/utility-ranks.ts`, written by `python3 tools/coefficients/utility.py ~/spelldb`, and `src/scripts/utility-detail.ts` draws it;
   and `src/scripts/coefficients.ts` draws the summary as a PNG for Copy image / Save image. The full detail is built from
   every rank in `src/data/coefficient-ranks.ts` (generated from spelldb, Forever with hotfixes and Classic 1.15.9; mana is each rank's `SpellPower.ManaCost`) by
   `src/scripts/coefficient-detail.ts`, at level 60 on the server and again in the browser for the level slider, rank

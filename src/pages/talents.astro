@@ -9,53 +9,82 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const COLS = 4;   // every tree on the same four-column grid, so the trees line up
 const idx = new Map(data.talents.map((t, i) => [t.id, i]));
 ---
-<Layout title="Talents" description="Talent calculator for WoW Forever warlocks: Forever's own Affliction, Demonology and Destruction trees, with Wrack, Bane of Havoc and Incinerate, and a link to share your build.">
+<Layout title="Talents" description="Talent calculator for WoW Forever Warlocks, with a leveling order and a shareable link.">
   <div class="page-head">
     <h1>Talents</h1>
-    <p>Forever's warlock talents, straight from the game client: Wrack, Malevolence, Bane of Havoc, Incinerate and the rest. Spend your {data.points} points, then copy the link to share the build.</p>
+    <p>Talent calculator for Forever's Warlock trees. Spend your {data.points} points in the order you'd take them while leveling, then copy the link to share your build.</p>
   </div>
 
+  <div class="tl-page">
   <section class="card full tl" aria-labelledby="tl-h">
     <div class="card-h" data-stick>
       <h2 id="tl-h">Calculator</h2>
-      <p class="tl-sum" aria-live="polite"><span><b id="tl-spent">0</b> / {data.points} points</span><span class="muted" id="tl-level">Spend a point to see the level it needs</span></p>
+      <div class="tl-sum" aria-live="polite">
+        <p><b id="tl-spent">0</b><span class="muted"> / {data.points}</span> <span id="tl-split" class="tl-split">{data.tabs.map(() => '0').join(' / ')}</span></p>
+        <span class="tl-bar" aria-hidden="true">{data.tabs.map((_, ti) => <i class={`tl-t${ti}`} data-seg={ti}></i>)}</span>
+        <p class="muted" id="tl-level">Spend a point to see the level it needs</p>
+      </div>
       <div class="acts">
-        <button type="button" class="pill" id="tl-copy"><span class="labels"><span class="a">Copy link</span><span class="b">Copied</span></span></button>
+        <button type="button" class="pill" id="tl-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><span class="labels"><span class="a">Copy link</span><span class="b" aria-hidden="true">Copied</span></span></button>
         <button type="button" class="pill" id="tl-reset">Reset all</button>
       </div>
     </div>
     <div class="tl-trees">
-      {data.tabs.map((tab, ti) => (
-        <div class={`tl-tree tl-t${ti}`} data-tree={ti}>
-          <div class="tl-head">
-            <h3>{tab.name}</h3>
-            <span class="tl-pts"><b data-pts={ti}>0</b> points</span>
-            <button type="button" class="link tl-reset" data-reset={ti} aria-label={`Reset ${tab.name}`}>Reset</button>
+      {data.tabs.map((tab, ti) => {
+        const mine = data.talents.filter((t) => t.tab === ti);
+        const cap = mine.reduce((a, t) => (t.row > a.row ? t : a));
+        // each row's gate (points in the rows above it), for the rail down the tree's left edge
+        const gates = Array.from({ length: tab.rows }, (_, r) => mine.find((t) => t.row === r + 1)?.gates[0]?.points ?? 0);
+        return (
+          <div class={`tl-tree tl-t${ti}`} data-tree={ti} style={`--cap:url(${base}talents/${cap.icon}.jpg)`}>
+            <div class="tl-head">
+              <h3>{tab.name}</h3>
+              <span class="tl-pts"><b data-pts={ti}>0</b> points</span>
+              <button type="button" class="link tl-reset" data-reset={ti} aria-label={`Reset ${tab.name}`}>Reset</button>
+            </div>
+            <div class="tl-grid" style={`--cols:${COLS};--rows:${tab.rows}`}>
+              {gates.map((g, r) => <span class="tl-gate" data-gate={g} data-row={r + 1} style={`grid-row:${r + 1}`} title={g ? `Row ${r + 1} opens at ${g} points in ${tab.name}` : undefined}>{g || ''}</span>)}
+              {mine.flatMap((t) => t.needs.map((id) => {
+                const s = data.talents[idx.get(id)!];
+                // an arrow from the prerequisite down to this talent, in their shared column
+                return <span class="tl-arrow" data-from={idx.get(id)} style={`grid-column:${t.col + 1};grid-row:${s.row}/${t.row + 1}`} aria-hidden="true"></span>;
+              }))}
+              {mine.map((t) => (
+                <button type="button" class="tl-talent" data-i={idx.get(t.id)} style={`grid-column:${t.col + 1};grid-row:${t.row}`} aria-label={`${t.name}, 0 of ${t.max}`}>
+                  <img src={`${base}talents/${t.icon}.jpg`} alt="" width="56" height="56" decoding="async">
+                  <span class="tl-rank">0/{t.max}</span>
+                </button>
+              ))}
+            </div>
           </div>
-          <div class="tl-grid" style={`--cols:${COLS};--rows:${tab.rows}`}>
-            {data.talents.flatMap((t) => t.tab !== ti ? [] : t.needs.map((id) => {
-              const s = data.talents[idx.get(id)!];
-              // an arrow from the prerequisite down to this talent, in their shared column
-              return <span class="tl-arrow" data-from={idx.get(id)} style={`grid-column:${t.col};grid-row:${s.row}/${t.row + 1}`} aria-hidden="true"></span>;
-            }))}
-            {data.talents.map((t, i) => t.tab === ti && (
-              <button type="button" class="tl-talent" data-i={i} style={`grid-column:${t.col};grid-row:${t.row}`} aria-label={`${t.name}, 0 of ${t.max}`}>
-                <img src={`${base}talents/${t.icon}.jpg`} alt="" width="56" height="56" decoding="async">
-                <span class="tl-rank">0/{t.max}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
-    <p class="muted tl-hint"><span class="tl-mouse">Click a talent to learn it, right-click to unlearn. </span><span class="tl-touch">Tap a talent for what it does, with − and + to change it. </span>A talent needs 5 more points in its tree for each row down, and an arrow means the talent above has to be maxed first. Points can come off anywhere: a talent left without what it needs turns red until you fix it.</p>
+    <p class="muted tl-hint"><span class="tl-mouse">Click a talent to learn it, right-click to unlearn. </span><span class="tl-touch">Tap a talent to see what it does, with − and + to change it. </span>The numbers beside each tree are the points a row needs, and an arrow means the talent above must be maxed first. A talent missing its requirements turns red.</p>
     <div class="tl-tip" id="tl-tip" hidden></div>
   </section>
 
-  <section class="card full" aria-labelledby="tl-list-h">
-    <div class="card-h"><h2 id="tl-list-h">Your talents</h2></div>
-    <div class="tl-list" id="tl-list" aria-live="polite"><p class="muted tl-none">No talents yet.</p></div>
-  </section>
+  <div class="tl-below">
+    <section class="card full" aria-labelledby="tl-order-h">
+      <div class="card-h">
+        <h2 id="tl-order-h">Order</h2>
+        <div class="acts">
+          <button type="button" class="pill" id="tl-icons" aria-pressed="false" title="Show the order as icons only, a row per five levels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Icons only</button>
+          <button type="button" class="pill" id="tl-copy-order" disabled title="Copy the order as text, a line per level"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><span class="labels"><span class="a">Copy order</span><span class="b" aria-hidden="true">Copied</span></span></button>
+        </div>
+      </div>
+      <p class="muted tl-order-hint" id="tl-order-hint" hidden>Drag a line by its handle, or the icon with Icons only, to change the level you take it at. Copy link includes the order.</p>
+      <p class="tl-moved" id="tl-moved" role="status" hidden></p>
+      <ol class="tl-order" id="tl-order"></ol>
+      <p class="muted tl-none" id="tl-order-none">Spend points to build your leveling order.</p>
+    </section>
 
+    <section class="card full" aria-labelledby="tl-list-h">
+      <div class="card-h"><h2 id="tl-list-h">Your talents</h2></div>
+      <div class="tl-list" id="tl-list" aria-live="polite"><p class="muted tl-none">No talents yet.</p></div>
+    </section>
+  </div>
+
+  </div>
   <script>import '../scripts/talents';</script>
 </Layout>

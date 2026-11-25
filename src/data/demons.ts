@@ -22,7 +22,7 @@ export interface Demon {
 
 export const DEMONS: Demon[] = [
   { title: 'Imp', abilities: 'Imp', summon: { name: 'Summon Imp', id: 688 }, level: 1, quest: 'imp', shard: false,
-    role: 'Fire damage from range, and Stamina for the party. The one demon that costs no Soul Shard.',
+    role: 'Fire damage from range, and Stamina for the party. The only demon that needs no Soul Shard.',
     does: {
       'Firebolt': 'Its attack: Fire damage from 30 yards, on a 2 sec cast.',
       'Blood Pact': 'More Stamina for your party while the Imp is near: 4 at rank 1, 54 at rank 5.',
@@ -30,7 +30,7 @@ export const DEMONS: Demon[] = [
       'Phase Shift': 'Nothing can attack the Imp until it attacks.',
     } },
   { title: 'Voidwalker', abilities: 'Voidwalker', summon: { name: 'Summon Voidwalker', id: 697 }, level: 10, quest: 'voidwalker', shard: true,
-    role: 'Your tank: it holds monsters while you cast, and can die to shield you.',
+    role: 'A tank that holds enemies while you cast, and can be sacrificed for a shield.',
     does: {
       'Torment': 'A taunt: makes one enemy more likely to attack the Voidwalker. 5 sec cooldown.',
       'Sacrifice': 'Kills the Voidwalker to give you a shield for 30 sec (1,943 damage at rank 6). Damage can\'t interrupt your casts while it holds.',
@@ -40,7 +40,7 @@ export const DEMONS: Demon[] = [
   { title: 'Succubus and Incubus', abilities: 'Succubus', summon: { name: 'Summon Succubus', id: 712 }, level: 20, quest: 'succubus', shard: true,
     role: 'Melee Shadow damage, and Seduction to take a Humanoid out of the fight.',
     also: { name: 'Summon Incubus', id: 713, quest: 'incubus' },
-    note: 'The Incubus is new in Forever. It and the Succubus are both sayaad: they have the same spells, but each learns them from its own grimoires.',
+    note: 'The Incubus is the Succubus\'s counterpart. They have the same spells, but each learns them from its own grimoires.',
     does: {
       'Lash of Pain': 'An instant Shadow attack in melee. 12 sec cooldown.',
       'Soothing Kiss': 'Makes its target more likely to attack something else. 4 sec cooldown.',
@@ -48,7 +48,7 @@ export const DEMONS: Demon[] = [
       'Lesser Invisibility': 'Makes the demon invisible for up to 5 min. Out of combat only.',
     } },
   { title: 'Felhunter', abilities: 'Felhunter', summon: { name: 'Summon Felhunter', id: 691 }, level: 30, quest: 'felhunter', shard: true,
-    role: 'For fighting casters: it eats magic effects and stops spells.',
+    role: 'An anti-caster demon that removes magic effects and interrupts spells.',
     does: {
       'Devour Magic': 'Removes one harmful magic effect from a friend, or one helpful one from an enemy, and heals the Felhunter when it does. 8 sec cooldown.',
       'Tainted Blood': 'For 1 min, anything that hits the Felhunter in melee loses attack power for 10 sec (40 at rank 4), stacking 5 times.',

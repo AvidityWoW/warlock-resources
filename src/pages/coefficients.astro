@@ -1,17 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Stepper from '../components/Stepper.astro';
-import { coefficients, COEFF_BUILD } from '../data/coefficients';
+import { coefficients, COEFF_BUILD, LIFE_TAP } from '../data/coefficients';
 import { detailBody, cls, GROUPS, CAP, SP_MAX, CLASSIC_BUILD } from '../scripts/coefficient-detail';
+import { utilityBody, ucls, UGROUPS, SPI_MAX } from '../scripts/utility-detail';
 import '../styles/coefficients.css';
 
 const sch = (s: string) => (s === 'Fire' ? 'fire' : 'shadow');
 const detail = detailBody({ level: CAP, sp: 0, classic: false, pins: {} });
+const utility = utilityBody({ level: CAP, spirit: 0, classic: false, pins: {} });
 ---
-<Layout title="Coefficients" description="Spell-power coefficients and level-60 damage for every WoW Forever warlock damage spell.">
+<Layout title="Coefficients" description="Spell power coefficients and level 60 damage for every WoW Forever Warlock damage spell, and what Life Tap, Health Funnel, Shadow Ward and Drain Mana do at 60.">
   <div class="page-head">
     <h1>Coefficients</h1>
-    <p>How much of your spell power each damage spell adds, and what it does at level 60 before spell power. A coefficient of 0.857 means 100 spell power adds 85.7 damage.</p>
+    <p>Spell power coefficients and base damage for every Warlock damage spell, and what the utility spells do at 60. A coefficient of 0.857 means 100 spell power adds 85.7 damage. Set your level and spell power in the full detail below.</p>
   </div>
 
   <p class="cf-meta muted">WoW Forever {COEFF_BUILD} · <span class="cf-key fire">◆ Fire</span> <span class="cf-key shadow">● Shadow</span></p>
@@ -38,6 +40,14 @@ const detail = detailBody({ level: CAP, sp: 0, classic: false, pins: {} });
               <td class="num muted">{r.coeffPerTick}</td>
             </tr>
           ))}
+          <tr class="shadow util">
+            <th scope="row">{LIFE_TAP.name}</th>
+            <td class="num dm">{LIFE_TAP.amount}</td>
+            <td class="num sc"></td>
+            <td class="num"></td>
+            <td class="num tot">{LIFE_TAP.coeff}</td>
+            <td class="num muted"></td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -53,7 +63,7 @@ const detail = detailBody({ level: CAP, sp: 0, classic: false, pins: {} });
     <div class="ctlbar" data-stick>
       <div class="slide"><label for="cf-level">Level</label><input type="range" class="slider" id="cf-level" min="1" max={CAP} value={CAP} style="--p:100%"><Stepper id="cf-level-n" label="level" min={1} max={CAP} value={CAP} /></div>
       <div class="slide"><label for="cf-sp">Spell power</label><input type="range" class="slider" id="cf-sp" min="0" max={SP_MAX} value="0" style="--p:0%"><Stepper id="cf-sp-n" label="spell power" min={0} max={9999} value={0} /></div>
-      <p class="ctlbar-note muted" id="cf-note" aria-live="polite">Highest rank learned at each level; drag a rank left or right to see another. Moving the level resets the picks.</p>
+      <p class="ctlbar-note muted" id="cf-note" aria-live="polite">Shows the highest rank learned at each level. Drag a rank left or right to see another. Changing the level resets your picks.</p>
     </div>
     <div class="tscroll">
       <table class="dtable cf full">
@@ -62,6 +72,29 @@ const detail = detailBody({ level: CAP, sp: 0, classic: false, pins: {} });
           <tr><th>Spell</th><th>Learned · Rank</th>{GROUPS.flatMap((g) => g.cols.map(([k, label]) => <th class={cls(k).replace(/muted|sc|dm|tot/g, '').trim() || undefined}>{label}</th>))}</tr>
         </thead>
         <tbody id="cf-rows" set:html={detail.html}></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" id="cu-detail" aria-labelledby="cf-util">
+    <div class="card-h">
+      <h2 id="cf-util">Utility spells</h2>
+      <div class="acts">
+        <button type="button" class="pill" id="cu-classic" aria-pressed="false" title={`Show Classic Era ${CLASSIC_BUILD} under each spell, at the same level and Spirit`}>Compare with Classic</button>
+      </div>
+    </div>
+    <div class="ctlbar" data-stick>
+      <div class="slide"><label for="cu-level">Level</label><input type="range" class="slider" id="cu-level" min="1" max={CAP} value={CAP} style="--p:100%"><Stepper id="cu-level-n" label="level" min={1} max={CAP} value={CAP} /></div>
+      <div class="slide"><label for="cu-spi">Spirit</label><input type="range" class="slider" id="cu-spi" min="0" max={SPI_MAX} value="0" style="--p:0%"><Stepper id="cu-spi-n" label="Spirit" min={0} max={9999} value={0} /></div>
+      <p class="ctlbar-note muted" id="cu-note" aria-live="polite">These don't scale with spell power. Spirit adds to Life Tap only. Drag a rank left or right to see another.</p>
+    </div>
+    <div class="tscroll">
+      <table class="dtable cf full">
+        <thead>
+          <tr class="grp"><th class="pin">Spell</th><th colspan={UGROUPS[0].cols.length + 1}></th>{UGROUPS.slice(1).map((g) => <th colspan={g.cols.length} class="g">{g.label === 'Result' ? <>Result <span class="cf-at" id="cu-at">at level 60, 0 Spirit</span></> : g.label}</th>)}</tr>
+          <tr><th>Spell</th><th>Learned · Rank</th>{UGROUPS.flatMap((g) => g.cols.map(([k, label]) => <th class={ucls(k).replace(/muted|sc|dm|tot/g, '').trim() || undefined}>{label}</th>))}</tr>
+        </thead>
+        <tbody id="cu-rows" set:html={utility.html}></tbody>
       </table>
     </div>
   </section>
