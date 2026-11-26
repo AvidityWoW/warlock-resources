@@ -1,5 +1,5 @@
 // Every rank of the warlock damage spells, for the Coefficients page's full detail: its level slider and Classic comparison.
-// Generated from spelldb: WoW Forever 1.60.1.70959 with the client's hotfixes (70959), and Classic Era 1.15.9.70003.
+// Generated from spelldb: WoW Forever 1.60.1.71139 with the client's hotfixes (71139), and Classic Era 1.15.9.70003.
 // Times are in ms; mana is the cost of one cast (SpellPower.ManaCost, flat for every rank here). Forever gives a base and a
 // variance; Classic gives dice (lo to hi), stored here as their middle and spread too.
 import type { School } from './coefficients';

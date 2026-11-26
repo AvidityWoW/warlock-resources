@@ -2,8 +2,15 @@
 // The macros page's second tab: a builder for /cast lines (scripts/macro-builder.ts drives it), then a guide to how
 // macros read, with a reference of conditionals, targets and commands. Code samples are coloured like the macro cards.
 import { highlight } from '../lib/macro';
-import { SPELLS, PRESETS } from '../data/macro-guide';
+import { SPELL_GROUPS, PRESETS } from '../data/macro-guide';
+import spellbook from '../data/spellbook.json';
+import demons from '../data/demons.json';
 const ex = (s: string) => highlight(s);
+// how many ranks each Warlock and demon spell has, for the builder's Rank menu (spells with one rank get none)
+const RANKS: Record<string, number> = {};
+for (const r of [...spellbook.spells, ...Object.values(demons.abilities).flat()])
+  if (r.rank) RANKS[r.name] = Math.max(RANKS[r.name] ?? 0, r.rank);
+for (const k of Object.keys(RANKS)) if (RANKS[k] < 2) delete RANKS[k];
 ---
 <section class="builder master" id="builder" aria-labelledby="builder-h">
   <h2 class="card-h" id="builder-h">Macro builder</h2>
@@ -25,7 +32,7 @@ const ex = (s: string) => highlight(s);
     <label class="b-check"><input type="checkbox" id="b-petattack"> <code>/petattack</code> too</label>
   </div>
 
-  <ol class="b-clauses" id="b-clauses"></ol>
+  <ol class="b-clauses" id="b-clauses" data-ranks={JSON.stringify(RANKS)} data-spells={JSON.stringify(SPELL_GROUPS)}></ol>
   <button type="button" class="b-add" id="b-add">+ Add a clause (another spell, after <code>;</code>)</button>
 
   <div class="b-out">
@@ -45,14 +52,13 @@ const ex = (s: string) => highlight(s);
     </div>
   </div>
 
-  <datalist id="b-spells">{SPELLS.map((s) => <option value={s} />)}</datalist>
-
   <!-- one clause; the script clones it -->
   <template id="b-clause-tpl">
     <li class="b-clause">
       <div class="b-clausehead">
         <span class="b-num"></span>
-        <label class="b-spell"><span class="sr-only">Spell or item</span><input type="text" list="b-spells" placeholder="Spell or item name" autocomplete="off"></label>
+        <label class="b-spell"><span class="sr-only">Spell or item</span><input type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="b-menu" placeholder="Spell or item name" autocomplete="off"></label>
+        <label class="b-rank" hidden><span class="sr-only">Rank</span><select data-rank></select></label>
         <button type="button" class="b-x" data-act="del-clause" aria-label="Remove this clause" title="Remove this clause">×</button>
       </div>
       <div class="b-sets"></div>

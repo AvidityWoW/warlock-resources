@@ -5,11 +5,19 @@ import { COND_MENUS, PRESETS, type Preset } from '../data/macro-guide';
 import { LIMIT, highlight } from '../lib/macro';
 
 type CondSet = Record<string, string>;
-interface State { cmd: string; tip: boolean; stop: boolean; petattack: boolean; clauses: { spell: string; sets: CondSet[] }[] }
+interface State { cmd: string; tip: boolean; stop: boolean; petattack: boolean; clauses: Clause[] }
+/** rank: a set rank, cast as "Spell(Rank 2)"; left out for the highest the player knows */
+interface Clause { spell: string; rank?: number; sets: CondSet[] }
 const KEY = 'macros:builder';
 const blank = (): State => ({ cmd: '/cast', tip: true, stop: false, petattack: false, clauses: [{ spell: '', sets: [{}] }] });
 const fromPreset = (p: Preset): State => ({ cmd: p.command, tip: p.tooltip, stop: false, petattack: false,
-  clauses: p.clauses.map((c) => ({ spell: c.spell, sets: c.sets.map((s) => ({ ...s })) })) });
+  clauses: p.clauses.map((c) => splitRank({ spell: c.spell, sets: c.sets.map((s) => ({ ...s })) })) });
+/** a spell typed as "Fear(Rank 1)" becomes Fear with rank 1 */
+function splitRank(c: Clause): Clause {
+  const m = c.spell.match(/^(.*?)\s*\(Rank (\d+)\)\s*$/i);
+  return m ? { ...c, spell: m[1], rank: +m[2] } : c;
+}
+const spellText = (c: Clause) => c.spell.trim() + (c.rank && c.spell.trim() ? `(Rank ${c.rank})` : '');
 
 const ORDER = COND_MENUS.map((m) => m.key);
 const condsOf = (s: CondSet) => ORDER.map((k) => s[k]).filter(Boolean);
@@ -20,7 +28,7 @@ const always = (s: CondSet) => ORDER.every((k) => k === 'unit' || !s[k]);
 export function macroText(st: State): string {
   const clauses = st.clauses.map((c) => {
     const bare = c.sets.length === 1 && !condsOf(c.sets[0]).length;
-    return bare ? c.spell.trim() : `${c.sets.map(setText).join('')} ${c.spell.trim()}`;
+    return bare ? spellText(c) : `${c.sets.map(setText).join('')} ${spellText(c)}`;
   });
   return [st.tip && '#showtooltip', st.stop && '/stopcasting', st.petattack && '/petattack [harm,nodead]', `${st.cmd} ${clauses.join('; ')}`]
     .filter(Boolean).join('\n');
@@ -54,7 +62,7 @@ function reading(st: State): { steps: string[]; warns: string[] } {
         s.mod && MOD[s.mod], ...['combat', 'chan', 'group'].map((k) => s[k] && OTHER[s[k]]),
         s.pet && (OTHER[s.pet] ?? `your ${s.pet.slice(4)} is out`),
       ].filter(Boolean) as string[];
-      const what = `cast <b>${esc(spell || '…')}</b>${s.unit && s.unit !== '@target' ? (s.unit === '@cursor' ? ' at the ground under your cursor' : ` on ${u}`) : ''}`;
+      const what = `cast <b>${esc(spell || '…')}</b>${spell && c.rank ? ` rank ${c.rank}` : ''}${s.unit && s.unit !== '@target' ? (s.unit === '@cursor' ? ' at the ground under your cursor' : ` on ${u}`) : ''}`;
       const lead = conds.length ? `If ${conds.join(', and ')}: ` : n === 1 ? 'Always ' : 'Otherwise ';
       steps.push(lead + what + '.');
       if (s.unit && !['@player', '@cursor', ''].includes(s.unit) && !s.react && !s.dead)
@@ -84,6 +92,20 @@ document.addEventListener('astro:page-load', () => {
   let st: State;
   try { st = JSON.parse(localStorage.getItem(KEY) ?? 'null') ?? fromPreset(PRESETS[0]); } catch { st = fromPreset(PRESETS[0]); }
   if (!Array.isArray(st.clauses) || !st.clauses.length) st = blank();
+  st.clauses = st.clauses.map(splitRank);
+  const RANKS: Record<string, number> = JSON.parse(list.dataset.ranks ?? '{}');
+  // the Rank menu for a clause: hidden unless its spell has more than one rank; a rank the spell doesn't have is dropped
+  const rankMenu = (li: Element, c: Clause) => {
+    const n = RANKS[c.spell.trim()] ?? 0;
+    if (c.rank && c.rank > n) delete c.rank;
+    const lab = li.querySelector<HTMLElement>('.b-rank')!, sel = lab.querySelector('select')!;
+    lab.hidden = !n;
+    if (sel.options.length !== n + 1) {
+      sel.replaceChildren(new Option('Highest rank', ''), ...Array.from({ length: n }, (_, i) => new Option(`Rank ${n - i}`, String(n - i))));
+    }
+    sel.value = c.rank ? String(c.rank) : '';
+    sel.classList.toggle('set', !!c.rank);
+  };
 
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch {} };
   const output = () => {
@@ -107,6 +129,7 @@ document.addEventListener('astro:page-load', () => {
       li.querySelector('.b-num')!.textContent = ci ? `; ${ci + 1}` : '1';
       const inp = li.querySelector('input')!;
       inp.value = c.spell;
+      rankMenu(li, c);
       li.querySelector<HTMLButtonElement>('[data-act="del-clause"]')!.hidden = st.clauses.length === 1;
       li.querySelector('.b-sets')!.replaceChildren(...c.sets.map((s, si) => {
         const row = document.createElement('div');
@@ -132,6 +155,87 @@ document.addEventListener('astro:page-load', () => {
     output();
   };
 
+  // The spell box's list: every spell when the box gets focus, narrowed to what's typed once you type. It's a popover,
+  // so it sits above the card (cards clip their overflow) and is placed under the box while open.
+  const GROUPS: { group: string; spells: string[] }[] = JSON.parse(list.dataset.spells ?? '[]');
+  const menu = document.createElement('div');
+  menu.id = 'b-menu'; menu.className = 'b-menu'; menu.setAttribute('role', 'listbox'); menu.popover = 'manual';
+  document.body.append(menu);
+  ctl.signal.addEventListener('abort', () => menu.remove());
+  let box: HTMLInputElement | null = null, active = -1, picking = false;
+  const items = () => [...menu.querySelectorAll<HTMLElement>('[role="option"]')];
+  const place = () => {
+    if (!box) return;
+    const r = box.getBoundingClientRect();
+    Object.assign(menu.style, { left: `${r.left}px`, top: `${r.bottom + 6}px`, minWidth: `${r.width}px`,
+      maxHeight: `${Math.max(160, Math.min(420, innerHeight - r.bottom - 16))}px` });
+  };
+  const mark = (i: number) => {
+    const all = items();
+    active = all.length ? (i + all.length) % all.length : -1;
+    all.forEach((el, j) => el.setAttribute('aria-selected', String(j === active)));
+    if (active >= 0) { all[active].scrollIntoView({ block: 'nearest' }); box?.setAttribute('aria-activedescendant', all[active].id); }
+    else box?.removeAttribute('aria-activedescendant');
+  };
+  function openMenu(inp: HTMLInputElement, filter: string) {
+    box = inp;
+    const q = filter.trim().toLowerCase();
+    let n = 0;
+    menu.innerHTML = GROUPS.map((g) => {
+      const hits = g.spells.filter((s) => s.toLowerCase().includes(q));
+      return hits.length ? `<div class="b-mgroup" role="group" aria-label="${esc(g.group)}"><div class="b-mhead" aria-hidden="true">${esc(g.group)}</div>${
+        hits.map((s) => `<div role="option" id="b-opt-${n++}" data-v="${esc(s)}"${s === inp.value.trim() ? ' class="cur"' : ''}>${esc(s)}</div>`).join('')}</div>` : '';
+    }).join('') || '<div class="b-mnone">No match. The name is used as typed.</div>';
+    if (!menu.matches(':popover-open')) menu.showPopover();
+    inp.setAttribute('aria-expanded', 'true');
+    place();
+    // typing puts the first match up for Enter; on focus the current spell is marked, else nothing
+    mark(q ? 0 : items().findIndex((el) => el.classList.contains('cur')));
+  }
+  const closeMenu = () => {
+    if (menu.matches(':popover-open')) menu.hidePopover();
+    box?.setAttribute('aria-expanded', 'false');
+    box?.removeAttribute('aria-activedescendant');
+    box = null; active = -1;
+  };
+  const pick = (v: string) => {
+    if (!box) return;
+    const inp = box;
+    inp.value = v;
+    picking = true;
+    inp.dispatchEvent(new Event('input', { bubbles: true }));
+    picking = false;
+    closeMenu();
+  };
+  list.addEventListener('focusin', (e) => {
+    const t = e.target;
+    if (t instanceof HTMLInputElement && t.closest('.b-spell')) openMenu(t, '');
+  }, on);
+  list.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t instanceof HTMLInputElement && t.closest('.b-spell') && box !== t) openMenu(t, '');
+  }, on);
+  list.addEventListener('focusout', (e) => { if (e.target === box) closeMenu(); }, on);
+  list.addEventListener('keydown', (e) => {
+    if (e.target !== box || !box) {
+      if (e.target instanceof HTMLInputElement && e.target.closest('.b-spell') && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        e.preventDefault(); openMenu(e.target, '');
+      }
+      return;
+    }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); mark(active + (e.key === 'ArrowDown' ? 1 : -1)); }
+    else if (e.key === 'Enter' && active >= 0) { e.preventDefault(); pick(items()[active].dataset.v!); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeMenu(); }
+  }, on);
+  // mousedown, so the box keeps its focus
+  menu.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    const o = (e.target as HTMLElement).closest<HTMLElement>('[role="option"]');
+    if (o) pick(o.dataset.v!);
+  }, on);
+  window.addEventListener('scroll', place, { ...on, passive: true, capture: true });
+  window.addEventListener('resize', place, on);
+
   const where = (el: Element) => {
     const li = el.closest<HTMLElement>('.b-clause')!, row = el.closest<HTMLElement>('.b-set');
     return { ci: +li.dataset.ci!, si: row ? +row.dataset.si! : -1 };
@@ -139,8 +243,14 @@ document.addEventListener('astro:page-load', () => {
   list.addEventListener('input', (e) => {
     const t = e.target as HTMLElement;
     const { ci, si } = where(t);
-    if (t instanceof HTMLInputElement) st.clauses[ci].spell = t.value;
-    else if (t instanceof HTMLSelectElement) {
+    if (t instanceof HTMLInputElement) {
+      st.clauses[ci].spell = t.value;
+      rankMenu(t.closest('.b-clause')!, st.clauses[ci]);
+      if (!picking) openMenu(t, t.value);
+    } else if (t instanceof HTMLSelectElement && 'rank' in t.dataset) {
+      if (t.value) st.clauses[ci].rank = +t.value; else delete st.clauses[ci].rank;
+      t.classList.toggle('set', !!t.value);
+    } else if (t instanceof HTMLSelectElement) {
       const s = st.clauses[ci].sets[si];
       if (t.value) s[t.dataset.key!] = t.value; else delete s[t.dataset.key!];
       t.classList.toggle('set', !!t.value);

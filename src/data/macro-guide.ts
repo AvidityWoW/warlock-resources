@@ -2,21 +2,21 @@
 // spells: banes and Incubus are in; Season of Discovery runes (Chaos Bolt, Metamorphosis, Felguard, Shadowflame, Fel Armor)
 // are left in the files but aren't in the game, so they're left out here, as are arena frames.
 
-/** spells and items the builder's spell box suggests */
-export const SPELLS = [
-  'Shadow Bolt', 'Immolate', 'Corruption', 'Bane of Agony', 'Bane of Doom', 'Bane of Havoc', 'Curse of the Elements',
-  'Curse of Recklessness', 'Curse of Weakness', 'Curse of Tongues', 'Curse of Exhaustion', 'Amplify Curse',
-  'Siphon Life', 'Wrack', 'Drain Life', 'Drain Mana', 'Drain Soul', 'Life Tap', 'Searing Pain', 'Soul Fire', 'Incinerate',
-  'Shadowburn', 'Conflagrate', 'Rain of Fire', 'Hellfire', 'Fear', 'Howl of Terror', 'Death Coil', 'Banish',
-  'Subjugate Demon', 'Health Funnel', 'Demon Skin', 'Demon Armor', 'Shadow Ward', 'Unending Breath', 'Detect Invisibility',
-  'Eye of Kilrogg', 'Sense Demons', 'Ritual of Summoning', 'Portal of Summoning', 'Ritual of Doom', 'Inferno', 'Summon Imp', 'Summon Voidwalker',
-  'Summon Succubus', 'Summon Incubus', 'Summon Felhunter', 'Summon Felsteed', 'Summon Dreadsteed', 'Fel Domination',
-  'Demonic Sacrifice', 'Soul Link', 'Shoot', 'Create Healthstone', 'Create Soulstone', 'Create Spellstone', 'Create Firestone',
-  // demon abilities
-  'Firebolt', 'Fire Shield', 'Phase Shift', 'Blood Pact', 'Torment', 'Suffering', 'Sacrifice', 'Consume Shadows',
-  'Lash of Pain', 'Seduction', 'Soothing Kiss', 'Lesser Invisibility', 'Spell Lock', 'Devour Magic', 'Tainted Blood', 'Paranoia',
-  // items
-  'Major Healthstone', 'Major Soulstone', 'Major Spellstone',
+/** spells and items the builder's spell box lists, under headings */
+export const SPELL_GROUPS: { group: string; spells: string[] }[] = [
+  { group: 'Warlock spells', spells: [
+    'Shadow Bolt', 'Immolate', 'Corruption', 'Bane of Agony', 'Bane of Doom', 'Bane of Havoc', 'Curse of the Elements',
+    'Curse of Recklessness', 'Curse of Weakness', 'Curse of Tongues', 'Curse of Exhaustion', 'Amplify Curse',
+    'Siphon Life', 'Wrack', 'Drain Life', 'Drain Mana', 'Drain Soul', 'Life Tap', 'Searing Pain', 'Soul Fire', 'Incinerate',
+    'Shadowburn', 'Conflagrate', 'Rain of Fire', 'Hellfire', 'Fear', 'Howl of Terror', 'Death Coil', 'Banish',
+    'Subjugate Demon', 'Health Funnel', 'Demon Skin', 'Demon Armor', 'Shadow Ward', 'Unending Breath', 'Detect Invisibility',
+    'Eye of Kilrogg', 'Sense Demons', 'Ritual of Summoning', 'Portal of Summoning', 'Ritual of Doom', 'Inferno', 'Summon Imp', 'Summon Voidwalker',
+    'Summon Succubus', 'Summon Incubus', 'Summon Felhunter', 'Summon Felsteed', 'Summon Dreadsteed', 'Fel Domination',
+    'Demonic Sacrifice', 'Soul Link', 'Shoot', 'Create Healthstone', 'Create Soulstone', 'Create Spellstone', 'Create Firestone'] },
+  { group: 'Demon abilities', spells: [
+    'Firebolt', 'Fire Shield', 'Phase Shift', 'Blood Pact', 'Torment', 'Suffering', 'Sacrifice', 'Consume Shadows',
+    'Lash of Pain', 'Seduction', 'Soothing Kiss', 'Lesser Invisibility', 'Spell Lock', 'Devour Magic', 'Tainted Blood', 'Paranoia'] },
+  { group: 'Items', spells: ['Major Healthstone', 'Major Soulstone', 'Major Spellstone'] },
 ];
 
 /** one dropdown in a condition set: its key, label, and [value, menu text] options; '' is "don't check" */

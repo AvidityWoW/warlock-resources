@@ -10,10 +10,11 @@ const sch = (s: string) => (s === 'Fire' ? 'fire' : 'shadow');
 const detail = detailBody({ level: CAP, sp: 0, classic: false, pins: {} });
 const utility = utilityBody({ level: CAP, spirit: 0, classic: false, pins: {} });
 ---
-<Layout title="Coefficients" description="Spell power coefficients and level 60 damage for every WoW Forever Warlock damage spell, and what Life Tap, Health Funnel, Shadow Ward and Drain Mana do at 60.">
+<Layout title="Coefficients" description="Spell power coefficients and level 60 values for every WoW Forever Warlock spell.">
   <div class="page-head">
     <h1>Coefficients</h1>
-    <p>Spell power coefficients and base damage for every Warlock damage spell, and what the utility spells do at 60. A coefficient of 0.857 means 100 spell power adds 85.7 damage. Set your level and spell power in the full detail below.</p>
+    <p>Interactable tables with spell data and coefficients for every Warlock spell at all levels, including a summary view for max ranks at level 60. Set your level and spell power in the full detail below.</p>
+    <p>Example: a coefficient of 0.857 means 100 spell power adds 85.7 damage.</p>
   </div>
 
   <p class="cf-meta muted">WoW Forever {COEFF_BUILD} · <span class="cf-key fire">◆ Fire</span> <span class="cf-key shadow">● Shadow</span></p>

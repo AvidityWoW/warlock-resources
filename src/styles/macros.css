@@ -147,3 +147,16 @@ details.note p{margin:6px 0 0}
 .g-card dt{overflow-wrap:anywhere}
 .g-card dd{margin:2px 0 0 14px;color:var(--muted)}
 .g-card dd+dt{margin-top:10px}
+.b-rank{flex:none}
+.b-rank[hidden]{display:none}
+.b-rank select{height:34px;padding-left:12px}
+.b-rank select.set{border-color:var(--warn);color:var(--warn)}   /* a set rank, like a condition that's switched on */
+/* the spell box's list (a popover, placed under the box by macro-builder.ts), styled like a select's open list */
+.b-menu{position:fixed;inset:auto;margin:0;padding:6px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--text);
+  box-shadow:0 8px 24px rgb(0 0 0 / .3);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) transparent}
+.b-mgroup+.b-mgroup{margin-top:4px;padding-top:4px;border-top:1px solid var(--line)}
+.b-mhead{padding:6px 10px 2px;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.b-menu [role="option"]{padding:7px 10px;border-radius:6px;font-size:.95em;cursor:pointer;white-space:nowrap}
+.b-menu [role="option"]:hover,.b-menu [aria-selected="true"]{background:var(--raised)}
+.b-menu .cur{color:var(--accent);font-weight:600}
+.b-mnone{padding:7px 10px;color:var(--muted);font-size:.9em}

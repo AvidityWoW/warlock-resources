@@ -1,5 +1,5 @@
 {
- "build": "1.60.1.70862.1",
+ "build": "1.60.1.71139.1",
  "points": 51,
  "firstLevel": 10,
  "tabs": [
@@ -407,9 +407,9 @@
    "max": 3,
    "icon": "spell_shadow_lifedrain02",
    "ranks": [
-    "Increases the damage done or health drained by your Drain Life, Drain Soul, and Wrack spells by 4% per each of your other Affliction effects active on the target, up to a maximum increase of 12%.",
-    "Increases the damage done or health drained by your Drain Life, Drain Soul, and Wrack spells by 8% per each of your other Affliction effects active on the target, up to a maximum increase of 24%.",
-    "Increases the damage done or health drained by your Drain Life, Drain Soul, and Wrack spells by 12% per each of your other Affliction effects active on the target, up to a maximum increase of 36%."
+    "Increases the damage done or health drained by your Drain Life, Drain Soul, and Wrack spells by 4% per each of your Corruption, Siphon Life, and Bane of Agony effects active on the target, up to a maximum increase of 12%.",
+    "Increases the damage done or health drained by your Drain Life, Drain Soul, and Wrack spells by 8% per each of your Corruption, Siphon Life, and Bane of Agony effects active on the target, up to a maximum increase of 24%.",
+    "Increases the damage done or health drained by your Drain Life, Drain Soul, and Wrack spells by 12% per each of your Corruption, Siphon Life, and Bane of Agony effects active on the target, up to a maximum increase of 36%."
    ],
    "gates": [
     {
@@ -483,7 +483,7 @@
    "max": 1,
    "icon": "ability_deathknight_hemorrhagicfever",
    "ranks": [
-    "Tears the target apart from within, inflicting 86 Shadow damage every 1 sec and increasing the damage they take from your other Shadow damage over time effects by 10% for 6 sec."
+    "Tears the target apart from within for 6 sec, inflicting 61 Shadow damage every 1 sec. While channeling, your Siphon Life, Corruption, and Bane of Agony effects on the target deal their periodic damage 100% faster."
    ],
    "gates": [
     {

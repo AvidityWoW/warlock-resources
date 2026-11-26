@@ -1,6 +1,6 @@
 {
- "build": "1.60.1.70862",
- "pulled": "2026-11-16",
+ "build": "1.60.1.71139",
+ "pulled": "2026-11-25",
  "sourceNote": "Classic 1.12 server data (cmangos classic-db), plus crafting recipes from the game client",
  "items": [
   {
@@ -3566,6 +3566,27 @@
    "reqFrom": "quest"
   },
   {
+   "id": 10634,
+   "name": "Mindseye Circle",
+   "quality": 3,
+   "ilvl": 46,
+   "req": 41,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "sta": 4,
+    "int": 12,
+    "hit": 0.5
+   },
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
    "id": 17768,
    "name": "Woodseed Hoop",
    "quality": 2,
@@ -3849,6 +3870,26 @@
     },
     "where": null
    }
+  },
+  {
+   "id": 862,
+   "name": "Runed Ring",
+   "quality": 3,
+   "ilvl": 50,
+   "req": 45,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "sp": 7
+   },
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   },
+   "affixes": true
   },
   {
    "id": 270109,
@@ -4373,6 +4414,29 @@
    }
   },
   {
+   "id": 17780,
+   "name": "Blade of Eternal Darkness",
+   "quality": 4,
+   "ilvl": 54,
+   "req": 49,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sp": 62
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 12201,
+     "name": "Princess Theradras"
+    },
+    "where": "Maraudon"
+   }
+  },
+  {
    "id": 17710,
    "name": "Charstone Dirk",
    "quality": 3,
@@ -4398,6 +4462,32 @@
    }
   },
   {
+   "id": 11824,
+   "name": "Cyclopean Band",
+   "quality": 3,
+   "ilvl": 54,
+   "req": 49,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "spi": 4,
+    "int": 7,
+    "sta": 8,
+    "sp": 9
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9030,
+     "name": "Ok'thor the Breaker"
+    },
+    "where": "Blackrock Depths"
+   }
+  },
+  {
    "id": 287025,
    "name": "Enchantresses' Spire",
    "quality": 3,
@@ -4420,6 +4510,28 @@
      "name": "Strashaz Enchantress"
     },
     "where": "Alcaz Prison"
+   }
+  },
+  {
+   "id": 812,
+   "name": "Glowing Brightwood Staff",
+   "quality": 4,
+   "ilvl": 54,
+   "req": 49,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 29,
+    "sta": 15,
+    "spi": 9,
+    "sp": 50
+   },
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
    }
   },
   {
@@ -4727,6 +4839,27 @@
    "reqFrom": "quest"
   },
   {
+   "id": 12532,
+   "name": "Spire of the Stoneshaper",
+   "quality": 3,
+   "ilvl": 56,
+   "req": 51,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 20,
+    "int": 17,
+    "sp": 64
+   },
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
+   }
+  },
+  {
    "id": 275836,
    "name": "Acolyte Blade",
    "quality": 2,
@@ -4769,6 +4902,32 @@
     "kind": "Other",
     "text": "Container: Chest of The Seven",
     "link": null,
+    "where": "Blackrock Depths"
+   }
+  },
+  {
+   "id": 22257,
+   "name": "Bloodclot Band",
+   "quality": 3,
+   "ilvl": 57,
+   "req": 52,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "int": 8,
+    "sta": 8,
+    "spi": 6,
+    "sp": 5
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9027,
+     "name": "Gorosh the Dervish"
+    },
     "where": "Blackrock Depths"
    }
   },
@@ -4819,6 +4978,58 @@
     },
     "where": "Blackrock Depths"
    }
+  },
+  {
+   "id": 280082,
+   "name": "Staff of Sorrow",
+   "quality": 3,
+   "ilvl": 57,
+   "req": 52,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 15,
+    "spi": 21,
+    "sp": 66,
+    "hit": 1.5
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 247412,
+     "name": "Mopes"
+    },
+    "where": "Blackmaw Hold"
+   }
+  },
+  {
+   "id": 16058,
+   "name": "Fordring's Seal",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 52,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "int": 6,
+    "sta": 5,
+    "sp": 12
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 5944,
+     "name": "In Dreams"
+    },
+    "where": "Western Plaguelands"
+   },
+   "reqFrom": "quest"
   },
   {
    "id": 274417,
@@ -4914,6 +5125,33 @@
      "type": "npc",
      "id": 14354,
      "name": "Pusillin"
+    },
+    "where": "Dire Maul"
+   }
+  },
+  {
+   "id": 18311,
+   "name": "Quel'dorai Channeling Rod",
+   "quality": 3,
+   "ilvl": 58,
+   "req": 53,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 18,
+    "sta": 8,
+    "spi": 8,
+    "mp5": 8,
+    "sp": 41
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 14327,
+     "name": "Lethtendris"
     },
     "where": "Dire Maul"
    }
@@ -5050,6 +5288,31 @@
    "reqFrom": "ilvl"
   },
   {
+   "id": 13261,
+   "name": "Globe of D'sak",
+   "quality": 3,
+   "ilvl": 59,
+   "req": 54,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 11,
+    "sta": 5,
+    "shadow": 14
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9217,
+     "name": "Spirestone Lord Magus"
+    },
+    "where": "Blackrock Spire"
+   }
+  },
+  {
    "id": 11932,
    "name": "Guiding Stave of Wisdom",
    "quality": 3,
@@ -5073,6 +5336,32 @@
      "name": "Emperor Dagran Thaurissan"
     },
     "where": "Blackrock Depths"
+   }
+  },
+  {
+   "id": 13283,
+   "name": "Magus Ring",
+   "quality": 3,
+   "ilvl": 59,
+   "req": 54,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "int": 12,
+    "spi": 7,
+    "sta": 8,
+    "hit": 0.5
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9217,
+     "name": "Spirestone Lord Magus"
+    },
+    "where": "Blackrock Spire"
    }
   },
   {
@@ -5100,6 +5389,31 @@
     "where": null
    },
    "reqFrom": "ilvl"
+  },
+  {
+   "id": 18314,
+   "name": "Ring of Demonic Guile",
+   "quality": 3,
+   "ilvl": 59,
+   "req": 54,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "int": 10,
+    "mp5": 4,
+    "hit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 11492,
+     "name": "Alzzin the Wildshaper"
+    },
+    "where": "Dire Maul"
+   }
   },
   {
    "id": 275685,
@@ -5149,6 +5463,52 @@
      "name": "Gaelden Hammersmith"
     },
     "where": "Alterac Valley"
+   }
+  },
+  {
+   "id": 18672,
+   "name": "Elemental Ember",
+   "quality": 2,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "sta": 11,
+    "fire": 14
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 14461,
+     "name": "Baron Charr"
+    },
+    "where": null
+   }
+  },
+  {
+   "id": 287034,
+   "name": "Grove Subjugator's Blade",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 6,
+    "spi": -10,
+    "sp": 68,
+    "crit": 1
+   },
+   "source": {
+    "kind": "World drop",
+    "text": "World drop",
+    "link": null,
+    "where": null
    }
   },
   {
@@ -5327,6 +5687,32 @@
     "where": null
    },
    "reqFrom": "ilvl"
+  },
+  {
+   "id": 11928,
+   "name": "Thaurissan's Royal Scepter",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "spi": 10,
+    "int": 6,
+    "sta": 7,
+    "sp": 7
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9019,
+     "name": "Emperor Dagran Thaurissan"
+    },
+    "where": "Blackrock Depths"
+   }
   },
   {
    "id": 19315,
@@ -5626,6 +6012,56 @@
    "reqFrom": "quest"
   },
   {
+   "id": 18536,
+   "name": "Milli's Lexicon",
+   "quality": 3,
+   "ilvl": 59,
+   "req": 56,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "mp5": 6,
+    "sp": 11
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 5526,
+     "name": "Shards of the Felvine"
+    },
+    "where": "Moonglade"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 276073,
+   "name": "Band of the Damned",
+   "quality": 3,
+   "ilvl": 61,
+   "req": 56,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "spi": 6,
+    "int": 11,
+    "sp": 15
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10432,
+     "name": "Vectus"
+    },
+    "where": "Scholomance"
+   }
+  },
+  {
    "id": 944,
    "name": "Elemental Mage Staff",
    "quality": 4,
@@ -5644,6 +6080,30 @@
     "link": null,
     "where": null
    }
+  },
+  {
+   "id": 12926,
+   "name": "Flaming Band",
+   "quality": 3,
+   "ilvl": 61,
+   "req": 56,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "fire": 24
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9816,
+     "name": "Pyroguard Emberseer"
+    },
+    "where": "Blackrock Spire"
+   },
+   "affixes": true
   },
   {
    "id": 275738,
@@ -5670,6 +6130,31 @@
     "where": null
    },
    "reqFrom": "ilvl"
+  },
+  {
+   "id": 22406,
+   "name": "Redemption",
+   "quality": 3,
+   "ilvl": 61,
+   "req": 56,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "spi": 12,
+    "mp5": 12,
+    "sp": 43
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10997,
+     "name": "Cannon Master Willey"
+    },
+    "where": "Stratholme"
+   }
   },
   {
    "id": 275740,
@@ -5767,6 +6252,85 @@
    }
   },
   {
+   "id": 13392,
+   "name": "The Postmaster's Seal",
+   "quality": 3,
+   "ilvl": 61,
+   "req": 56,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "spi": 12,
+    "sta": 6,
+    "int": 3,
+    "sp": 13,
+    "hit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 11143,
+     "name": "Postmaster Malown"
+    },
+    "where": "Stratholme"
+   }
+  },
+  {
+   "id": 22319,
+   "name": "Tome of Divine Right",
+   "quality": 3,
+   "ilvl": 61,
+   "req": 56,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 6,
+    "sta": 6,
+    "mp5": 4,
+    "sp": 9
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 16080,
+     "name": "Mor Grayhoof"
+    },
+    "where": "Blackrock Spire"
+   }
+  },
+  {
+   "id": 13161,
+   "name": "Trindlehaven Staff",
+   "quality": 3,
+   "ilvl": 61,
+   "req": 56,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 25,
+    "sta": 12,
+    "mp5": 6,
+    "sp": 70
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 9568,
+     "name": "Overlord Wyrmthalak"
+    },
+    "where": "Blackrock Spire"
+   }
+  },
+  {
    "id": 18022,
    "name": "Royal Seal of Alexis",
    "quality": 3,
@@ -5791,6 +6355,152 @@
     "where": "Stratholme"
    },
    "reqFrom": "quest"
+  },
+  {
+   "id": 15854,
+   "name": "Dancing Sliver",
+   "quality": 3,
+   "ilvl": 60,
+   "req": 57,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "spi": 29,
+    "int": 12,
+    "sp": 68
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 4771,
+     "name": "Dawn's Gambit"
+    },
+    "where": "Scholomance"
+   },
+   "reqFrom": "quest"
+  },
+  {
+   "id": 22334,
+   "name": "Band of Mending",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "sta": 7,
+    "int": 7,
+    "spi": 6,
+    "sp": 10
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop in Stratholme",
+    "link": null,
+    "where": null
+   }
+  },
+  {
+   "id": 22332,
+   "name": "Blade of Necromancy",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "slot": "main",
+   "type": "Sword",
+   "side": null,
+   "stats": {
+    "sp": 72
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 16118,
+     "name": "Kormok"
+    },
+    "where": "Scholomance"
+   }
+  },
+  {
+   "id": 18372,
+   "name": "Blade of the New Moon",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "sta": 15,
+    "shadow": 88
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 11496,
+     "name": "Immol'thar"
+    },
+    "where": "Dire Maul"
+   }
+  },
+  {
+   "id": 18395,
+   "name": "Emerald Flame Ring",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "int": 12,
+    "spi": 8,
+    "sta": 7,
+    "sp": 5
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 11486,
+     "name": "Prince Tortheldrin"
+    },
+    "where": "Dire Maul"
+   }
+  },
+  {
+   "id": 260219,
+   "name": "Engraved Band",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "spi": 10,
+    "crit": 0.5
+   },
+   "source": {
+    "kind": "Quest",
+    "text": "Quest",
+    "link": {
+     "type": "quest",
+     "id": 92065,
+     "name": "Blackmaw Reclamation"
+    },
+    "where": null
+   },
+   "reqFrom": "ilvl"
   },
   {
    "id": 279912,
@@ -5864,6 +6574,30 @@
    }
   },
   {
+   "id": 13964,
+   "name": "Witchblade",
+   "quality": 3,
+   "ilvl": 62,
+   "req": 57,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "int": 8,
+    "sp": 72
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 1853,
+     "name": "Darkmaster Gandling"
+    },
+    "where": "Scholomance"
+   }
+  },
+  {
    "id": 20724,
    "name": "Corrupted Blackwood Staff",
    "quality": 2,
@@ -5912,6 +6646,82 @@
      "name": "Kelm Hargunth"
     },
     "where": null
+   }
+  },
+  {
+   "id": 22326,
+   "name": "Amalgam's Band",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "int": 6,
+    "sta": 5,
+    "mp5": 3,
+    "crit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 16118,
+     "name": "Kormok"
+    },
+    "where": "Scholomance"
+   }
+  },
+  {
+   "id": 18103,
+   "name": "Band of Rumination",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "mp5": 5,
+    "crit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10429,
+     "name": "Warchief Rend Blackhand"
+    },
+    "where": "Blackrock Spire"
+   }
+  },
+  {
+   "id": 13353,
+   "name": "Book of the Dead",
+   "quality": 4,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "spi": 10,
+    "int": 15,
+    "sta": 8,
+    "shadow": 16
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10812,
+     "name": "Grand Crusader Dathrohan"
+    },
+    "where": "Stratholme"
    }
   },
   {
@@ -5991,6 +6801,53 @@
    }
   },
   {
+   "id": 22433,
+   "name": "Don Mauricio's Band of Domination",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "sta": 10,
+    "sp": 11,
+    "crit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 1853,
+     "name": "Darkmaster Gandling"
+    },
+    "where": "Scholomance"
+   }
+  },
+  {
+   "id": 13360,
+   "name": "Gift of the Elven Magi",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "main",
+   "type": "Dagger",
+   "side": null,
+   "stats": {
+    "spi": 7,
+    "int": 10,
+    "sta": 6,
+    "sp": 45
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop in Stratholme",
+    "link": null,
+    "where": null
+   }
+  },
+  {
    "id": 271932,
    "name": "Insurgent's Manifesto",
    "quality": 3,
@@ -6013,6 +6870,32 @@
      "name": "Bryanna Embreeze"
     },
     "where": "The Barrens"
+   }
+  },
+  {
+   "id": 22335,
+   "name": "Lord Valthalak's Staff of Command",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "sta": 21,
+    "int": 21,
+    "sp": 72,
+    "hit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 16042,
+     "name": "Lord Valthalak"
+    },
+    "where": "Blackrock Spire"
    }
   },
   {
@@ -6066,6 +6949,78 @@
    }
   },
   {
+   "id": 13098,
+   "name": "Painweaver Band",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "sta": 9,
+    "crit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10363,
+     "name": "General Drakkisath"
+    },
+    "where": "Blackrock Spire"
+   }
+  },
+  {
+   "id": 18534,
+   "name": "Rod of the Ogre Magi",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "staff",
+   "type": "Staff",
+   "side": null,
+   "stats": {
+    "int": 20,
+    "sta": 14,
+    "spi": 11,
+    "sp": 72,
+    "crit": 1
+   },
+   "source": {
+    "kind": "Other",
+    "text": "Container: Gordok Tribute",
+    "link": null,
+    "where": "Dire Maul"
+   }
+  },
+  {
+   "id": 22339,
+   "name": "Rune Band of Wizardry",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "sta": 7,
+    "sp": 13,
+    "hit": 1
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 16042,
+     "name": "Lord Valthalak"
+    },
+    "where": "Blackrock Spire"
+   }
+  },
+  {
    "id": 13345,
    "name": "Seal of Rivendare",
    "quality": 3,
@@ -6112,6 +7067,31 @@
      "name": "Creeg Bothunk"
     },
     "where": "The Barrens"
+   }
+  },
+  {
+   "id": 22253,
+   "name": "Tome of the Lost",
+   "quality": 3,
+   "ilvl": 63,
+   "req": 58,
+   "slot": "off",
+   "type": "Held in off-hand",
+   "side": null,
+   "stats": {
+    "int": 7,
+    "sta": 8,
+    "sp": 18
+   },
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 10363,
+     "name": "General Drakkisath"
+    },
+    "where": "Blackrock Spire"
    }
   },
   {
@@ -6377,7 +7357,6 @@
    "side": null,
    "stats": {
     "int": 14,
-    "spi": 8,
     "sp": 9,
     "hit": 1
    },
@@ -6403,6 +7382,7 @@
    "side": "Alliance",
    "stats": {
     "int": 25,
+    "sta": 25,
     "sp": 99
    },
    "source": {
@@ -6787,7 +7767,7 @@
    "type": "Staff",
    "side": "Horde",
    "stats": {
-    "int": 16,
+    "int": 25,
     "sta": 25,
     "sp": 74
    },
@@ -8108,6 +9088,21 @@
    },
    "source": null,
    "reqFrom": "ilvl"
+  },
+  {
+   "id": 286597,
+   "name": "Calm Air Band",
+   "quality": 2,
+   "ilvl": 60,
+   "req": 55,
+   "slot": "ring",
+   "type": "Ring",
+   "side": null,
+   "stats": {
+    "spi": 11,
+    "sp": 6
+   },
+   "source": null
   },
   {
    "id": 18968,

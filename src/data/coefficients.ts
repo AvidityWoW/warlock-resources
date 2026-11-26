@@ -1,6 +1,6 @@
 // Warlock spell-power coefficients at level 60, from the WoW Forever client tables plus server hotfixes (spelldb).
 // Values are text, printed as shown; a field left out is blank in the tables. Rows are in A to Z order.
-export const COEFF_BUILD = '1.60.1.70959 + hotfixes (client 1.60.1.70959, 2026-11-19)';
+export const COEFF_BUILD = '1.60.1.71139 + hotfixes (client 1.60.1.71139, 2026-11-25)';
 
 export type School = 'Fire' | 'Shadow';
 /** one Bane of Agony stage: only its base damage ramps, every tick gets the same share of spell power */

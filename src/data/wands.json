@@ -1,6 +1,6 @@
 {
- "build": "1.60.1.70862",
- "pulled": "2026-11-16",
+ "build": "1.60.1.71139",
+ "pulled": "2026-11-25",
  "wands": [
   {
    "id": 247789,
@@ -2297,6 +2297,31 @@
    }
   },
   {
+   "id": 282020,
+   "name": "Stonegaze Wand",
+   "quality": 2,
+   "ilvl": 51,
+   "req": 46,
+   "side": null,
+   "school": "Arcane",
+   "dps": 42.333,
+   "damage": [
+    44,
+    83
+   ],
+   "speed": 1.5,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 8302,
+     "name": "Deatheye"
+    },
+    "where": "Blasted Lands"
+   }
+  },
+  {
    "id": 276735,
    "name": "Tidesong Wand",
    "quality": 3,
@@ -3055,6 +3080,31 @@
    }
   },
   {
+   "id": 281600,
+   "name": "Wail of Death",
+   "quality": 2,
+   "ilvl": 61,
+   "req": 56,
+   "side": null,
+   "school": "Fire",
+   "dps": 54.167,
+   "damage": [
+    68,
+    127
+   ],
+   "speed": 1.8,
+   "source": {
+    "kind": "Drop",
+    "text": "Drop",
+    "link": {
+     "type": "npc",
+     "id": 249226,
+     "name": "Death Wailer"
+    },
+    "where": "Mount Hyjal"
+   }
+  },
+  {
    "id": 16997,
    "name": "Stormrager",
    "quality": 3,
@@ -3376,6 +3426,22 @@
    "source": null
   },
   {
+   "id": 288914,
+   "name": "Crimson Shocker",
+   "quality": 4,
+   "ilvl": 30,
+   "req": null,
+   "side": null,
+   "school": "Fire",
+   "dps": 34.0,
+   "damage": [
+    47,
+    89
+   ],
+   "speed": 2.0,
+   "source": null
+  },
+  {
    "id": 9483,
    "name": "Flaming Incinerator",
    "quality": 3,
@@ -3392,22 +3458,6 @@
    "source": null
   },
   {
-   "id": 282020,
-   "name": "Stonegaze Wand",
-   "quality": 2,
-   "ilvl": 51,
-   "req": 46,
-   "side": null,
-   "school": "Arcane",
-   "dps": 42.333,
-   "damage": [
-    44,
-    83
-   ],
-   "speed": 1.5,
-   "source": null
-  },
-  {
    "id": 284070,
    "name": "Dreadwhisper's Touch",
    "quality": 2,
@@ -3421,22 +3471,6 @@
     111
    ],
    "speed": 1.6,
-   "source": null
-  },
-  {
-   "id": 281600,
-   "name": "Wail of Death",
-   "quality": 2,
-   "ilvl": 61,
-   "req": 56,
-   "side": null,
-   "school": "Fire",
-   "dps": 54.167,
-   "damage": [
-    68,
-    127
-   ],
-   "speed": 1.8,
    "source": null
   }
  ],

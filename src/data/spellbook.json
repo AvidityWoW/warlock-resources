@@ -1,4 +1,4 @@
-{"build":"1.60.1.70862.1","spells":[
+{"build":"1.60.1.71139.1","spells":[
 {"id":687,"name":"Demon Skin","rank":1,"level":1,"tree":"Demonology","how":"start","first":true},
 {"id":688,"name":"Summon Imp","rank":null,"level":1,"tree":"Demonology","how":"quest","first":true,"quest":"imp"},
 {"id":348,"name":"Immolate","rank":1,"level":1,"tree":"Destruction","how":"train","first":true},
