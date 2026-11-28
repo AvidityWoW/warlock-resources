@@ -38,7 +38,7 @@ export interface Buy {
   id: number; name: string; qty?: number; each?: number; note?: string;
   /** not needed if a warlock who already owns it helps (the Dreadsteed ritual's implements) */
   shared?: true;
-  /** the quantity is our estimate, not what a quest asks for: the cost line names it (the Shadowy Potions) */
+  /** the quantity is our estimate, not what a quest asks for: the cost line names it (none at the moment) */
   guess?: true;
 }
 export interface Route {
@@ -57,7 +57,9 @@ export interface Chain {
   /** what you get, with links written the same way as a step's `what` */
   reward: string;
   note?: string;
-  /** ways to do the chain that change what you buy, lettered A, B, C... in the shopping list above the steps. A plan with
+  /** something to know before starting, shown in a callout under the reward */
+  heads?: string;
+  /** ways to do the chain that change what you buy, lettered A, B, C... in the options box above the steps. A plan with
       `buy` buys the `shared` items (listed under it at their step); the others don't, and say instead (`at`) what happens there. */
   plans?: Plan[];
   routes: Route[];
@@ -215,7 +217,7 @@ export const CHAINS: Chain[] = [
     ] },
 
   { key: 'dreadsteed', title: 'Dreadsteed', level: 60, reward: '[Summon Dreadsteed](spell:23161), your epic mount',
-    note: 'The longest Warlock chain: about 418 gold at vendors (168 if a Warlock who has done it helps with the ritual), materials from four professions, a run into Scholomance, and a ritual at the bottom of Dire Maul that needs a group. Everything is handed in to Mor\'zul Bloodbringer and his servant Gorzeeki Wildeyes, camped at the Altar of Storms in the Burning Steppes.',
+    heads: 'Every quest in this chain is required to learn Summon Dreadsteed.',
     plans: [
       { title: 'Your own ritual', buy: true,
         text: 'You buy the three ritual components from Gorzeeki, fight through Dire Maul to Immol\'thar\'s pedestal and run the ritual with your party.' },
@@ -238,8 +240,8 @@ export const CHAINS: Chain[] = [
 
         { id: 7623, name: 'Lord Banehollow', part: 'Stardust',
           what: 'Buy [Shadowy Potions](item:18802) from Gorzeeki, drink them to walk through Jaedenar in Felwood as one of the Shadow Council, and speak with [Lord Banehollow](npc:9516).',
-          more: ['The potions are 6 gold each and last 20 minutes. Two may be enough but three will save you a trip back if there\'s any trouble.'],
-          buy: [{ id: 18802, name: 'Shadowy Potion', qty: 3, each: 60000, guess: true, note: 'Gorzeeki Wildeyes: 20 min each' }] },
+          more: ['You need three potions. They\'re sold in sets of three for 6 gold, and each lasts 20 minutes.'],
+          buy: [{ id: 18802, name: 'Shadowy Potion', qty: 3, each: 20000, note: 'Gorzeeki Wildeyes: 3 for 6g, 20 min each' }] },
         { id: 7624, name: 'Ulathek the Traitor',
           what: 'Confront Ulathek in his quarters in the Shadow Hold, to the west of Banehollow, kill him, and bring [The Traitor\'s Heart](item:18719) to Lord Banehollow.' },
         { id: 7625, name: 'Xorothian Stardust',
@@ -267,8 +269,9 @@ export const CHAINS: Chain[] = [
           what: 'With the parchment and the tools done, Mor\'zul gives you [Mor\'zul\'s Instructions](item:18818). Summon a Xorothian Dreadsteed in Dire Maul, defeat it, and bind its spirit.',
           more: [
             'You don\'t have to run it yourself, see options A, B and C on the side.',
-            'To run it yourself (plan A), buy the three implements from Gorzeeki first: [J\'eevee\'s Jar](item:18663) (150 gold), a [Black Lodestone](item:18629) (50 gold) and [Xorothian Glyphs](item:18670) (50 gold). Fill your bags with Soul Shards.',
+            'To run it yourself (plan A), buy the three implements from Gorzeeki first: [J\'eevee\'s Jar](item:18663) (150 gold), a [Black Lodestone](item:18629) (50 gold) and [Xorothian Glyphs](item:18670) (50 gold).',
             'With a group, fight your way to the pedestal of Immol\'thar\'s prison, deep in Dire Maul West, and let J\'eevee out of his jar. He places the Bell, the Wheel and the Candle, and a circle appears.',
+            'Tip: bring a bag full of [Soul Shards](item:6265) for the restarts.',
             'Keep the three running while demons come. When one fails, use the Black Lodestone on it at once; each restart burns a Soul Shard. If all three are out together, the ritual fails and you start it again.',
             'While they run, the Bell gives Warlocks in the circle vigor and energy, the Wheel protects everyone in it, and the Candle burns enemies that step in.',
             'Runes appear around the edge of the circle. At nine it is complete: use the Xorothian Glyphs to open the portal to Xoroth and pull the dreadsteed through.',
@@ -277,6 +280,6 @@ export const CHAINS: Chain[] = [
             { id: 18663, name: 'J\'eevee\'s Jar', qty: 1, each: 1500000, note: 'Gorzeeki Wildeyes', shared: true },
             { id: 18629, name: 'Black Lodestone', qty: 1, each: 500000, note: 'Gorzeeki Wildeyes', shared: true },
             { id: 18670, name: 'Xorothian Glyphs', qty: 1, each: 500000, note: 'Gorzeeki Wildeyes', shared: true },
-            { id: 6265, name: 'Soul Shards', note: 'A bag full if you\'re recharging the implements' }] }] },
+            ] }] },
     ] },
 ];

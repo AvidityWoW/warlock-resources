@@ -22,15 +22,23 @@
 .cq-route h3 .muted{font-weight:400}
 .cq-route ol{margin:0;max-width:70ch}
 .cq-route ol>li{margin:0 0 10px}
-.cq-step>.link{font-weight:650}
-.cq-opt{margin-left:8px;font-size:.8em}
+/* each step in its own box; an optional lead's box is dashed, and the chain's last quest is outlined in the accent */
+.cq-step{padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.cq-route ol>li.lead .cq-step{border-style:dashed;background:none}
+.cq-route ol>li.last .cq-step{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 14px var(--accent-soft)}
+.cq-final{margin-left:8px;padding:1px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.75em;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;vertical-align:1px}
+.cq-lead-note{display:block;margin-top:6px;font-size:.85em;color:var(--warn)}
+.cq-text>.link{font-weight:650}
+.cq-opt{margin-left:8px;padding:1px 8px;border:1px dashed var(--line);border-radius:999px;color:var(--muted);font-size:.75em;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;vertical-align:1px}
 .cq-what{display:block;margin-top:2px;color:var(--muted);font-size:.92em}
 .cq-note{margin:0;font-size:.85em}
 /* a long chain: steps numbered straight through its parts, each part under a small heading; extra notes as a list */
 .cq-route{counter-reset:step}
 .cq-route ol{list-style:none;padding-left:2em}
 .cq-route ol>li{counter-increment:step;position:relative}
-.cq-route ol>li::before{content:counter(step) ".";position:absolute;right:calc(100% + 6px);color:var(--muted);font-variant-numeric:tabular-nums}
+.cq-route ol>li::before{content:counter(step) ".";position:absolute;top:10px;right:calc(100% + 6px);color:var(--muted);font-variant-numeric:tabular-nums}
 .cq-route h4{margin:18px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line);color:var(--accent);font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .cq-route h4:first-child{margin-top:0}
 .cq-more{margin:6px 0 0;padding-left:1.1em;color:var(--muted);font-size:.88em}
@@ -57,8 +65,17 @@
 .cq-opt-box .cq-buy{margin-top:4px;padding:0;border:0}
 .cq-opt-box p{margin:4px 0 0;font-size:.88em}
 .cq-buys ol{max-width:none}
-.cq-buys ol>li{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:6px 28px;align-items:start}
-.cq-step{max-width:70ch}
+.cq-buys ol>li:has(.cq-buy-col){display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:6px 28px;align-items:start}
+/* a step's own list, inside its box under a small heading (Trade materials, Buy, Farm, Bring) */
+/* a step with its own list: the text on the left, the list on the right, inside the same box */
+.cq-step:has(.cq-mats){display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,320px);gap:10px 24px;align-items:start}
+.cq-mats{display:grid;gap:6px}
+.cq-mats .cq-buy+h5{margin-top:6px}
+@container (max-width:700px){.cq-step:has(.cq-mats){grid-template-columns:minmax(0,1fr)}}
+:is(.cq-mats h5,.cq-col-h){margin:0;color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.cq-col-h{margin:2px 0 0}
+.cq-step{max-width:none}
+.cq-buys ol>li{container-type:inline-size}
 .cq-buy{margin:0;padding:4px 12px;list-style:none;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg)}
 .cq-buy label{display:grid;grid-template-columns:16px 2.4em minmax(0,1fr) auto;align-items:baseline;gap:8px;padding:5px 0;cursor:pointer}
 .cq-buy li+li{border-top:1px solid var(--line)}
@@ -103,3 +120,10 @@
   .cq-fork-row{grid-template-columns:1fr}
   .cq-fork-or{padding:3px 0;border-inline:0;border-block:1px solid var(--line)}
 }
+
+/* a chain's heads up: a warn-tinted callout with an icon */
+.cq-body>p.cq-heads{display:flex;align-items:flex-start;gap:10px;max-width:80ch;margin:4px 0 12px;padding:10px 14px;
+  border:1px solid color-mix(in srgb,var(--warn) 45%,transparent);border-left-width:4px;border-radius:8px;
+  background:color-mix(in srgb,var(--warn) 9%,transparent)}
+.cq-heads svg{flex:none;width:18px;height:18px;margin-top:2px;color:var(--warn)}
+.cq-heads strong{margin-right:4px;color:var(--warn)}

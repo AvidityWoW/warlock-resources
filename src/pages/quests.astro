@@ -14,7 +14,7 @@ import '../styles/quests.css';
 const LEVEL = 10;   // before any saved choice
 const sideName = (side: 'A' | 'H' | 'C') => (side === 'A' ? 'Alliance' : 'Horde');
 const letter = (i: number) => String.fromCharCode(65 + i);
-/** the lines whose quantity is our estimate, named under a cost: "Includes 3 Shadowy Potions (18g)" */
+/** the lines whose quantity is our estimate, named under a cost, e.g. "Includes 3 Shadowy Potions (18g)" */
 const guessed = (c: Chain) => buys(c).filter((it) => it.guess && it.qty && it.each).map((it) => `${it.qty} ${it.name}s (${money(it.qty! * it.each!)})`).join(', ');
 /** a step's list in two: what everyone needs, and what a helping warlock would bring (plan A buys it, plan B doesn't) */
 const own = (items: Buy[]) => items.filter((it) => !it.shared), shared = (items: Buy[]) => items.filter((it) => it.shared);
@@ -24,8 +24,14 @@ const parts = (steps: Step[]) => steps.reduce<{ title?: string; steps: Step[] }[
   runs.at(-1)!.steps.push(s);
   return runs;
 }, []);
+/** a step's own list split under headings: profession materials, vendor buys, things to farm, and the rest to bring */
+const TRADES = /^(Alchemy|Enchanting|Mining|Skinning|Herbalism|Tailoring|Blacksmithing|Leatherworking|Engineering)\b/;
+const kindOf = (it: Buy) => (TRADES.test(it.note ?? '') ? 'Trade materials' : it.each ? 'Buy' : /^Farm\b/.test(it.note ?? '') ? 'Farm' : 'Bring');
+const byKind = (items: Buy[]) => [...Map.groupBy(items, kindOf)];
 /** everything a chain's steps list to buy or gather */
 const buys = (c: Chain) => c.routes.flatMap((r) => r.steps.flatMap((s) => s.buy ?? []));
+/** "plus trade materials" after a cost when some lines have no price (profession materials) */
+const plus = (c: Chain) => (buys(c).some((it) => !it.each) ? ' plus trade materials' : ' at vendors');
 /** what the priced lines come to, for the quantities listed (a line with no quantity isn't counted) */
 const vendorTotal = (c: Chain, helped = false) => buys(c).reduce((sum, it) => sum + (it.each && it.qty && !(helped && it.shared) ? it.each * it.qty : 0), 0);
 /** the demon chains long enough that someone could lose track partway */
@@ -66,11 +72,15 @@ const finder = (c: Chain, steps: Step[]) => {
       <div class="cq-body">
         <p class="cq-reward"><span class="muted">You learn</span> <span set:html={rich(c.reward)} /></p>
         {c.note && <p class="muted">{c.note}</p>}
+        {c.heads && (
+          <p class="cq-heads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+            <span><strong>Heads up</strong> {c.heads}</span></p>
+        )}
         {buys(c).length > 0 && (
           <div class="cq-shop" data-chain={c.key}>
             <p class="cq-shop-h">
-              <strong>Shopping list</strong>
-              <span class="muted">beside each step · <span class="cq-shop-n">{`0 of ${buys(c).length}`}</span> ticked</span>
+              <strong>{c.plans ? 'Ritual quest options' : 'Cost'}</strong>
+              <span class="muted">items are listed in each step · <span class="cq-shop-n">{`0 of ${buys(c).length}`}</span> ticked</span>
               <button type="button" class="pill cq-clear" hidden>Untick all</button>
             </p>
             {c.plans
@@ -80,14 +90,14 @@ const finder = (c: Chain, steps: Step[]) => {
                       {i > 0 && <span class="cq-or muted">or</span>}
                       <div class="cq-plan">
                         <h4><b>{letter(i)}</b>{pl.title}</h4>
-                        <p class="cq-plan-g">{money(vendorTotal(c, !pl.buy))} at vendors</p>
+                        <p class="cq-plan-g">{money(vendorTotal(c, !pl.buy))}{plus(c)}</p>
                         {guessed(c) && <p class="cq-plan-inc muted">Includes {guessed(c)}</p>}
                         <p class="muted" set:html={rich(pl.text)} />
                       </div>
                     </>
                   ))}
                 </div>
-              : <p class="muted">{money(vendorTotal(c))} at vendors{guessed(c) && `, including ${guessed(c)}`}</p>}
+              : <p class="muted">{money(vendorTotal(c))}{plus(c)}{guessed(c) && `, including ${guessed(c)}`}</p>}
           </div>
         )}
         <div class="cq-routes">
@@ -100,13 +110,16 @@ const finder = (c: Chain, steps: Step[]) => {
                   {p.title && <h4>{p.title}</h4>}
                   <ol>
                     {p.steps.map((s) => (
-                      <li class:list={{ lead: s.lead }}>
+                      <li class:list={{ lead: s.lead, last: s === r.steps.at(-1) }}>
                         <div class="cq-step">
+                          <div class="cq-text">
                           {s.link === false
                             ? <strong>{s.name}</strong>
                             : <a class="link" href={wowhead('quest', s.id)} target="_blank" rel="noopener">{s.name}</a>}
-                          {s.lead && <span class="muted cq-opt" title="It only sends you to the next quest's giver: you can go straight there">optional</span>}
+                          {s.lead && <span class="cq-opt">Optional</span>}
+                          {s === r.steps.at(-1) && <span class="cq-final">Final quest</span>}
                           <span class="cq-what" set:html={rich(s.what)} />
+                          {s.lead && <span class="cq-lead-note">This one only sends you to the next quest giver, so you can skip it and go straight there. The quests after it are required.</span>}
                           {s.fork && (
                             <div class="cq-fork-row" role="list">
                               {s.fork.map((f, i) => (
@@ -124,11 +137,22 @@ const finder = (c: Chain, steps: Step[]) => {
                             </div>
                           )}
                           {s.more && <ul class="cq-more">{s.more.map((m) => <li set:html={rich(m)} />)}</ul>}
+                          </div>
+                          {s.buy && own(s.buy).length > 0 && (
+                            <div class="cq-mats">
+                              {byKind(own(s.buy)).map(([kind, items]) => (
+                                <>
+                                  <h5>{kind}</h5>
+                                  <BuyList items={items} step={s.id} label={`${kind} for ${s.name}`} />
+                                </>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        {s.buy && (
+                        {s.buy && shared(s.buy).length > 0 && (
                           <div class="cq-buy-col">
-                            {own(s.buy).length > 0 && <BuyList items={own(s.buy)} step={s.id} label={`To get for ${s.name}`} />}
-                            {shared(s.buy).length > 0 && (c.plans ?? []).map((pl, i) => (
+                            <h5 class="cq-col-h">Options</h5>
+                            {(c.plans ?? []).map((pl, i) => (
                               <>
                                 {i > 0 && <span class="cq-or muted">or</span>}
                                 <div class="cq-opt-box">
